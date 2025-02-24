@@ -1,0 +1,3 @@
+C:/Users/worker/Desktop/2Ano2Semestre/DA/Projeto/Project1/cmake-build-debug/CMakeFiles/UrbanMapProject.dir
+C:/Users/worker/Desktop/2Ano2Semestre/DA/Projeto/Project1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/worker/Desktop/2Ano2Semestre/DA/Projeto/Project1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
