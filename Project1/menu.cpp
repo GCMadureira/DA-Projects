@@ -51,9 +51,24 @@ void runBatchMode(Graph<int>& urbanGraph) {
     // For demonstration,just output the information.
     outFile << "Computing route from " << startNode << " to " << endNode << ".\n";
 
-    // TODO: Replace the following with actual route planning function.
-    // Example: auto route = computeRoute(urbanGraph, startNode, endNode);
-    // outFile << "Route: " << route << "\n";
+    // Compute Best Driving Route
+    int pathLength;
+    dijkstra(&urbanGraph, startNode);
+    std::vector<int> path = getPath(&urbanGraph, startNode, endNode, pathLength);
+    if (path.empty()) {
+        outFile << "Could not find path between input nodes.\n";
+        return;
+    }
+
+    outFile << "\n";
+    outFile << "Source: " << startNode << "\n"
+            << "Destination: " << endNode << "\n"
+            << "BestDrivingRoute: " << path[0];
+    for (int i = 1; i < path.size(); i++) {
+        outFile << ", " << path[i];
+    }
+    outFile << " (" << pathLength << ")" << "\n";
+    //outFile << "AlternateDrivingRoute: ";
 
     outFile << "Batch processing completed successfully.\n";
 }
