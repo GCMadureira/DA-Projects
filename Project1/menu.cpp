@@ -4,7 +4,8 @@
 
 
 #include <iostream>
-#include "Graph.h"
+#include "data_structures/Graph.h"
+#include "data_structures/MutablePriorityQueue.h"
 #include "parsing.cpp"
 #include "search.cpp"
 #include "parsing.h"
@@ -30,6 +31,15 @@ void runBatchMode(Graph<int>& urbanGraph) {
         outFile << "Invalid input format. Expected command 'ROUTE'.\n";
         return;
     }
+    /*
+        std::string line;
+        std::getline(inFile, line);
+        std::string value;
+        while (std::getline(inFile, line)){
+            std::getline(linestream, token, ',');
+        }
+
+     */
 
     int startNode, endNode;
     if (!(inFile >> startNode >> endNode)) {
@@ -41,7 +51,7 @@ void runBatchMode(Graph<int>& urbanGraph) {
     // For demonstration,just output the information.
     outFile << "Computing route from " << startNode << " to " << endNode << ".\n";
 
-    // TODO: Replace the following with your actual route planning function.
+    // TODO: Replace the following with actual route planning function.
     // Example: auto route = computeRoute(urbanGraph, startNode, endNode);
     // outFile << "Route: " << route << "\n";
 
@@ -62,6 +72,9 @@ int main() {
         std::cin >> choice;
         std::cin.ignore();
 
+        //TODO: runbatchmode(urbanGraph,choice)
+        // Depois no batchmode faz-se o switch
+        //
         if (choice == 1) {
             // TODO: This function reads input.txt and writes the route results to output.txt.
             std::cout << "Not yet implemented.\n";

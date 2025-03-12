@@ -10,6 +10,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 # List your source files (for example, main.cpp)
 add_executable(UrbanMapProject
         parsing.cpp
+        data_structures/MutablePriorityQueue.h
         #menu.cpp
         # List any additional .cpp files here
 )

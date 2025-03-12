@@ -107,8 +107,8 @@ void loadGraph(Graph<int>& graph) {
 
     std::cout << "Graph successfully loaded with " << locations.size() << " locations and " << distances.size() << " connections.\n";
 }
-/*
- // Debugging purposes
+/*2
+Debugging purposes
 int main() {
     std::cout << "Reading locations...\n";
     auto locations = readLocations("DataSets/Locations.csv");

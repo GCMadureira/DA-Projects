@@ -11,7 +11,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include "Graph.h"
+#include "data_structures/Graph.h"
 
 // Structure representing a record from Locations.csv
 struct LocationRecord {
