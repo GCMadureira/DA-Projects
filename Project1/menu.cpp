@@ -51,12 +51,18 @@ void runBatchMode(Graph<int>& urbanGraph) {
     // For demonstration,just output the information.
     outFile << "Computing route from " << startNode << " to " << endNode << ".\n";
 
+    // Allow every vertex to be taken
+    for (auto v : urbanGraph.getVertexSet()) {
+        v->setIgnoreFlag(false);
+    }
+
     // Compute Best Driving Route
     int pathLength;
     dijkstra(&urbanGraph, startNode);
     std::vector<int> path = getPath(&urbanGraph, startNode, endNode, pathLength);
     if (path.empty()) {
-        outFile << "Could not find path between input nodes.\n";
+        outFile << "BestDrivingRoute: none\n"
+                << "AlternateDrivingRoute: none\n";
         return;
     }
 
@@ -68,7 +74,28 @@ void runBatchMode(Graph<int>& urbanGraph) {
         outFile << ", " << path[i];
     }
     outFile << " (" << pathLength << ")" << "\n";
-    //outFile << "AlternateDrivingRoute: ";
+
+    // Ignore all used Nodes to compute the Alternate Driving Route (except start and end nodes)
+    for (int i = 1; i < path.size() - 1; ++i) {
+        auto vertex = urbanGraph.findVertex(path[i]);
+        vertex->setIgnoreFlag(true);
+    }
+
+
+    // Second iteration of the algorithm to compute the Alternative Driving Route
+    dijkstra(&urbanGraph, startNode);
+    path = getPath(&urbanGraph, startNode, endNode, pathLength);
+    if (path.empty()) {
+        outFile << "AlternateDrivingRoute: none\n";
+        return;
+    }
+
+    outFile << "AlternateDrivingRoute: " << path[0];
+    for (int i = 1; i < path.size(); i++) {
+        outFile << ", " << path[i];
+    }
+    outFile << " (" << pathLength << ")" << "\n\n";
+
 
     outFile << "Batch processing completed successfully.\n";
 }

@@ -29,6 +29,7 @@ public:
     std::vector<Edge<T> *> getAdj() const;
     bool isVisited() const;
     bool isProcessing() const;
+    bool isIgnored() const;
     unsigned int getIndegree() const;
     double getDist() const;
     Edge<T> *getPath() const;
@@ -37,6 +38,7 @@ public:
     void setInfo(T info);
     void setVisited(bool visited);
     void setProcessing(bool processing);
+    void setIgnoreFlag(bool ignore);
 
     int getLow() const;
     void setLow(int value);
@@ -62,6 +64,7 @@ protected:
     unsigned int indegree; // used by topsort
     double dist = 0;
     Edge<T> *path = nullptr;
+    bool ignoreFlag = false; // if true then ignore Vertex when searching for path
 
     std::vector<Edge<T> *> incoming; // incoming edges
 
@@ -79,12 +82,14 @@ public:
 
     Vertex<T> * getDest() const;
     bool isSelected() const;
+    bool isIgnored() const;
     Vertex<T> * getOrig() const;
     Edge<T> *getReverse() const;
     int getDrivingTime() const;
     int getWalkingTime() const;
 
     void setSelected(bool selected);
+    void setIgnoreFlag(bool ignore);
     void setReverse(Edge<T> *reverse);
     void setDrivingTime(int time);
     void setWalkingTime(int time);
@@ -96,6 +101,7 @@ protected:
 
     // auxiliary fields
     bool selected = false;
+    bool ignoreFlag = false; // if true then ignore Edge when searching for path
 
     // used for bidirectional edges
     Vertex<T> *orig;
@@ -267,6 +273,16 @@ std::vector<Edge<T> *> Vertex<T>::getIncoming() const {
 }
 
 template <class T>
+void Vertex<T>::setIgnoreFlag(bool ignore) {
+    this->ignoreFlag = ignore;
+}
+
+template <class T>
+bool Vertex<T>::isIgnored() const{
+    return this->ignoreFlag;
+}
+
+template <class T>
 void Vertex<T>::setInfo(T in) {
     this->info = in;
 }
@@ -341,6 +357,16 @@ bool Edge<T>::isSelected() const {
 template <class T>
 void Edge<T>::setSelected(bool selected) {
     this->selected = selected;
+}
+
+template <class T>
+void Edge<T>::setIgnoreFlag(bool ignore) {
+    this->ignoreFlag = ignore;
+}
+
+template <class T>
+bool Edge<T>::isIgnored() const{
+    return this->ignoreFlag;
 }
 
 template <class T>
