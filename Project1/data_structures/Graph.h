@@ -10,6 +10,7 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
+#include "MutablePriorityQueue.h"
 
 template <class T>
 class Edge;
@@ -22,6 +23,7 @@ template <class T>
 class Vertex {
 public:
     Vertex(T in);
+    bool operator<(Vertex<T> & vertex) const; // // required by MutablePriorityQueue
 
     T getInfo() const;
     std::vector<Edge<T> *> getAdj() const;
@@ -44,10 +46,11 @@ public:
     void setIndegree(unsigned int indegree);
     void setDist(double dist);
     void setPath(Edge<T> *path);
-    Edge<T> * addEdge(Vertex<T> *dest, int drivingTime, int walkingTime);
+    Edge<T> * addEdge(Vertex<T> *d, int drivingTime, int walkingTime);
     bool removeEdge(T in);
     void removeOutgoingEdges();
 
+    friend class MutablePriorityQueue<Vertex>;
 protected:
     T info;                // info node
     std::vector<Edge<T> *> adj;  // outgoing edges
@@ -62,6 +65,7 @@ protected:
 
     std::vector<Edge<T> *> incoming; // incoming edges
 
+    int queueIndex = 0; 		// required by MutablePriorityQueue and UFDS
 
     void deleteEdge(Edge<T> *edge);
 };
@@ -96,12 +100,7 @@ protected:
     // used for bidirectional edges
     Vertex<T> *orig;
     Edge<T> *reverse = nullptr;
-
 };
-
-template <class T>
-Edge<T>::Edge(Vertex<T> *orig, Vertex<T> *dest, int drivingTime, int walkingTime)
-        : orig(orig), dest(dest), drivingTime(drivingTime), walkingTime(walkingTime) {}
 
 /********************** Graph  ****************************/
 
@@ -127,7 +126,7 @@ public:
      * destination vertices and the edge weight (w).
      * Returns true if successful, and false if the source or destination vertex does not exist.
      */
-    bool addEdge(const T &sourc, const T &dest, double w);
+    bool addEdge(const T &sourc, const T &dest, int drivingTime, int walkingTime);
     bool removeEdge(const T &source, const T &dest);
 
     int getNumVertex() const;
@@ -200,6 +199,11 @@ void Vertex<T>::removeOutgoingEdges() {
         it = adj.erase(it);
         deleteEdge(edge);
     }
+}
+
+template <class T>
+bool Vertex<T>::operator<(Vertex<T> & vertex) const {
+    return this->dist < vertex.dist;
 }
 
 template <class T>
@@ -310,6 +314,9 @@ void Vertex<T>::deleteEdge(Edge<T> *edge) {
 
 /********************** Edge  ****************************/
 
+template <class T>
+Edge<T>::Edge(Vertex<T> *orig, Vertex<T> *dest, int drivingTime, int walkingTime)
+        : orig(orig), dest(dest), drivingTime(drivingTime), walkingTime(walkingTime) {}
 
 template <class T>
 Vertex<T> * Edge<T>::getDest() const {
@@ -341,6 +348,24 @@ void Edge<T>::setReverse(Edge<T> *reverse) {
     this->reverse = reverse;
 }
 
+template <class T>
+int Edge<T>::getDrivingTime() const{
+    return this->drivingTime;
+}
+
+template <class T>
+int Edge<T>::getWalkingTime() const {
+    return this->walkingTime;
+}
+template <class T>
+void Edge<T>::setDrivingTime(int time) {
+    this->drivingTime = time;
+}
+
+template <class T>
+void Edge<T>::setWalkingTime(int time) {
+    this->walkingTime = time;
+}
 
 /********************** Graph  ****************************/
 
@@ -415,12 +440,12 @@ bool Graph<T>::removeVertex(const T &in) {
  * Returns true if successful, and false if the source or destination vertex does not exist.
  */
 template <class T>
-bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
+bool Graph<T>::addEdge(const T &sourc, const T &dest, int drivingTime, int walkingTime) {
     auto v1 = findVertex(sourc);
     auto v2 = findVertex(dest);
     if (v1 == nullptr || v2 == nullptr)
         return false;
-    v1->addEdge(v2, w);
+    v1->addEdge(v2, drivingTime, walkingTime);
     return true;
 }
 
