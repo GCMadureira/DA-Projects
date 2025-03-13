@@ -24,26 +24,51 @@ void runBatchMode(Graph<int>& urbanGraph) {
         return;
     }
 
-    // Example: Expecting the command "ROUTE" followed by two integers.
-    std::string command;
-    inFile >> command;
-    if (command != "ROUTE") {
-        outFile << "Invalid input format. Expected command 'ROUTE'.\n";
+    std::string modeLine, sourceLine, destinationLine;
+    std::string mode, startNodeStr, endNodeStr;;
+    int startNode, endNode;
+
+    // Extract values after ':'
+    size_t pos;
+
+    // Read expected lines
+    std::getline(inFile, modeLine);
+    std::getline(inFile, sourceLine);
+    std::getline(inFile, destinationLine);
+
+    // Parse mode
+    pos = modeLine.find(':');
+    if (pos != std::string::npos) {
+        mode = modeLine.substr(pos + 1);
+    } else {
+        outFile << "Invalid input format. Expected 'Mode:<value>'\n";
         return;
     }
-    /*
-        std::string line;
-        std::getline(inFile, line);
-        std::string value;
-        while (std::getline(inFile, line)){
-            std::getline(linestream, token, ',');
-        }
 
-     */
+    // Parse source
+    pos = sourceLine.find(':');
+    if (pos != std::string::npos) {
+        startNodeStr = sourceLine.substr(pos + 1);
+    } else {
+        outFile << "Invalid input format. Expected 'Source:<id>'\n";
+        return;
+    }
 
-    int startNode, endNode;
-    if (!(inFile >> startNode >> endNode)) {
-        outFile << "Invalid or missing node data.\n";
+    // Parse destination
+    pos = destinationLine.find(':');
+    if (pos != std::string::npos) {
+        endNodeStr = destinationLine.substr(pos + 1);
+    } else {
+        outFile << "Invalid input format. Expected 'Destination:<id>'\n";
+        return;
+    }
+
+    // Convert startNode and endNode to integers
+    try {
+        startNode = std::stoi(startNodeStr);
+        endNode = std::stoi(endNodeStr);
+    } catch (const std::exception& e) {
+        outFile << "Invalid node format. Source and Destination must be integers.\n";
         return;
     }
 
