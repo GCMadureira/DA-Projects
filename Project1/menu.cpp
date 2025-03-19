@@ -28,7 +28,7 @@ int main() {
 
         if (choice == 1) {
             // TODO: This function reads input.txt and writes the route results to output.txt.
-            IndependentRoutePlanning(urbanGraph);
+            independentRoutePlanning(urbanGraph);
         } else if (choice == 2) {
             std::cout << "Exiting program.\n";
         } else {
