@@ -21,7 +21,7 @@ std::vector<LocationRecord> readLocations(const std::string &filename) {
     std::string line;
     std::getline(file, line); // Skip header line
     while (std::getline(file, line)) {
-        std::cout << "Reading line: " << line << std::endl;
+        //std::cout << "Reading line: " << line << std::endl;
         std::istringstream linestream(line);
         std::string token;
         LocationRecord rec;
@@ -54,7 +54,7 @@ std::vector<DistanceRecord> readDistances(const std::string &filename) {
     std::string line;
     std::getline(file, line); // Skip header line
     while (std::getline(file, line)) {
-        std::cout << "Reading line: " << line << std::endl;
+        //std::cout << "Reading line: " << line << std::endl;
         std::istringstream linestream(line);
         std::string token;
         DistanceRecord rec;

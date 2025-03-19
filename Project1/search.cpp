@@ -36,10 +36,11 @@ void dijkstra(Graph<T> * g, const int &origin) {
 
     while(!pq.empty()){
         Vertex<T>* v = pq.extractMin();
+        v->setVisited(true);
         for(Edge<T>* e : v->getAdj()){
-            if (e->getDest()->isIgnored() || e->isIgnored()) continue; // Restricted Route
+            if (e->getDest()->isIgnored() || e->isIgnored() || e->getDest()->isVisited()) continue; // Restricted Route or already visited
             if (e->getDest()->getDist() == INF) pq.insert(e->getDest());
-            if(e->getDrivingTime() != -1 && relax(e)){ //only driving route for now
+            if (e->getDrivingTime() != -1 && relax(e)){ //only driving route for now
                 pq.decreaseKey(e->getDest());
             }
         }

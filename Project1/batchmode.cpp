@@ -75,7 +75,15 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
     std::istringstream avoidNodesStream(avoidNodesStr);
     std::string node;
     while (std::getline(avoidNodesStream, node, ',')) {
-        avoidNodes.push_back(std::stoi(node));
+        try {
+            int nodeValue = std::stoi(node);
+            // Avoid nodes cannot coincide with the start, end or include nodes
+            if (nodeValue == startNode || nodeValue == endNode || nodeValue == includeNode) continue;
+            avoidNodes.push_back(nodeValue);
+        }
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Avoid nodes must be a valid integers.\n";
+        }
     }
     if (std::getline(avoidNodesStream, node)) // read the last node
         avoidNodes.push_back(std::stoi(node));
@@ -104,9 +112,11 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
     pos = includeNodeLine.find(':');
     if (pos != std::string::npos) {
         includeNodeStr = includeNodeLine.substr(pos + 1);
-        try {includeNode = std::stoi(includeNodeStr);}
-        catch (const std::exception& e) {
-            outFile << "Invalid node format. Include node must be a valid integer.\n";
+        if (!includeNodeStr.empty()) { // Avoid the error message when there is no include node
+            try {includeNode = std::stoi(includeNodeStr);}
+            catch (const std::exception& e) {
+                outFile << "Invalid node format. Include node must be a valid integer.\n";
+            }
         }
     }
 
@@ -154,25 +164,30 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     int firstPathLength = 0, secondPathLength = 0;
     std::vector<int> firstPath, secondPath;
     dijkstra(&urbanGraph, startNode);
-    if (includeNode != -1) { // Two-step path calculation via includeNode
-        firstPath = getPath(&urbanGraph, startNode, includeNode, firstPathLength);
-        dijkstra(&urbanGraph, includeNode);
-        secondPath = getPath(&urbanGraph, includeNode, endNode, secondPathLength);
-    }
-    else { // Best and Alternate Driving Routes
+    if (mode == 0) { // Driving and Alternate Driving Route
         firstPath = getPath(&urbanGraph, startNode, endNode, firstPathLength);
         // Ignore all used Nodes to compute the Alternate Driving Route (except start and end nodes)
         for (int i = 1; i < firstPath.size() - 1; ++i) {
             auto vertex = urbanGraph.findVertex(firstPath[i]);
             vertex->setIgnoreFlag(true);
         }
+        dijkstra(&urbanGraph, startNode);
         secondPath = getPath(&urbanGraph, startNode, endNode, secondPathLength);
+    }
+    else if (mode == 1) { // Restricted Route
+        if (includeNode == -1) firstPath = getPath(&urbanGraph, startNode, endNode, firstPathLength);
+        else { // Two-step path calculation via includeNode
+            firstPath = getPath(&urbanGraph, startNode, includeNode, firstPathLength);
+            dijkstra(&urbanGraph, includeNode);
+            secondPath = getPath(&urbanGraph, includeNode, endNode, secondPathLength);
+        }
     }
 
 
     // Result Output
     outFile << "Source: " << startNode << "\n"
             << "Destination: " << endNode << "\n";
+
     if (mode == 0) { // Normal Driving Route
         if (firstPath.empty()) {
             outFile << "BestDrivingRoute: none\n"
@@ -198,17 +213,20 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     }
     else if (mode == 1) { // Restricted Driving Route
         outFile << "RestrictedDrivingRoute: ";
-        if (firstPath.empty() || secondPath.empty()) {
+        if (firstPath.empty()) {
             outFile << "none\n";
         } else {
             outFile << firstPath[0];
             for (size_t i = 1; i < firstPath.size(); ++i) {
                 outFile << ", " << firstPath[i];
             }
-            for (size_t i = 1; i < secondPath.size(); ++i) {
-                outFile << ", " << secondPath[i];
+            if (includeNode != -1 && !secondPath.empty()) { // Has include node and a valid route through it
+                for (size_t i = 1; i < secondPath.size(); ++i) {
+                    outFile << ", " << secondPath[i];
+                }
+                outFile << " (" << (firstPathLength + secondPathLength) << ")\n\n";
             }
-            outFile << " (" << (firstPathLength + secondPathLength) << ")\n";
+            else outFile << " (" << firstPathLength << ")\n\n";
         }
     }
     outFile << "Batch processing completed successfully.\n";
