@@ -3,11 +3,21 @@
 //
 
 
-// Parses the input file and applies all restrictions; sets the start and end nodes on the arguments
+
+/*
+    Parses the input file and applies all restrictions; sets the start, end and include nodes on the arguments
+    Return values:
+        -1: error
+         0: driving and alternate driving routes
+         1: restricted driving route
+         (can add more later)
+*/
 int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& urbanGraph,
-                    int& startNode, int& endNode) {
-    std::string modeLine, sourceLine, destinationLine;
-    std::string modeStr, startNodeStr, endNodeStr;
+                    int& startNode, int& endNode, int& includeNode) {
+    std::string modeLine, sourceLine, destinationLine, avoidNodesLine, avoidSegmentsLine, includeNodeLine;
+    std::string modeStr, startNodeStr, endNodeStr, avoidNodesStr, avoidSegmentsStr, includeNodeStr;
+    std::vector<int> avoidNodes;
+    std::vector<std::pair<int, int>> avoidSegments;
 
     // Extract values after ':'
     size_t pos;
@@ -16,6 +26,9 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
     std::getline(inFile, modeLine);
     std::getline(inFile, sourceLine);
     std::getline(inFile, destinationLine);
+    std::getline(inFile, avoidNodesLine);
+    std::getline(inFile, avoidSegmentsLine);
+    std::getline(inFile, includeNodeLine);
 
     // Parse mode
     pos = modeLine.find(':');
@@ -30,6 +43,11 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
     pos = sourceLine.find(':');
     if (pos != std::string::npos) {
         startNodeStr = sourceLine.substr(pos + 1);
+        try {startNode = std::stoi(startNodeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Source node must be a valid integer.\n";
+            return -1;
+        }
     } else {
         outFile << "Invalid input format. Expected 'Source:<id>'\n";
         return -1;
@@ -39,26 +57,70 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
     pos = destinationLine.find(':');
     if (pos != std::string::npos) {
         endNodeStr = destinationLine.substr(pos + 1);
+        try {endNode = std::stoi(endNodeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Destination node must be a valid integer.\n";
+            return -1;
+        }
     } else {
         outFile << "Invalid input format. Expected 'Destination:<id>'\n";
         return -1;
     }
 
-  	// Convert startNode and endNode to integers
-    try {
-        startNode = std::stoi(startNodeStr);
-        endNode = std::stoi(endNodeStr);
-    } catch (const std::exception& e) {
-        outFile << "Invalid node format. Source and Destination must be integers.\n";
-        return -1;
+    //Parse avoidNodes
+    pos=avoidNodesLine.find(':');
+    if (pos != std::string::npos) {
+        avoidNodesStr = avoidNodesLine.substr(pos + 1);
+    }
+    std::istringstream avoidNodesStream(avoidNodesStr);
+    std::string node;
+    while (std::getline(avoidNodesStream, node, ',')) {
+        avoidNodes.push_back(std::stoi(node));
+    }
+    if (std::getline(avoidNodesStream, node)) // read the last node
+        avoidNodes.push_back(std::stoi(node));
+
+    //Parse avoidSegments
+    pos = avoidSegmentsLine.find(':');
+    if (pos != std::string::npos) {
+        avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
+    }
+    std::istringstream avoidSegmentsStream(avoidSegmentsStr);
+    std::string segment;
+    while (std::getline(avoidSegmentsStream, segment, ',')) {
+        int u, v;
+        if (sscanf(segment.c_str(), "(%d,%d)", &u, &v) == 2) {
+            avoidSegments.emplace_back(u, v);
+        }
+    }
+    if (std::getline(avoidNodesStream, node)) { // read the last segment
+        int u, v;
+        if (sscanf(segment.c_str(), "(%d,%d)", &u, &v) == 2) {
+            avoidSegments.emplace_back(u, v);
+        }
     }
 
-    // Allow every vertex to be taken
-    for (auto v : urbanGraph.getVertexSet()) {
-        v->setIgnoreFlag(false);
+    //Parse includeNode
+    pos = includeNodeLine.find(':');
+    if (pos != std::string::npos) {
+        includeNodeStr = includeNodeLine.substr(pos + 1);
+        try {includeNode = std::stoi(includeNodeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Include node must be a valid integer.\n";
+        }
     }
 
-    return 0;
+    // Apply restrictions
+    for (int node : avoidNodes) {
+        auto v = urbanGraph.findVertex(node);
+        if (v) v->setIgnoreFlag(true);
+    }
+    for (auto& seg : avoidSegments) {
+        auto e = urbanGraph.findEdge(seg.first, seg.second);
+        if (e) e->setIgnoreFlag(true);
+    }
+
+    return (!avoidNodes.empty() || !avoidSegments.empty() || includeNode != -1);
 }
 
 
@@ -83,8 +145,8 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     for (auto v : urbanGraph.getVertexSet()) {
         v->setIgnoreFlag(false);
     }
-    int startNode = 1, endNode = 5;
-    int mode = parseInputFile(inFile, outFile, urbanGraph, startNode, endNode);
+    int startNode, endNode, includeNode = -1;
+    int mode = parseInputFile(inFile, outFile, urbanGraph, startNode, endNode, includeNode);
     if (mode == -1) return; // error
 
 
@@ -92,15 +154,20 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     int firstPathLength = 0, secondPathLength = 0;
     std::vector<int> firstPath, secondPath;
     dijkstra(&urbanGraph, startNode);
-    firstPath = getPath(&urbanGraph, startNode, endNode, firstPathLength);
-
-    // Ignore all used Nodes to compute the Alternate Driving Route (except start and end nodes)
-    for (int i = 1; i < firstPath.size() - 1; ++i) {
-        auto vertex = urbanGraph.findVertex(firstPath[i]);
-        vertex->setIgnoreFlag(true);
+    if (includeNode != -1) { // Two-step path calculation via includeNode
+        firstPath = getPath(&urbanGraph, startNode, includeNode, firstPathLength);
+        dijkstra(&urbanGraph, includeNode);
+        secondPath = getPath(&urbanGraph, includeNode, endNode, secondPathLength);
     }
-
-    secondPath = getPath(&urbanGraph, startNode, endNode, secondPathLength);
+    else { // Best and Alternate Driving Routes
+        firstPath = getPath(&urbanGraph, startNode, endNode, firstPathLength);
+        // Ignore all used Nodes to compute the Alternate Driving Route (except start and end nodes)
+        for (int i = 1; i < firstPath.size() - 1; ++i) {
+            auto vertex = urbanGraph.findVertex(firstPath[i]);
+            vertex->setIgnoreFlag(true);
+        }
+        secondPath = getPath(&urbanGraph, startNode, endNode, secondPathLength);
+    }
 
 
     // Result Output
@@ -112,7 +179,6 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
                     << "AlternateDrivingRoute: none\n";
             return;
         }
-
         outFile << "BestDrivingRoute: " << firstPath[0];
         for (int i = 1; i < firstPath.size(); i++) {
             outFile << ", " << firstPath[i];
@@ -124,12 +190,26 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
             outFile << "AlternateDrivingRoute: none\n";
             return;
         }
-
         outFile << "AlternateDrivingRoute: " << secondPath[0];
         for (int i = 1; i < secondPath.size(); i++) {
             outFile << ", " << secondPath[i];
         }
         outFile << " (" << secondPathLength << ")" << "\n\n";
+    }
+    else if (mode == 1) { // Restricted Driving Route
+        outFile << "RestrictedDrivingRoute: ";
+        if (firstPath.empty() || secondPath.empty()) {
+            outFile << "none\n";
+        } else {
+            outFile << firstPath[0];
+            for (size_t i = 1; i < firstPath.size(); ++i) {
+                outFile << ", " << firstPath[i];
+            }
+            for (size_t i = 1; i < secondPath.size(); ++i) {
+                outFile << ", " << secondPath[i];
+            }
+            outFile << " (" << (firstPathLength + secondPathLength) << ")\n";
+        }
     }
     outFile << "Batch processing completed successfully.\n";
 }

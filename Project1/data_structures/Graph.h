@@ -134,6 +134,7 @@ public:
      */
     bool addEdge(const T &sourc, const T &dest, int drivingTime, int walkingTime);
     bool removeEdge(const T &source, const T &dest);
+    Edge<T> *findEdge(const T &source, const T &dest) const;
 
     int getNumVertex() const;
     std::vector<Vertex<T> *> getVertexSet() const;
@@ -487,6 +488,17 @@ bool Graph<T>::removeEdge(const T &sourc, const T &dest) {
         return false;
     }
     return srcVertex->removeEdge(dest);
+}
+
+template <class T>
+Edge<T>* Graph<T>::findEdge(const T &sourc, const T &dest) const{
+    Vertex<T>* srcVertex = findVertex(sourc);
+    if (srcVertex == nullptr) return nullptr;
+    for (auto e : srcVertex->getAdj()) {
+        if (e->getDest()->getInfo() == dest)
+            return e;
+    }
+    return nullptr;
 }
 
 template <class T>
