@@ -67,14 +67,14 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
         return -1;
     }
 
-    //Parse avoidNodes
-    pos=avoidNodesLine.find(':');
+    // Parse avoidNodes
+    pos = avoidNodesLine.find(':');
     if (pos != std::string::npos) {
         avoidNodesStr = avoidNodesLine.substr(pos + 1);
     }
     std::istringstream avoidNodesStream(avoidNodesStr);
     std::string node;
-    while (std::getline(avoidNodesStream, node, ',')) {
+    while (std::getline(avoidNodesStream, node, ',') || std::getline(avoidNodesStream, node)) { // if the first condition is false then check for the last node without the comma
         try {
             int nodeValue = std::stoi(node);
             // Avoid nodes cannot coincide with the start, end or include nodes
@@ -85,8 +85,6 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
             outFile << "Invalid node format. Avoid nodes must be a valid integers.\n";
         }
     }
-    if (std::getline(avoidNodesStream, node)) // read the last node
-        avoidNodes.push_back(std::stoi(node));
 
     //Parse avoidSegments
     pos = avoidSegmentsLine.find(':');
@@ -95,13 +93,7 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
     }
     std::istringstream avoidSegmentsStream(avoidSegmentsStr);
     std::string segment;
-    while (std::getline(avoidSegmentsStream, segment, ',')) {
-        int u, v;
-        if (sscanf(segment.c_str(), "(%d,%d)", &u, &v) == 2) {
-            avoidSegments.emplace_back(u, v);
-        }
-    }
-    if (std::getline(avoidNodesStream, node)) { // read the last segment
+    while (std::getline(avoidSegmentsStream, segment, ',') || std::getline(avoidSegmentsStream, segment)) { // if the first condition is false then check for the last node without the comma
         int u, v;
         if (sscanf(segment.c_str(), "(%d,%d)", &u, &v) == 2) {
             avoidSegments.emplace_back(u, v);
