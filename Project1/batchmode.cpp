@@ -93,10 +93,16 @@ int parseInputFile(std::ifstream& inFile, std::ofstream& outFile, Graph<int>& ur
     }
     std::istringstream avoidSegmentsStream(avoidSegmentsStr);
     std::string segment;
-    while (std::getline(avoidSegmentsStream, segment, ',') || std::getline(avoidSegmentsStream, segment)) { // if the first condition is false then check for the last node without the comma
+    while (std::getline(avoidSegmentsStream, segment, ')') || std::getline(avoidSegmentsStream, segment)) { // if the first condition is false then check for the last segment without the comma
         int u, v;
-        if (sscanf(segment.c_str(), "(%d,%d)", &u, &v) == 2) {
+        if (sscanf(segment.c_str(), "(%d,%d)", &u, &v) == 2) { // first segment
             avoidSegments.emplace_back(u, v);
+        }
+        else if (sscanf(segment.c_str(), ",(%d,%d)", &u, &v) == 2) { // other segments
+            avoidSegments.emplace_back(u, v);
+        }
+        else {
+            outFile << "Invalid segment format. Avoid segments must be in (a,b) format.\n";
         }
     }
 
@@ -146,6 +152,7 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     // Setup
     for (auto v : urbanGraph.getVertexSet()) {
         v->setIgnoreFlag(false);
+        for (auto e : v->getAdj()) e->setIgnoreFlag(false);
     }
     int startNode, endNode, includeNode = -1;
     int mode = parseInputFile(inFile, outFile, urbanGraph, startNode, endNode, includeNode);
