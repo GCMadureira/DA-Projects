@@ -29,16 +29,16 @@ void dijkstra(Graph<T> * g, const int &origin) {
         v->setDist(INF);
         v->setPath(nullptr);
         v->setVisited(false);
-        if (!v->isIgnored()) pq.insert(v);
     }
 
     g->findVertex(origin)->setDist(0);
-    pq.decreaseKey(g->findVertex(origin));
+    pq.insert(g->findVertex(origin));
 
     while(!pq.empty()){
         Vertex<T>* v = pq.extractMin();
         for(Edge<T>* e : v->getAdj()){
-            if (e->getDest()->isIgnored()) continue;
+            if (e->getDest()->isIgnored() || e->isIgnored()) continue; // Restricted Route
+            if (e->getDest()->getDist() == INF) pq.insert(e->getDest());
             if(e->getDrivingTime() != -1 && relax(e)){ //only driving route for now
                 pq.decreaseKey(e->getDest());
             }
