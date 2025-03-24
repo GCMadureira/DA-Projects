@@ -332,24 +332,29 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
     }
 
     if (includeNode == -1 || startNode == includeNode) {
-        // No IncludeNode or it's the same as startNode → Direct Route
+        // No IncludeNode or it's the same as startNode to Direct Route
         std::cout << "Debug: No IncludeNode. Finding direct path.\n";
         dijkstra(&urbanGraph, startNode);
         path1 = getPath(&urbanGraph, startNode, endNode, pathLength1);
     } else {
-        // Step 1: Path from startNode → IncludeNode
+        // Path from startNode to IncludeNode
         dijkstra(&urbanGraph, startNode);
         path1 = getPath(&urbanGraph, startNode, includeNode, pathLength1);
         if (path1.empty()) {
             std::cout << "Error: No path found from " << startNode << " to IncludeNode " << includeNode << ".\n";
+            outFile << "Source: " << startNode << "\n"
+                    << "Destination: " << endNode << "\n"
+                    << "RestrictedDrivingRoute: none\n";
             return;
         }
 
-        // Step 2: Path from IncludeNode → endNode
+        // Path from IncludeNode to endNode
         dijkstra(&urbanGraph, includeNode);
         path2 = getPath(&urbanGraph, includeNode, endNode, pathLength2);
         if (path2.empty()) {
-            std::cout << "Error: No path found from IncludeNode " << includeNode << " to " << endNode << ".\n";
+            outFile << "Source: " << startNode << "\n"
+                    << "Destination: " << endNode << "\n"
+                    << "RestrictedDrivingRoute: none\n";
             return;
         }
     }
@@ -358,6 +363,12 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
     std::vector<int> finalPath = path1;
     if (!path2.empty()) {
         finalPath.insert(finalPath.end(), path2.begin() + 1, path2.end());
+    }
+    if (finalPath.empty()) {
+        outFile << "Source: " << startNode << "\n"
+                << "Destination: " << endNode << "\n"
+                << "RestrictedDrivingRoute: none\n";
+        return;
     }
 
     outFile << "Source: " << startNode << "\n"

@@ -1,4 +1,3 @@
 Source: 1
-Destination: 5
-RestrictedDrivingRoute: 1, 128, 45, 697, 948, 655, 210, 927, 27, 951, 5 (33)
-Batch processing completed successfully.
+Destination: 128
+RestrictedDrivingRoute: none
