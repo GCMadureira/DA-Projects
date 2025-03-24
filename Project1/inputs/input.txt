@@ -1,6 +1,6 @@
 Mode:driving
 Source:1
 Destination:5
-AvoidNodes:
-AvoidSegments:(1,1219)
+AvoidNodes:1255
+AvoidSegments:(1219,1255)
 IncludeNode:
