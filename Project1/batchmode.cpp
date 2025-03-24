@@ -382,3 +382,161 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
     outFile << "Batch processing completed successfully.\n";
 }
 
+void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
+    std::ifstream inFile("inputs/input.txt");
+    if (!inFile.is_open()) {
+        std::cout << "Could not open input.txt. Process aborted.\n";
+        return;
+    }
+
+    std::ofstream outFile("inputs/output.txt");
+    if (!outFile.is_open()) {
+        std::cout << "Could not open output.txt. Process aborted.\n";
+        return;
+    }
+
+    // Read input parameters
+    std::string modeLine, sourceLine, destinationLine, maxWalkTimeLine, avoidNodesLine, avoidSegmentsLine;
+    std::string startNodeStr, endNodeStr, maxWalkTimeStr, avoidNodesStr, avoidSegmentsStr;
+    int startNode, endNode, maxWalkTime;
+
+    std::getline(inFile, modeLine);
+    std::getline(inFile, sourceLine);
+    std::getline(inFile, destinationLine);
+    std::getline(inFile, maxWalkTimeLine);
+    std::getline(inFile, avoidNodesLine);
+    std::getline(inFile, avoidSegmentsLine);
+
+    // Extract values
+    size_t pos;
+    pos = sourceLine.find(':');
+    if (pos != std::string::npos) startNodeStr = sourceLine.substr(pos + 1);
+    pos = destinationLine.find(':');
+    if (pos != std::string::npos) endNodeStr = destinationLine.substr(pos + 1);
+    pos = maxWalkTimeLine.find(':');
+    if (pos != std::string::npos) maxWalkTimeStr = maxWalkTimeLine.substr(pos + 1);
+    pos = avoidNodesLine.find(':');
+    if (pos != std::string::npos) avoidNodesStr = avoidNodesLine.substr(pos + 1);
+    pos = avoidSegmentsLine.find(':');
+    if (pos != std::string::npos) avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
+
+    // Convert string values to integers
+    try {
+        startNode = std::stoi(startNodeStr);
+        endNode = std::stoi(endNodeStr);
+        maxWalkTime = std::stoi(maxWalkTimeStr);
+    } catch (const std::exception &) {
+        outFile << "Invalid format. Ensure Source, Destination, and MaxWalkTime are valid integers.\n";
+        return;
+    }
+
+    // Check constraints
+    /*
+    if (urbanGraph.areAdjacent(startNode, endNode)) {
+        outFile << "Source: " << startNode << "\nDestination: " << endNode << "\n";
+        outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
+        outFile << "Message: Origin and destination are adjacent, violating constraints.\n";
+        return;
+    }*/
+    if(urbanGraph.findVertex(startNode)->hasParking() ||urbanGraph.findVertex(endNode)->hasParking()){
+        outFile << "Source: " << startNode << "\nDestination: " << endNode << "\n";
+        outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
+        outFile << "Message: Origin or destination is a parking node, violating constraints.\n";
+        return;
+    }
+
+    std::stringstream ss(avoidNodesStr);
+    std::string node;
+    while (std::getline(ss, node, ',')) {
+        try {
+            int nodeId = std::stoi(node);
+            auto vertex = urbanGraph.findVertex(nodeId);
+            if (vertex) {  // Check if vertex exists
+                vertex->setIgnoreFlag(true);
+            } else {
+                std::cout << "Warning: Node " << nodeId << " not found in graph.\n";
+            }
+        } catch (const std::exception&) {
+            std::cout << "Warning: Invalid node format in AvoidNodes.\n";
+        }
+    }
+
+    // Process AvoidSegments and set ignore flags for edges
+    std::stringstream segSS(avoidSegmentsStr);
+    std::string segment;
+    while (std::getline(segSS, segment, ')')) {
+        size_t openParen = segment.find('(');
+        size_t comma = segment.find(',');
+        if (openParen != std::string::npos && comma != std::string::npos) {
+            try {
+                int from = std::stoi(segment.substr(openParen + 1, comma - openParen - 1));
+                int to = std::stoi(segment.substr(comma + 1));
+                auto edge = urbanGraph.findEdge(from, to);
+                if (edge) {  // Check if edge exists
+                    edge->setIgnoreFlag(true);
+                } else {
+                    std::cout << "Warning: Edge (" << from << ", " << to << ") not found in graph.\n";
+                }
+            } catch (...) {
+                std::cout << "Warning: Invalid edge format in AvoidSegments.\n";
+            }
+        }
+    }
+
+    // Find all possible parking nodes
+    std::vector<int> parkingNodes = getParkingNodes(&urbanGraph);
+    std::vector<int> bestDrivingPath, bestWalkingPath;
+    int bestTotalTime = INT_MAX;
+    int bestParkingNode = -1;
+
+    for (int parkingNode : parkingNodes) {
+        if (urbanGraph.findVertex(parkingNode)->isIgnored()) continue;
+
+        // Step 1: Find best driving path to parking node
+        dijkstra(&urbanGraph, startNode);
+        std::vector<int> drivingPath = getPath(&urbanGraph, startNode, parkingNode, bestTotalTime);
+        if (drivingPath.empty()) continue;
+
+        // Step 2: Find best walking path from parking node to destination
+        dijkstra(&urbanGraph, parkingNode);
+        int walkingTime = 0;
+        std::vector<int> walkingPath = getPath(&urbanGraph, parkingNode, endNode, walkingTime);
+
+        if (walkingPath.empty() || walkingTime > maxWalkTime) continue;
+
+        // Step 3: Check for optimality
+        int totalTime = bestTotalTime + walkingTime;
+        if (totalTime < bestTotalTime || (totalTime == bestTotalTime && walkingTime > bestWalkingPath.size())) {
+            bestTotalTime = totalTime;
+            bestDrivingPath = drivingPath;
+            bestWalkingPath = walkingPath;
+            bestParkingNode = parkingNode;
+        }
+    }
+
+    // Output results
+    outFile << "Source: " << startNode << "\nDestination: " << endNode << "\n";
+    if (bestParkingNode == -1) {
+        outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
+        outFile << "Message: No valid route found. Possible reasons: no suitable parking or max walking time exceeded.\n";
+    } else {
+        outFile << "DrivingRoute:";
+        for (size_t i = 0; i < bestDrivingPath.size(); i++) {
+            if (i > 0) outFile << ", ";
+            outFile << bestDrivingPath[i];
+        }
+        outFile << " (" << bestTotalTime - bestWalkingPath.size() << ")\n";
+
+        outFile << "ParkingNode:" << bestParkingNode << "\n";
+
+        outFile << "WalkingRoute:";
+        for (size_t i = 0; i < bestWalkingPath.size(); i++) {
+            if (i > 0) outFile << ", ";
+            outFile << bestWalkingPath[i];
+        }
+        outFile << " (" << bestWalkingPath.size() << ")\n";
+
+        outFile << "TotalTime:" << bestTotalTime << "\n";
+    }
+}
+

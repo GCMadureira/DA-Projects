@@ -91,6 +91,9 @@ void loadGraph(Graph<int>& graph) {
     for (const auto& loc : locations) {
         graph.addVertex(loc.id);
         codeToId[loc.code] = loc.id;
+        if(loc.parking){
+            graph.findVertex(loc.id)->setParking(true);
+        }
     }
 
     // Add distances (edges) to the graph

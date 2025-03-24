@@ -30,6 +30,7 @@ public:
     bool isVisited() const;
     bool isProcessing() const;
     bool isIgnored() const;
+    bool hasParking() const;
     unsigned int getIndegree() const;
     double getDist() const;
     Edge<T> *getPath() const;
@@ -39,6 +40,7 @@ public:
     void setVisited(bool visited);
     void setProcessing(bool processing);
     void setIgnoreFlag(bool ignore);
+    void setParking(bool parking);
 
     int getLow() const;
     void setLow(int value);
@@ -65,6 +67,7 @@ protected:
     double dist = 0;
     Edge<T> *path = nullptr;
     bool ignoreFlag = false; // if true then ignore Vertex when searching for path
+    bool parking=false;
 
     std::vector<Edge<T> *> incoming; // incoming edges
 
@@ -279,8 +282,18 @@ void Vertex<T>::setIgnoreFlag(bool ignore) {
 }
 
 template <class T>
+void Vertex<T>::setParking(bool parking) {
+    this->parking = parking;
+}
+
+template <class T>
 bool Vertex<T>::isIgnored() const{
     return this->ignoreFlag;
+}
+
+template <class T>
+bool Vertex<T>::hasParking() const{
+    return this->parking;
 }
 
 template <class T>

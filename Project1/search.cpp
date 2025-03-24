@@ -68,4 +68,26 @@ static std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, 
     return path;
 }
 
+template <class T>
+static std::vector<T> getParkingNodes(Graph<T> * g) {
+    std::vector<T> parkingNodes;
+
+    for(Vertex<T>* v : g->getVertexSet()){
+        if(v->hasParking()){
+            parkingNodes.push_back(v);
+        }
+    }
+    return parkingNodes;
+}
+
+template <class T>
+bool areAdjacent(Graph<T> * g,const int &origin, const int &dest){
+    for(Edge<T>* e : g->findVertex(origin)->getAdj()){
+        if(e->getDest()== g->findVertex(dest)){
+            return true;
+        }
+    }
+
+}
+
 
