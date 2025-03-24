@@ -1,3 +1,0 @@
-Source: 1
-Destination: 128
-RestrictedDrivingRoute: none

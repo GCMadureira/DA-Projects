@@ -69,12 +69,12 @@ static std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, 
 }
 
 template <class T>
-static std::vector<T> getParkingNodes(Graph<T> * g) {
-    std::vector<T> parkingNodes;
+static std::vector<int> getParkingNodes(Graph<T> * g) {
+    std::vector<int> parkingNodes;
 
     for(Vertex<T>* v : g->getVertexSet()){
         if(v->hasParking()){
-            parkingNodes.push_back(v);
+            parkingNodes.push_back(v->getNum());
         }
     }
     return parkingNodes;
@@ -87,7 +87,7 @@ bool areAdjacent(Graph<T> * g,const int &origin, const int &dest){
             return true;
         }
     }
-
+    return false;
 }
 
 

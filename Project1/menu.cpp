@@ -22,7 +22,8 @@ int main() {
         std::cout << "\n===== Route Planning =====\n";
         std::cout << "1. Independent Route Planning\n";
         std::cout << "2. Restricted Route Planning\n";
-        std::cout << "3. Exit\n";
+        std::cout << "3. Environmental Friendly Route Planning\n";
+        std::cout << "4. Exit\n";
         std::cout << "Enter your choice: ";
         std::cin >> choice;
         std::cin.ignore();
@@ -35,13 +36,16 @@ int main() {
                 restrictedRoutePlanning(urbanGraph);
                 break;
             case 3:
+                environmentallyFriendlyRoutePlanning(urbanGraph);
+                break;
+            case 4:
                 std::cout << "Exiting program.\n";
                 break;
             default:
                 std::cout << "Invalid choice. Please try again.\n";
                 break;
         }
-    } while(choice!=3);
+    } while(choice!=4);
         /*
         if (choice == 1) {
             // TODO: This function reads input.txt and writes the route results to output.txt.
