@@ -1,6 +1,4 @@
 Source: 1
-Destination: 7
-DrivingRoute:none
-ParkingNode:none
-WalkingRoute:none
-Message: No valid route found. Possible reasons: no suitable parking or max walking time exceeded.
+Destination: 2
+RestrictedDrivingRoute: 1, 2 (8)
+Batch processing completed successfully.

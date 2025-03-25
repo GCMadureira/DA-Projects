@@ -3,7 +3,7 @@
 //
 
 #include "search.h"
-
+#include <climits>
 
 using namespace std;
 
