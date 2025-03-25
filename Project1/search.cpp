@@ -69,12 +69,12 @@ static std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, 
 }
 
 template <class T>
-static std::vector<int> getParkingNodes(Graph<T> * g) {
-    std::vector<int> parkingNodes;
+static std::vector<T> getParkingNodes(Graph<T> * g) {
+    std::vector<T> parkingNodes;
 
     for(Vertex<T>* v : g->getVertexSet()){
         if(v->hasParking()){
-            parkingNodes.push_back(v->getNum());
+            parkingNodes.push_back(v->getInfo());
         }
     }
     return parkingNodes;
