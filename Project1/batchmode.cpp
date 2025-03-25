@@ -505,9 +505,9 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
         }
 
         // Step 2: Find best walking path from parking node to destination
-        dijkstra(&urbanGraph, parkingNode);
+        dijkstra(&urbanGraph, parkingNode,false);
         int walkingTime = 0;
-        std::vector<int> walkingPath = getPath(&urbanGraph, parkingNode, endNode, walkingTime);
+        std::vector<int> walkingPath = getPath(&urbanGraph, parkingNode, endNode, walkingTime,false);
 
         if (walkingPath.empty() || walkingTime > maxWalkTime) {
             continue;
