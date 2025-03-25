@@ -34,6 +34,8 @@ public:
     unsigned int getIndegree() const;
     double getDist() const;
     Edge<T> *getPath() const;
+    double getSavedDist() const;
+    Edge<T> *getSavedPath() const;
     std::vector<Edge<T> *> getIncoming() const;
 
     void setInfo(T info);
@@ -50,6 +52,8 @@ public:
     void setIndegree(unsigned int indegree);
     void setDist(double dist);
     void setPath(Edge<T> *path);
+    void saveDist();
+    void savePath();
     Edge<T> * addEdge(Vertex<T> *d, int drivingTime, int walkingTime);
     bool removeEdge(T in);
     void removeOutgoingEdges();
@@ -66,6 +70,8 @@ protected:
     unsigned int indegree; // used by topsort
     double dist = 0;
     Edge<T> *path = nullptr;
+    double savedDist = 0; // save current dist and path
+    Edge<T> *savedPath = nullptr;
     bool ignoreFlag = false; // if true then ignore Vertex when searching for path
     bool parking=false;
 
@@ -272,6 +278,16 @@ Edge<T> *Vertex<T>::getPath() const {
 }
 
 template <class T>
+double Vertex<T>::getSavedDist() const{
+    return this->savedDist;
+}
+
+template <class T>
+Edge<T> *Vertex<T>::getSavedPath() const{
+    return this->savedPath;
+}
+
+template <class T>
 std::vector<Edge<T> *> Vertex<T>::getIncoming() const {
     return this->incoming;
 }
@@ -324,6 +340,16 @@ void Vertex<T>::setDist(double dist) {
 template <class T>
 void Vertex<T>::setPath(Edge<T> *path) {
     this->path = path;
+}
+
+template <class T>
+void Vertex<T>::saveDist() {
+    this->savedDist = dist;
+}
+
+template <class T>
+void Vertex<T>::savePath() {
+    this->savedPath = path;
 }
 
 template <class T>

@@ -3,7 +3,7 @@
 //
 
 #include "search.h"
-
+#include <climits>
 
 using namespace std;
 
@@ -62,6 +62,27 @@ static std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, 
         if (v->getInfo() == origin) break;
         pathLength += v->getPath()->getDrivingTime();
         v = v->getPath()->getOrig();
+    }
+
+    reverse(path.begin(), path.end());
+    return path;
+}
+
+template <class T>
+static std::vector<T> getSavedPath(Graph<T> * g, const int &origin, const int &dest, int& pathLength) {
+    std::vector<T> path;
+    pathLength = 0;
+    Vertex<T>* v = g->findVertex(dest);
+
+    if (!v || v->getSavedDist() == INT_MAX) {
+        return path;
+    }
+
+    while (v) {
+        path.push_back(v->getInfo());
+        if (v->getInfo() == origin) break;
+        pathLength += v->getSavedPath()->getDrivingTime();
+        v = v->getSavedPath()->getOrig();
     }
 
     reverse(path.begin(), path.end());

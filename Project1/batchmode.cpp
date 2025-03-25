@@ -483,47 +483,25 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
         }
     }
 
-    // Find all possible parking nodes
-    std::vector<int> parkingNodes = getParkingNodes(&urbanGraph);
-    std::cout << "Found " << parkingNodes.size() << " parking nodes.\n";
+    dijkstra(&urbanGraph, startNode); // all driving routes from start node
+    for (auto node : urbanGraph.getVertexSet()) {
+        node->saveDist();
+        node->savePath();
+    }
+    dijkstra(&urbanGraph, endNode); // all walking routes from end node
 
-    std::vector<int> bestDrivingPath, bestWalkingPath;
-    int bestTotalTime = INF;
-    int bestParkingNode = -1;
+    int bestTotalTime = INT_MAX, bestParkingNode = -1;
+    for (auto node : urbanGraph.getVertexSet()) {
+        if (!node->hasParking()) continue;
 
-
-    for (int parkingNode : parkingNodes) {
-        if (urbanGraph.findVertex(parkingNode)->isIgnored()) continue;
-
-        cout<<"Processing Parking Node:"<<parkingNode<< "\n";
-        // Step 1: Find best driving path to parking node
-        dijkstra(&urbanGraph, startNode);
-        int drivingTime=0;
-        std::vector<int> drivingPath = getPath(&urbanGraph, startNode, parkingNode, drivingTime);
-        if (drivingPath.empty()) {
-            continue;
-        }
-
-        // Step 2: Find best walking path from parking node to destination
-        dijkstra(&urbanGraph, parkingNode);
-        int walkingTime = 0;
-        std::vector<int> walkingPath = getPath(&urbanGraph, parkingNode, endNode, walkingTime);
-
-        if (walkingPath.empty() || walkingTime > maxWalkTime) {
-            continue;
-        }
-
-        cout<<"Driving Time:"<<drivingTime<<"\n"<<"WalkingTime:"<< walkingTime<<"\n";
-        // Step 3: Check for optimality
-        int totalTime = drivingTime + walkingTime;
-        if (totalTime < bestTotalTime || (totalTime == bestTotalTime && walkingTime > bestWalkingPath.size())) {
+        //                  driving time        walking time
+        int totalTime = node->getSavedDist() + node->getDist();
+        if (totalTime < bestTotalTime && node->getDist() <= maxWalkTime) {
             bestTotalTime = totalTime;
-            bestDrivingPath = drivingPath;
-            bestWalkingPath = walkingPath;
-            bestParkingNode = parkingNode;
-            cout<<"BestTotalTime:"<<totalTime<<"\n";
+            bestParkingNode = node->getInfo();
         }
     }
+
 
     // Output results
     outFile << "Source: " << startNode << "\nDestination: " << endNode << "\n";
@@ -531,12 +509,17 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
         outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
         outFile << "Message: No valid route found. Possible reasons: no suitable parking or max walking time exceeded.\n";
     } else {
+        cout << "test\n";
+        int walkingDistance, drivingDistance;
+        vector<int> bestDrivingPath = getSavedPath(&urbanGraph, startNode, bestParkingNode, drivingDistance);
+        vector<int> bestWalkingPath = getPath(&urbanGraph,  endNode, bestParkingNode, walkingDistance);
+        reverse(bestWalkingPath.begin(), bestWalkingPath.end());
         outFile << "DrivingRoute:";
         for (size_t i = 0; i < bestDrivingPath.size(); i++) {
             if (i > 0) outFile << ", ";
             outFile << bestDrivingPath[i];
         }
-        outFile << " (" << bestTotalTime - bestWalkingPath.size() << ")\n";
+        outFile << " (" << drivingDistance << ")\n";
 
         outFile << "ParkingNode:" << bestParkingNode << "\n";
 
@@ -545,7 +528,7 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
             if (i > 0) outFile << ", ";
             outFile << bestWalkingPath[i];
         }
-        outFile << " (" << bestWalkingPath.size() << ")\n";
+        outFile << " (" << walkingDistance << ")\n";
 
         outFile << "TotalTime:" << bestTotalTime << "\n";
     }
