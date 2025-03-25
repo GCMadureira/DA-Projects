@@ -139,13 +139,13 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     // Open the input and output files
     std::ifstream inFile("inputs/input.txt");
     if (!inFile.is_open()) {
-        std::cerr << "Could not open input.txt. Batch mode aborted.\n";
+        std::cout << "Could not open input.txt. Batch mode aborted.\n";
         return;
     }
 
     std::ofstream outFile("inputs/output.txt");
     if (!outFile.is_open()) {
-        std::cerr << "Could not open output.txt. Batch mode aborted.\n";
+        std::cout << "Could not open output.txt. Batch mode aborted.\n";
         return;
     }
 
@@ -230,3 +230,155 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     }
     outFile << "Batch processing completed successfully.\n";
 }
+
+void restrictedRoutePlanning(Graph<int>& urbanGraph) {
+    std::ifstream inFile("inputs/input.txt");
+    if (!inFile.is_open()) {
+        std::cout << "Could not open input.txt. Batch mode aborted.\n";
+        return;
+    }
+
+    std::ofstream outFile("inputs/output.txt");
+    if (!outFile.is_open()) {
+        std::cout << "Could not open output.txt. Batch mode aborted.\n";
+        return;
+    }
+
+    std::string modeLine, sourceLine, destinationLine, avoidNodesLine, avoidSegmentsLine, includeNodeLine;
+    std::string mode, startNodeStr, endNodeStr, avoidNodesStr, avoidSegmentsStr, includeNodeStr;
+    int startNode, endNode, includeNode = -1;
+
+    size_t pos;
+
+    std::getline(inFile, modeLine);
+    std::getline(inFile, sourceLine);
+    std::getline(inFile, destinationLine);
+    std::getline(inFile, avoidNodesLine);
+    std::getline(inFile, avoidSegmentsLine);
+    std::getline(inFile, includeNodeLine);
+
+    pos = modeLine.find(':');
+    if (pos != std::string::npos) mode = modeLine.substr(pos + 1);
+
+    pos = sourceLine.find(':');
+    if (pos != std::string::npos) startNodeStr = sourceLine.substr(pos + 1);
+
+    pos = destinationLine.find(':');
+    if (pos != std::string::npos) endNodeStr = destinationLine.substr(pos + 1);
+
+    pos = avoidNodesLine.find(':');
+    if (pos != std::string::npos) avoidNodesStr = avoidNodesLine.substr(pos + 1);
+
+    pos = avoidSegmentsLine.find(':');
+    if (pos != std::string::npos) avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
+
+    pos = includeNodeLine.find(':');
+    if (pos != std::string::npos) includeNodeStr = includeNodeLine.substr(pos + 1);
+
+    try {
+        startNode = std::stoi(startNodeStr);
+        endNode = std::stoi(endNodeStr);
+        if (!includeNodeStr.empty()) {
+            includeNode = std::stoi(includeNodeStr);
+        }
+    } catch (const std::exception &) {
+        outFile << "Invalid node format. Source, Destination, and IncludeNode must be integers.\n";
+        return;
+    }
+
+    std::stringstream ss(avoidNodesStr);
+    std::string node;
+    while (std::getline(ss, node, ',')) {
+        try {
+            int nodeId = std::stoi(node);
+            auto vertex = urbanGraph.findVertex(nodeId);
+            if (vertex) {  // Check if vertex is not nullptr
+                vertex->setIgnoreFlag(true);
+            } else {
+                std::cout << "Warning: Node " << nodeId << " not found in graph.\n";
+            }
+        } catch (const std::exception&) {
+            std::cout << "Warning: Invalid node format in AvoidNodes.\n";
+        }
+    }
+
+    std::stringstream segSS(avoidSegmentsStr);
+    std::string segment;
+    while (std::getline(segSS, segment, ')')) {
+        size_t openParen = segment.find('(');
+        size_t comma = segment.find(',');
+        if (openParen != std::string::npos && comma != std::string::npos) {
+            try {
+                int from = std::stoi(segment.substr(openParen + 1, comma - openParen - 1));
+                int to = std::stoi(segment.substr(comma + 1));
+                auto edge = urbanGraph.findEdge(from, to);
+                if (edge) {  // Check if edge is not nullptr
+                    edge->setIgnoreFlag(true);
+                } else {
+                    std::cout << "Warning: Edge (" << from << ", " << to << ") not found in graph.\n";
+                }
+            } catch (const std::exception&) {
+                std::cout << "Warning: Invalid edge format in AvoidSegments.\n";
+            }
+        }
+    }
+
+    std::vector<int> path1, path2;
+    int pathLength1 = 0, pathLength2 = 0;
+
+    if (includeNode != -1) {
+        auto vertex = urbanGraph.findVertex(includeNode);
+        if (vertex) vertex->setIgnoreFlag(false);
+    }
+
+    if (includeNode == -1 || startNode == includeNode) {
+        // No IncludeNode or it's the same as startNode to Direct Route
+        std::cout << "Debug: No IncludeNode. Finding direct path.\n";
+        dijkstra(&urbanGraph, startNode);
+        path1 = getPath(&urbanGraph, startNode, endNode, pathLength1);
+    } else {
+        // Path from startNode to IncludeNode
+        dijkstra(&urbanGraph, startNode);
+        path1 = getPath(&urbanGraph, startNode, includeNode, pathLength1);
+        if (path1.empty()) {
+            std::cout << "Error: No path found from " << startNode << " to IncludeNode " << includeNode << ".\n";
+            outFile << "Source: " << startNode << "\n"
+                    << "Destination: " << endNode << "\n"
+                    << "RestrictedDrivingRoute: none\n";
+            return;
+        }
+
+        // Path from IncludeNode to endNode
+        dijkstra(&urbanGraph, includeNode);
+        path2 = getPath(&urbanGraph, includeNode, endNode, pathLength2);
+        if (path2.empty()) {
+            outFile << "Source: " << startNode << "\n"
+                    << "Destination: " << endNode << "\n"
+                    << "RestrictedDrivingRoute: none\n";
+            return;
+        }
+    }
+
+// Merge paths if IncludeNode exists
+    std::vector<int> finalPath = path1;
+    if (!path2.empty()) {
+        finalPath.insert(finalPath.end(), path2.begin() + 1, path2.end());
+    }
+    if (finalPath.empty()) {
+        outFile << "Source: " << startNode << "\n"
+                << "Destination: " << endNode << "\n"
+                << "RestrictedDrivingRoute: none\n";
+        return;
+    }
+
+    outFile << "Source: " << startNode << "\n"
+            << "Destination: " << endNode << "\n"
+            << "RestrictedDrivingRoute: " << finalPath[0];
+    for (int i = 1; i < finalPath.size(); i++) {
+        outFile << ", " << finalPath[i];
+    }
+    outFile << " (" << pathLength1 + pathLength2 << ")\n";
+
+    outFile << "Batch processing completed successfully.\n";
+}
+

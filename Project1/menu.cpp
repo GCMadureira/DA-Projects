@@ -21,11 +21,28 @@ int main() {
     do {
         std::cout << "\n===== Route Planning =====\n";
         std::cout << "1. Independent Route Planning\n";
-        std::cout << "2. Exit\n";
+        std::cout << "2. Restricted Route Planning\n";
+        std::cout << "3. Exit\n";
         std::cout << "Enter your choice: ";
         std::cin >> choice;
         std::cin.ignore();
 
+        switch (choice) {
+            case 1:
+                independentRoutePlanning(urbanGraph);
+                break;
+            case 2:
+                restrictedRoutePlanning(urbanGraph);
+                break;
+            case 3:
+                std::cout << "Exiting program.\n";
+                break;
+            default:
+                std::cout << "Invalid choice. Please try again.\n";
+                break;
+        }
+    } while(choice!=3);
+        /*
         if (choice == 1) {
             // TODO: This function reads input.txt and writes the route results to output.txt.
             independentRoutePlanning(urbanGraph);
@@ -35,7 +52,7 @@ int main() {
             std::cout << "Invalid choice. Please try again.\n";
         }
     } while (choice != 2);
-
+*/
     return 0;
 }
 
