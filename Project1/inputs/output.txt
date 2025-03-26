@@ -1,4 +1,0 @@
-Source: 1
-Destination: 2
-RestrictedDrivingRoute: 1, 2 (8)
-Batch processing completed successfully.
