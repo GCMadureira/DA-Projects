@@ -34,9 +34,9 @@ void writeInputToFile(int choice, int source, int destination, int maxWalkTime,
     if (maxWalkTime != -1)
         inputFile << "MaxWalkTime:" << maxWalkTime << "\n";
 
-    inputFile << "AvoidNodes:" << (avoidNodes.empty() ? "none" : avoidNodes) << "\n";
-    inputFile << "AvoidSegments:" << (avoidSegments.empty() ? "none" : avoidSegments) << "\n";
-    inputFile << "IncludeNode:" << (includeNode == -1 ? "none" : std::to_string(includeNode)) << "\n";
+    inputFile << "AvoidNodes:" << avoidNodes << "\n";
+    inputFile << "AvoidSegments:" << avoidSegments << "\n";
+    inputFile << "IncludeNode:" << (includeNode == -1 ? "" : std::to_string(includeNode)) << "\n";
 
     inputFile.close();
     std::cout << "\nData successfully saved in input.txt!\n";
@@ -72,7 +72,7 @@ std::string getValidList(const std::string& prompt, const std::string& pattern) 
         std::getline(std::cin, input);
 
         if (input.empty())  // Allow skipping
-            return "none";
+            return "";
 
         if (std::regex_match(input, regexPattern))
             return input;
