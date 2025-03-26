@@ -161,23 +161,35 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
 
     // Computations
     int firstPathLength = 0, secondPathLength = 0;
+    Vertex<int>* endVertex = urbanGraph.findVertex(endNode);
+    Vertex<int>* includeVertex = urbanGraph.findVertex(includeNode);
     std::vector<int> firstPath, secondPath;
     dijkstra(&urbanGraph, startNode);
     if (mode == 0) { // Driving and Alternate Driving Route
-        firstPath = getPath(&urbanGraph, startNode, endNode, firstPathLength);
+        if (endVertex != nullptr) firstPathLength = endVertex->getDist();
+        firstPath = getPath(&urbanGraph, startNode, endNode);
+
         // Ignore all used Nodes to compute the Alternate Driving Route (except start and end nodes)
         for (int i = 1; i < firstPath.size() - 1; ++i) {
             auto vertex = urbanGraph.findVertex(firstPath[i]);
             vertex->setIgnoreFlag(true);
         }
+
         dijkstra(&urbanGraph, startNode);
-        secondPath = getPath(&urbanGraph, startNode, endNode, secondPathLength);
+        if (endVertex != nullptr) secondPathLength = endVertex->getDist();
+        secondPath = getPath(&urbanGraph, startNode, endNode);
     }
     else if (mode == 1) { // Restricted Route
-        if (includeNode == -1) firstPath = getPath(&urbanGraph, startNode, endNode, firstPathLength);
+        if (includeNode == -1) {
+            if (endVertex != nullptr) firstPathLength = endVertex->getDist();
+            firstPath = getPath(&urbanGraph, startNode, endNode);
+        }
         else { // Two-step path calculation via includeNode
-            firstPath = getPath(&urbanGraph, startNode, includeNode, firstPathLength);
+            if (includeVertex != nullptr) firstPathLength = includeVertex->getDist();
+            firstPath = getPath(&urbanGraph, startNode, includeNode);
+
             dijkstra(&urbanGraph, includeNode);
+            if (endVertex != nullptr) secondPathLength = endVertex->getDist();
             secondPath = getPath(&urbanGraph, includeNode, endNode, secondPathLength);
         }
     }
@@ -323,35 +335,40 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
         }
     }
 
-    std::vector<int> path1, path2;
-    int pathLength1 = 0, pathLength2 = 0;
+    std::vector<int> firstPath, secondPath;
+    Vertex<int>* endVertex = urbanGraph.findVertex(endNode);
+    Vertex<int>* includeVertex = urbanGraph.findVertex(includeNode);
+    int firstPathLength = 0, secondPathLength = 0;
 
     if (includeNode != -1) {
         auto vertex = urbanGraph.findVertex(includeNode);
         if (vertex) vertex->setIgnoreFlag(false);
     }
 
+    dijkstra(&urbanGraph, startNode);
     if (includeNode == -1 || startNode == includeNode) {
         // No IncludeNode or it's the same as startNode to Direct Route
-        std::cout << "Debug: No IncludeNode. Finding direct path.\n";
-        dijkstra(&urbanGraph, startNode);
-        path1 = getPath(&urbanGraph, startNode, endNode, pathLength1);
+        if (endVertex != nullptr) firstPathLength = endVertex->getDist();
+        firstPath = getPath(&urbanGraph, startNode, endNode);
     } else {
-        // Path from startNode to IncludeNode
-        dijkstra(&urbanGraph, startNode);
-        path1 = getPath(&urbanGraph, startNode, includeNode, pathLength1);
-        if (path1.empty()) {
-            std::cout << "Error: No path found from " << startNode << " to IncludeNode " << includeNode << ".\n";
+        // Path from startNode to includeNode
+        if (includeVertex != nullptr) firstPathLength = includeVertex->getDist();
+        firstPath = getPath(&urbanGraph, startNode, includeNode);
+
+        if (firstPath.empty()) {
+            std::cout << "Error: No path found from startNode " << startNode << " to includeNode " << includeNode << ".\n";
             outFile << "Source: " << startNode << "\n"
                     << "Destination: " << endNode << "\n"
                     << "RestrictedDrivingRoute: none\n";
             return;
         }
 
-        // Path from IncludeNode to endNode
         dijkstra(&urbanGraph, includeNode);
-        path2 = getPath(&urbanGraph, includeNode, endNode, pathLength2);
-        if (path2.empty()) {
+        if (endVertex != nullptr) secondPathLength = endVertex->getDist();
+        secondPath = getPath(&urbanGraph, includeNode, endNode, secondPathLength);
+
+        if (secondPath.empty()) {
+            std::cout << "Error: No path found from includeNode " << includeNode << " to endNode " << endNode << ".\n";
             outFile << "Source: " << startNode << "\n"
                     << "Destination: " << endNode << "\n"
                     << "RestrictedDrivingRoute: none\n";
@@ -359,25 +376,18 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
         }
     }
 
-// Merge paths if IncludeNode exists
-    std::vector<int> finalPath = path1;
-    if (!path2.empty()) {
-        finalPath.insert(finalPath.end(), path2.begin() + 1, path2.end());
-    }
-    if (finalPath.empty()) {
-        outFile << "Source: " << startNode << "\n"
-                << "Destination: " << endNode << "\n"
-                << "RestrictedDrivingRoute: none\n";
-        return;
+    // Merge paths if includeNode exists
+    if (!secondPath.empty()) {
+        firstPath.insert(firstPath.end(), secondPath.begin() + 1, secondPath.end());
     }
 
     outFile << "Source: " << startNode << "\n"
             << "Destination: " << endNode << "\n"
-            << "RestrictedDrivingRoute: " << finalPath[0];
-    for (int i = 1; i < finalPath.size(); i++) {
-        outFile << ", " << finalPath[i];
+            << "RestrictedDrivingRoute: " << firstPath[0];
+    for (int i = 1; i < firstPath.size(); i++) {
+        outFile << ", " << firstPath[i];
     }
-    outFile << " (" << pathLength1 + pathLength2 << ")\n";
+    outFile << " (" << firstPathLength + secondPathLength << ")\n\n";
 
     outFile << "Batch processing completed successfully.\n";
 }
@@ -431,13 +441,13 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
     }
 
     // Check constraints
-    /*
+
     if (urbanGraph.areAdjacent(startNode, endNode)) {
         outFile << "Source: " << startNode << "\nDestination: " << endNode << "\n";
         outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
         outFile << "Message: Origin and destination are adjacent, violating constraints.\n";
         return;
-    }*/
+    }
     if(urbanGraph.findVertex(startNode)->hasParking() ||urbanGraph.findVertex(endNode)->hasParking()){
         outFile << "Source: " << startNode << "\nDestination: " << endNode << "\n";
         outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
@@ -499,7 +509,7 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
 
         //                  driving time        walking time
         int totalTime = node->getSavedDist() + node->getDist();
-        if (totalTime < bestTotalTime && node->getDist() <= maxWalkTime) {
+        if (totalTime < bestTotalTime && node->getDist() <= maxWalkTime) { // obeys maxWalkTime restriction
             bestTotalTime = totalTime;
             bestParkingNode = node->getInfo();
         }
@@ -525,24 +535,25 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
             return;
         }
         // no route obeying the restrictions but suggested route exists
-        int walkingDistance, drivingDistance;
-        vector<int> drivingPath = getSavedPath(&urbanGraph, startNode, firstSuggestedParkingNode, drivingDistance);
-        vector<int> walkingPath = getPath(&urbanGraph,  endNode, firstSuggestedParkingNode, walkingDistance, false);
+        int drivingDistance = urbanGraph.findVertex(firstSuggestedParkingNode)->getSavedDist();
+        int walkingDistance = urbanGraph.findVertex(firstSuggestedParkingNode)->getDist();
+        vector<int> drivingPath = getPath(&urbanGraph, startNode, firstSuggestedParkingNode, true);
+        vector<int> walkingPath = getPath(&urbanGraph,  endNode, firstSuggestedParkingNode);
         reverse(walkingPath.begin(), walkingPath.end());
+
         outFile << "DrivingRoute1:";
         for (size_t i = 0; i < drivingPath.size(); i++) {
             if (i > 0) outFile << ", ";
             outFile << drivingPath[i];
         }
         outFile << " (" << drivingDistance << ")\n";
+
         outFile << "ParkingNode1:" << firstSuggestedParkingNode << "\n";
         outFile << "WalkingRoute1:";
-
         for (size_t i = 0; i < walkingPath.size(); i++) {
             if (i > 0) outFile << ", ";
             outFile << walkingPath[i];
         }
-
         outFile << " (" << walkingDistance << ")\n";
         outFile << "TotalTime1:" << firstSuggestedTotalTime << "\n";
 
@@ -552,30 +563,35 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
         }
 
         // second suggestion
-        drivingPath = getSavedPath(&urbanGraph, startNode, secondSuggestedParkingNode, drivingDistance);
-        walkingPath = getPath(&urbanGraph,  endNode, secondSuggestedParkingNode, walkingDistance, false);
+        drivingDistance = urbanGraph.findVertex(secondSuggestedParkingNode)->getSavedDist();
+        walkingDistance = urbanGraph.findVertex(secondSuggestedParkingNode)->getDist();
+        drivingPath = getPath(&urbanGraph, startNode, secondSuggestedParkingNode, true);
+        walkingPath = getPath(&urbanGraph,  endNode, secondSuggestedParkingNode);
         reverse(walkingPath.begin(), walkingPath.end());
+
         outFile << "DrivingRoute2:";
         for (size_t i = 0; i < drivingPath.size(); i++) {
             if (i > 0) outFile << ", ";
             outFile << drivingPath[i];
         }
         outFile << " (" << drivingDistance << ")\n";
+
         outFile << "ParkingNode2:" << secondSuggestedParkingNode << "\n";
         outFile << "WalkingRoute2:";
-
         for (size_t i = 0; i < walkingPath.size(); i++) {
             if (i > 0) outFile << ", ";
             outFile << walkingPath[i];
         }
-
         outFile << " (" << walkingDistance << ")\n";
         outFile << "TotalTime2:" << secondSuggestedTotalTime << "\n";
+
     } else {
-        int walkingDistance, drivingDistance;
-        vector<int> bestDrivingPath = getSavedPath(&urbanGraph, startNode, bestParkingNode, drivingDistance);
-        vector<int> bestWalkingPath = getPath(&urbanGraph,  endNode, bestParkingNode, walkingDistance, false);
+        int drivingDistance = urbanGraph.findVertex(bestParkingNode)->getSavedDist();
+        int walkingDistance = urbanGraph.findVertex(bestParkingNode)->getDist();
+        vector<int> bestDrivingPath = getPath(&urbanGraph, startNode, bestParkingNode, true);
+        vector<int> bestWalkingPath = getPath(&urbanGraph,  endNode, bestParkingNode);
         reverse(bestWalkingPath.begin(), bestWalkingPath.end());
+
         outFile << "DrivingRoute:";
         for (size_t i = 0; i < bestDrivingPath.size(); i++) {
             if (i > 0) outFile << ", ";
@@ -584,14 +600,12 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
         outFile << " (" << drivingDistance << ")\n";
 
         outFile << "ParkingNode:" << bestParkingNode << "\n";
-
         outFile << "WalkingRoute:";
         for (size_t i = 0; i < bestWalkingPath.size(); i++) {
             if (i > 0) outFile << ", ";
             outFile << bestWalkingPath[i];
         }
         outFile << " (" << walkingDistance << ")\n";
-
         outFile << "TotalTime:" << bestTotalTime << "\n";
     }
 }

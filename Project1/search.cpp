@@ -64,51 +64,22 @@ void dijkstra(Graph<T> * g, const int &origin, bool driving = true) {
 }
 
 template <class T>
-static std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, int& pathLength, bool driving = true) {
+static std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, bool savedPath = false) {
     std::vector<T> path;
-    pathLength = 0;
     Vertex<T>* v = g->findVertex(dest);
 
-    if (!v || v->getDist() == INT_MAX) {
-        return path;
-    }
+    // if normal path's destination vertex does not exist or its dist is undefined return
+    if (!savedPath && (!v || v->getDist() == INT_MAX)) return path;
+
+    // if saved path's destination vertex does not exist or its savedDist is undefined return
+    if (savedPath && (!v || v->getSavedDist() == INT_MAX)) return path;
 
     while (v) {
         path.push_back(v->getInfo());
         if (v->getInfo() == origin) break;
-        if(driving){ //For Driving Path
-            pathLength += v->getPath()->getDrivingTime();
-        }
-        else{ //For WalkingPath
-            pathLength += v->getPath()->getWalkingTime();
-        }
-        v = v->getPath()->getOrig();
-    }
 
-    reverse(path.begin(), path.end());
-    return path;
-}
-
-template <class T>
-static std::vector<T> getSavedPath(Graph<T> * g, const int &origin, const int &dest, int& pathLength, bool driving=true) {
-    std::vector<T> path;
-    pathLength = 0;
-    Vertex<T>* v = g->findVertex(dest);
-
-    if (!v || v->getSavedDist() == INT_MAX) {
-        return path;
-    }
-
-    while (v) {
-        path.push_back(v->getInfo());
-        if (v->getInfo() == origin) break;
-        if(driving){ //For Driving Path
-            pathLength += v->getSavedPath()->getDrivingTime();
-        }
-        else{ //For WalkingPath
-            pathLength += v->getSavedPath()->getWalkingTime();
-        }
-        v = v->getSavedPath()->getOrig();
+        if (!savedPath) v = v->getPath()->getOrig();
+        else v = v->getSavedPath()->getOrig();
     }
 
     reverse(path.begin(), path.end());
