@@ -488,6 +488,7 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
         node->saveDist();
         node->savePath();
     }
+
     dijkstra(&urbanGraph, endNode, false); // all walking routes from end node
 
     int bestTotalTime = INT_MAX, bestParkingNode = -1;
