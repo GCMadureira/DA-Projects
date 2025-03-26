@@ -12,7 +12,7 @@
 #include <climits>
 
 // Function to write inputs to input.txt
-void writeInputToFile(const std::string& mode, int source, int destination, int maxWalkTime,
+void writeInputToFile(int choice, int source, int destination, int maxWalkTime,
                       const std::string& avoidNodes, const std::string& avoidSegments, int includeNode) {
     std::ofstream inputFile("inputs/input.txt");
 
@@ -21,48 +21,25 @@ void writeInputToFile(const std::string& mode, int source, int destination, int 
         return;
     }
 
-    inputFile << "Mode:" << mode << "\n";
+    if (choice == 1 || choice ==2) {
+        inputFile << "Mode:driving\n";
+    }
+    else if (choice ==3 ){
+        inputFile << "Mode:driving-walking\n";
+    }
+
     inputFile << "Source:" << source << "\n";
     inputFile << "Destination:" << destination << "\n";
 
     if (maxWalkTime != -1)
         inputFile << "MaxWalkTime:" << maxWalkTime << "\n";
 
-    if (!avoidNodes.empty())
-        inputFile << "AvoidNodes:" << avoidNodes << "\n";
-
-    if (!avoidSegments.empty())
-        inputFile << "AvoidSegments:" << avoidSegments << "\n";
-
-    if (includeNode != -1)
-        inputFile << "IncludeNode:" << includeNode << "\n";
+    inputFile << "AvoidNodes:" << (avoidNodes.empty() ? "none" : avoidNodes) << "\n";
+    inputFile << "AvoidSegments:" << (avoidSegments.empty() ? "none" : avoidSegments) << "\n";
+    inputFile << "IncludeNode:" << (includeNode == -1 ? "none" : std::to_string(includeNode)) << "\n";
 
     inputFile.close();
-    std::cout << "✅ Data successfully saved in input.txt!\n";
-}
-
-// Function to get a valid mode from user
-std::string getValidMode(int choice) {
-    std::string mode;
-    while (true) {
-      if (choice == 1 || choice ==2) {
-          std::cout << "Mode (driving): ";
-          std::cin >> mode;
-
-          if (mode == "driving")
-              return mode;
-
-          std::cout << "❌ Invalid mode. Please enter 'driving'.\n";
-      } else if (choice ==3 ){
-          std::cout << "Mode (driving-walking): ";
-          std::cin >> mode;
-
-          if (mode == "driving-walking")
-              return mode;
-
-          std::cout << "❌ Invalid mode. Please enter 'driving-walking'.\n";
-      }
-    }
+    std::cout << "Data successfully saved in input.txt!\n";
 }
 
 // Function to get a valid integer (positive)
@@ -72,10 +49,11 @@ int getValidInt(const std::string& prompt) {
         std::cout << prompt;
         std::cin >> value;
 
+
         if (std::cin.fail() || value < 0) {
             std::cin.clear();  // Clear error flag
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignore invalid input
-            std::cout << "❌ Invalid input. Please enter a positive integer.\n";
+            std::cout << "Invalid input. Please enter a positive integer.\n";
         } else {
             return value;
         }
@@ -87,15 +65,59 @@ std::string getValidList(const std::string& prompt, const std::string& pattern) 
     std::string input;
     std::regex regexPattern(pattern);
 
+    std::cout << prompt;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear buffer before input
+
     while (true) {
-        std::cout << prompt;
-        std::cin.ignore();
         std::getline(std::cin, input);
 
-        if (input.empty() || std::regex_match(input, regexPattern))
+        if (input.empty())  // Allow skipping
+            return "none";
+
+        if (std::regex_match(input, regexPattern))
             return input;
 
-        std::cout << "❌ Invalid format. Please try again.\n";
+        std::cout << "Invalid format. Please try again.\n" << prompt;
+    }
+}
+
+void receiveInput(int choice){
+
+    int source = -1, destination = -1, maxWalkTime = -1, includeNode = -1;
+    std::string avoidNodes, avoidSegments;
+
+    if (choice == 1 || choice == 2 || choice == 3) {
+        source = getValidInt("Source: ");
+        destination = getValidInt("Destination: ");
+    }
+
+    if (choice == 2) {
+        avoidNodes = getValidList("AvoidNodes (e.g., 1,2,3 or empty): ", R"(^\d+(,\d+)*$|^$)");
+        avoidSegments = getValidList("AvoidSegments (e.g., (1,2),(3,4) or empty): ", R"(^\(\d+,\d+\)(,\(\d+,\d+\))*$|^$)");
+        includeNode = getValidInt("IncludeNode: ");
+    } else if (choice == 3) {
+        maxWalkTime = getValidInt("MaxWalkTime: ");
+        avoidNodes = getValidList("AvoidNodes (e.g., 1,2,3 or empty): ", R"(^\d+(,\d+)*$|^$)");
+        avoidSegments = getValidList("AvoidSegments (e.g., (1,2),(3,4) or empty): ", R"(^\(\d+,\d+\)(,\(\d+,\d+\))*$|^$)");
+    }
+
+    writeInputToFile(choice, source, destination, maxWalkTime, avoidNodes, avoidSegments, includeNode);
+}
+
+void selectMode(int choice){
+    int mode;
+    std::cout << "\n===== Mode Selection =====\n";
+    std::cout << "1. Manual Input\n";
+    std::cout << "2. Automatic Input\n";
+    std::cout << "Enter your choice: ";
+    std::cin >> mode;
+
+    if(mode==1){
+        receiveInput(choice);
+    }
+    if(mode>2){
+        std::cout<< "\nInvalid Choice\n";
+        std::cout << "Enter a valid choice: ";
     }
 }
 
@@ -104,8 +126,8 @@ int main() {
     Graph<int> urbanGraph;
     loadGraph(urbanGraph);
 
-    int choice = -1, source = -1, destination = -1, maxWalkTime = -1, includeNode = -1;
-    std::string mode, avoidNodes, avoidSegments;
+    int choice = -1;
+
 
     do {
         std::cout << "\n===== Route Planning =====\n";
@@ -116,31 +138,17 @@ int main() {
         std::cout << "Enter your choice: ";
         std::cin >> choice;
 
-        if (choice == 1 || choice == 2 || choice == 3) {
-            mode = getValidMode(choice);
-            source = getValidInt("Source: ");
-            destination = getValidInt("Destination: ");
-        }
-
-        if (choice == 2) {
-            avoidNodes = getValidList("AvoidNodes (e.g., 1,2,3 or empty): ", R"(^\d+(,\d+)*$|^$)");
-            avoidSegments = getValidList("AvoidSegments (e.g., (1,2),(3,4) or empty): ", R"(^\(\d+,\d+\)(,\(\d+,\d+\))*$|^$)");
-            includeNode = getValidInt("IncludeNode: ");
-        } else if (choice == 3) {
-            maxWalkTime = getValidInt("MaxWalkTime: ");
-            avoidNodes = getValidList("AvoidNodes (e.g., 1,2,3 or empty): ", R"(^\d+(,\d+)*$|^$)");
-            avoidSegments = getValidList("AvoidSegments (e.g., (1,2),(3,4) or empty): ", R"(^\(\d+,\d+\)(,\(\d+,\d+\))*$|^$)");
-        }
-
-        writeInputToFile(mode, source, destination, maxWalkTime, avoidNodes, avoidSegments, includeNode);
         switch (choice) {
             case 1:
+                selectMode(choice);
                 independentRoutePlanning(urbanGraph);
             break;
             case 2:
+                selectMode(choice);
                 restrictedRoutePlanning(urbanGraph);
             break;
             case 3:
+                selectMode(choice);
                 environmentallyFriendlyRoutePlanning(urbanGraph);
             break;
             case 4:
@@ -152,6 +160,6 @@ int main() {
         }
     } while (choice != 4);
 
-    std::cout << "🚪 Program exited.\n";
+    std::cout << "Program exited.\n";
     return 0;
 }
