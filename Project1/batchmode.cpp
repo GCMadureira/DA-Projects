@@ -23,7 +23,7 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     }
     int startNode, endNode;
     std::string modeLine, sourceLine, destinationLine;
-    std::string modeStr, startNodeStr, endNodeStr;
+    std::string startNodeStr, endNodeStr;
 
     // Extract values after ':'
     size_t pos;
@@ -33,15 +33,6 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     std::getline(inFile, sourceLine);
     std::getline(inFile, destinationLine);
 
-    // Parse mode
-    pos = modeLine.find(':');
-    if (pos != std::string::npos) {
-        modeStr = modeLine.substr(pos + 1);
-    } else {
-        outFile << "Invalid input format. Expected 'Mode:<value>'\n";
-        return;
-    }
-
     // Parse source
     pos = sourceLine.find(':');
     if (pos != std::string::npos) {
@@ -49,6 +40,10 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
         try {startNode = std::stoi(startNodeStr);}
         catch (const std::exception& e) {
             outFile << "Invalid node format. Source node must be a valid integer.\n";
+            return;
+        }
+        if (urbanGraph.findVertex(startNode) == nullptr) {
+            outFile << "The source node " << startNode << " does not exist.\n";
             return;
         }
     } else {
@@ -65,6 +60,10 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
             outFile << "Invalid node format. Destination node must be a valid integer.\n";
             return;
         }
+        if (urbanGraph.findVertex(endNode) == nullptr) {
+            outFile << "The destination node " << endNode << " does not exist.\n";
+            return;
+        }
     } else {
         outFile << "Invalid input format. Expected 'Destination:<id>'\n";
         return;
@@ -77,7 +76,7 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     std::vector<int> firstPath, secondPath;
     dijkstra(&urbanGraph, startNode);
 
-    if (endVertex != nullptr) firstPathLength = endVertex->getDist();
+    firstPathLength = endVertex->getDist();
     firstPath = getPath(&urbanGraph, startNode, endNode);
 
     // Ignore all used Nodes to compute the Alternate Driving Route (except start and end nodes)
@@ -87,7 +86,7 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
     }
 
     dijkstra(&urbanGraph, startNode);
-    if (endVertex != nullptr) secondPathLength = endVertex->getDist();
+    secondPathLength = endVertex->getDist();
     secondPath = getPath(&urbanGraph, startNode, endNode);
 
 
@@ -119,6 +118,7 @@ void independentRoutePlanning(Graph<int>& urbanGraph) {
 }
 
 void restrictedRoutePlanning(Graph<int>& urbanGraph) {
+    // Open the input and output files
     std::ifstream inFile("inputs/input.txt");
     if (!inFile.is_open()) {
         std::cout << "Could not open input.txt. Process aborted.\n";
@@ -130,12 +130,17 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
         return;
     }
 
+    // Setup
+    for (auto v : urbanGraph.getVertexSet()) {
+        v->setIgnoreFlag(false);
+        for (auto e : v->getAdj()) e->setIgnoreFlag(false);
+    }
+
     std::string modeLine, sourceLine, destinationLine, avoidNodesLine, avoidSegmentsLine, includeNodeLine;
-    std::string mode, startNodeStr, endNodeStr, avoidNodesStr, avoidSegmentsStr, includeNodeStr;
+    std::string startNodeStr, endNodeStr, avoidNodesStr, avoidSegmentsStr, includeNodeStr;
     int startNode, endNode, includeNode = -1;
 
-    size_t pos;
-
+    // Read expected lines
     std::getline(inFile, modeLine);
     std::getline(inFile, sourceLine);
     std::getline(inFile, destinationLine);
@@ -143,42 +148,78 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
     std::getline(inFile, avoidSegmentsLine);
     std::getline(inFile, includeNodeLine);
 
-    pos = modeLine.find(':');
-    if (pos != std::string::npos) mode = modeLine.substr(pos + 1);
+    // Extract values after ':'
+    size_t pos;
 
+    // Parse source
     pos = sourceLine.find(':');
-    if (pos != std::string::npos) startNodeStr = sourceLine.substr(pos + 1);
-
-    pos = destinationLine.find(':');
-    if (pos != std::string::npos) endNodeStr = destinationLine.substr(pos + 1);
-
-    pos = avoidNodesLine.find(':');
-    if (pos != std::string::npos) avoidNodesStr = avoidNodesLine.substr(pos + 1);
-
-    pos = avoidSegmentsLine.find(':');
-    if (pos != std::string::npos) avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
-
-    pos = includeNodeLine.find(':');
-    if (pos != std::string::npos) includeNodeStr = includeNodeLine.substr(pos + 1);
-
-    try {
-        startNode = std::stoi(startNodeStr);
-        endNode = std::stoi(endNodeStr);
-        if (!includeNodeStr.empty()) {
-            includeNode = std::stoi(includeNodeStr);
+    if (pos != std::string::npos) {
+        startNodeStr = sourceLine.substr(pos + 1);
+        try {startNode = std::stoi(startNodeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Source node must be a valid integer.\n";
+            return;
         }
-    } catch (const std::exception &) {
-        outFile << "Invalid node format. Source, Destination, and IncludeNode must be integers.\n";
+        if (urbanGraph.findVertex(startNode) == nullptr) {
+            outFile << "The source node " << startNode << " does not exist.\n";
+            return;
+        }
+    } else {
+        outFile << "Invalid input format. Expected 'Source:<id>'\n";
         return;
     }
 
+    // Parse destination
+    pos = destinationLine.find(':');
+    if (pos != std::string::npos) {
+        endNodeStr = destinationLine.substr(pos + 1);
+        try {endNode = std::stoi(endNodeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Destination node must be a valid integer.\n";
+            return;
+        }
+        if (urbanGraph.findVertex(endNode) == nullptr) {
+            outFile << "The destination node " << endNode << " does not exist.\n";
+            return;
+        }
+    } else {
+        outFile << "Invalid input format. Expected 'Destination:<id>'\n";
+        return;
+    }
+
+    // Parse include node
+    pos = includeNodeLine.find(':');
+    if (pos != std::string::npos) {
+        includeNodeStr = includeNodeLine.substr(pos + 1);
+        if (!includeNodeStr.empty()) {
+            try {includeNode = std::stoi(includeNodeStr);}
+            catch (const std::exception& e) {
+                outFile << "Warning: Invalid node format. Include node must be a valid integer. Ignoring include node.\n";
+                includeNode = -1;
+            }
+            if (urbanGraph.findVertex(includeNode) == nullptr) {
+                outFile << "Warning: The include node " << includeNode << " does not exist. Ignoring include node.\n";
+                includeNode = -1;
+            }
+        }
+    } else {
+        outFile << "Invalid input format. Expected 'IncludeNode:<id>'\n";
+        return;
+    }
+
+    // Parse avoid nodes
+    pos = avoidNodesLine.find(':');
+    if (pos != std::string::npos) avoidNodesStr = avoidNodesLine.substr(pos + 1);
     std::stringstream ss(avoidNodesStr);
-    std::string node;
-    while (std::getline(ss, node, ',')) {
+    std::string nodeStr;
+    while (std::getline(ss, nodeStr, ',')) {
+        std::cout << "\n\n" << nodeStr << "\n\n";
         try {
-            int nodeId = std::stoi(node);
-            auto vertex = urbanGraph.findVertex(nodeId);
-            if (vertex) {  // Check if vertex is not nullptr
+            int nodeId = std::stoi(nodeStr);
+            if (nodeId == startNode || nodeId == endNode) {
+                std::cout << "Warning: Avoid nodes cannot be the same as the source or destination nodes.\n";
+            }
+            else if (auto vertex = urbanGraph.findVertex(nodeId)) {  // Check if vertex is not nullptr
                 vertex->setIgnoreFlag(true);
             } else {
                 std::cout << "Warning: Node " << nodeId << " not found in graph.\n";
@@ -188,17 +229,20 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
         }
     }
 
+    // Parse avoid segments
+    pos = avoidSegmentsLine.find(':');
+    if (pos != std::string::npos) avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
     std::stringstream segSS(avoidSegmentsStr);
-    std::string segment;
-    while (std::getline(segSS, segment, ')')) {
-        size_t openParen = segment.find('(');
-        size_t comma = segment.find(',');
+    std::string segmentStr;
+    while (std::getline(segSS, segmentStr, ')')) {
+        std::cout << "\n\n" << segmentStr << "\n\n";
+        size_t openParen = segmentStr.find('(');
+        size_t comma = segmentStr.find(',', 1);
         if (openParen != std::string::npos && comma != std::string::npos) {
             try {
-                int from = std::stoi(segment.substr(openParen + 1, comma - openParen - 1));
-                int to = std::stoi(segment.substr(comma + 1));
-                auto edge = urbanGraph.findEdge(from, to);
-                if (edge) {  // Check if edge is not nullptr
+                int from = std::stoi(segmentStr.substr(openParen + 1, comma - openParen - 1));
+                int to = std::stoi(segmentStr.substr(comma + 1));
+                if (auto edge = urbanGraph.findEdge(from, to)) {  // Check if edge is not nullptr
                     edge->setIgnoreFlag(true);
                 } else {
                     std::cout << "Warning: Edge (" << from << ", " << to << ") not found in graph.\n";
@@ -209,24 +253,20 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
         }
     }
 
+    // Computations
     std::vector<int> firstPath, secondPath;
     Vertex<int>* endVertex = urbanGraph.findVertex(endNode);
     Vertex<int>* includeVertex = urbanGraph.findVertex(includeNode);
     int firstPathLength = 0, secondPathLength = 0;
 
-    if (includeNode != -1) {
-        auto vertex = urbanGraph.findVertex(includeNode);
-        if (vertex) vertex->setIgnoreFlag(false);
-    }
-
     dijkstra(&urbanGraph, startNode);
-    if (includeNode == -1 || startNode == includeNode) {
-        // No IncludeNode or it's the same as startNode to Direct Route
-        if (endVertex != nullptr) firstPathLength = endVertex->getDist();
+    if (includeNode == -1 || startNode == includeNode || endNode == includeNode) {
+        // No IncludeNode or it's the same as startNode/endNode
+        firstPathLength = endVertex->getDist();
         firstPath = getPath(&urbanGraph, startNode, endNode);
     } else {
         // Path from startNode to includeNode
-        if (includeVertex != nullptr) firstPathLength = includeVertex->getDist();
+        firstPathLength = includeVertex->getDist();
         firstPath = getPath(&urbanGraph, startNode, includeNode);
 
         if (firstPath.empty()) {
@@ -238,8 +278,8 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
         }
 
         dijkstra(&urbanGraph, includeNode);
-        if (endVertex != nullptr) secondPathLength = endVertex->getDist();
-        secondPath = getPath(&urbanGraph, includeNode, endNode, secondPathLength);
+        secondPathLength = endVertex->getDist();
+        secondPath = getPath(&urbanGraph, includeNode, endNode);
 
         if (secondPath.empty()) {
             std::cout << "Error: No path found from includeNode " << includeNode << " to endNode " << endNode << ".\n";
@@ -265,6 +305,7 @@ void restrictedRoutePlanning(Graph<int>& urbanGraph) {
 }
 
 void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
+    // Open the input and output files
     std::ifstream inFile("inputs/input.txt");
     if (!inFile.is_open()) {
         std::cout << "Could not open input.txt. Process aborted.\n";
@@ -289,31 +330,104 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
     std::getline(inFile, avoidNodesLine);
     std::getline(inFile, avoidSegmentsLine);
 
-    // Extract values
+    // Extract values after ':'
     size_t pos;
-    pos = sourceLine.find(':');
-    if (pos != std::string::npos) startNodeStr = sourceLine.substr(pos + 1);
-    pos = destinationLine.find(':');
-    if (pos != std::string::npos) endNodeStr = destinationLine.substr(pos + 1);
-    pos = maxWalkTimeLine.find(':');
-    if (pos != std::string::npos) maxWalkTimeStr = maxWalkTimeLine.substr(pos + 1);
-    pos = avoidNodesLine.find(':');
-    if (pos != std::string::npos) avoidNodesStr = avoidNodesLine.substr(pos + 1);
-    pos = avoidSegmentsLine.find(':');
-    if (pos != std::string::npos) avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
 
-    // Convert string values to integers
-    try {
-        startNode = std::stoi(startNodeStr);
-        endNode = std::stoi(endNodeStr);
-        maxWalkTime = std::stoi(maxWalkTimeStr);
-    } catch (const std::exception &) {
-        outFile << "Invalid format. Ensure Source, Destination, and MaxWalkTime are valid integers.\n";
+    // Parse source
+    pos = sourceLine.find(':');
+    if (pos != std::string::npos) {
+        startNodeStr = sourceLine.substr(pos + 1);
+        try {startNode = std::stoi(startNodeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Source node must be a valid integer.\n";
+            return;
+        }
+        if (urbanGraph.findVertex(startNode) == nullptr) {
+            outFile << "The source node " << startNode << " does not exist.\n";
+            return;
+        }
+    } else {
+        outFile << "Invalid input format. Expected 'Source:<id>'\n";
         return;
     }
 
-    // Check constraints
+    // Parse destination
+    pos = destinationLine.find(':');
+    if (pos != std::string::npos) {
+        endNodeStr = destinationLine.substr(pos + 1);
+        try {endNode = std::stoi(endNodeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid node format. Destination node must be a valid integer.\n";
+            return;
+        }
+        if (urbanGraph.findVertex(endNode) == nullptr) {
+            outFile << "The destination node " << endNode << " does not exist.\n";
+            return;
+        }
+    } else {
+        outFile << "Invalid input format. Expected 'Destination:<id>'\n";
+        return;
+    }
 
+    // Parse max walk time
+    pos = maxWalkTimeLine.find(':');
+    if (pos != std::string::npos) {
+        maxWalkTimeStr = maxWalkTimeLine.substr(pos + 1);
+        try {maxWalkTime = std::stoi(maxWalkTimeStr);}
+        catch (const std::exception& e) {
+            outFile << "Invalid input format. Max Walk Time must be a valid integer.\n";
+            return;
+        }
+    } else {
+        outFile << "Invalid input format. Expected 'MaxWalkTime:<int>'\n";
+        return;
+    }
+
+    // Parse avoid nodes
+    pos = avoidNodesLine.find(':');
+    if (pos != std::string::npos) avoidNodesStr = avoidNodesLine.substr(pos + 1);
+    std::stringstream ss(avoidNodesStr);
+    std::string nodeStr;
+    while (std::getline(ss, nodeStr, ',')) {
+        try {
+            int nodeId = std::stoi(nodeStr);
+            if (nodeId == startNode || nodeId == endNode) {
+                std::cout << "Warning: Avoid nodes cannot be the same as the source or destination nodes.\n";
+            }
+            else if (auto vertex = urbanGraph.findVertex(nodeId)) {  // Check if vertex is not nullptr
+                vertex->setIgnoreFlag(true);
+            } else {
+                std::cout << "Warning: Node " << nodeId << " not found in graph.\n";
+            }
+        } catch (const std::exception&) {
+            std::cout << "Warning: Invalid node format in AvoidNodes.\n";
+        }
+    }
+
+    // Parse avoid segments
+    pos = avoidSegmentsLine.find(':');
+    if (pos != std::string::npos) avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
+    std::stringstream segSS(avoidSegmentsStr);
+    std::string segmentStr;
+    while (std::getline(segSS, segmentStr, ')')) {
+        size_t openParen = segmentStr.find('(');
+        size_t comma = segmentStr.find(',');
+        if (openParen != std::string::npos && comma != std::string::npos) {
+            try {
+                int from = std::stoi(segmentStr.substr(openParen + 1, comma - openParen - 1));
+                int to = std::stoi(segmentStr.substr(comma + 1));
+                if (auto edge = urbanGraph.findEdge(from, to)) {  // Check if edge is not nullptr
+                    edge->setIgnoreFlag(true);
+                } else {
+                    std::cout << "Warning: Edge (" << from << ", " << to << ") not found in graph.\n";
+                }
+            } catch (const std::exception&) {
+                std::cout << "Warning: Invalid edge format in AvoidSegments.\n";
+            }
+        }
+    }
+
+    // Check constraints
     if (urbanGraph.areAdjacent(startNode, endNode)) {
         outFile << "Source: " << startNode << "\nDestination: " << endNode << "\n";
         outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
@@ -325,44 +439,6 @@ void environmentallyFriendlyRoutePlanning(Graph<int>& urbanGraph) {
         outFile << "DrivingRoute:none\nParkingNode:none\nWalkingRoute:none\n";
         outFile << "Message: Origin or destination is a parking node, violating constraints.\n";
         return;
-    }
-
-    std::stringstream ss(avoidNodesStr);
-    std::string node;
-    while (std::getline(ss, node, ',')) {
-        try {
-            int nodeId = std::stoi(node);
-            auto vertex = urbanGraph.findVertex(nodeId);
-            if (vertex) {  // Check if vertex exists
-                vertex->setIgnoreFlag(true);
-            } else {
-                std::cout << "Warning: Node " << nodeId << " not found in graph.\n";
-            }
-        } catch (const std::exception&) {
-            std::cout << "Warning: Invalid node format in AvoidNodes.\n";
-        }
-    }
-
-    // Process AvoidSegments and set ignore flags for edges
-    std::stringstream segSS(avoidSegmentsStr);
-    std::string segment;
-    while (std::getline(segSS, segment, ')')) {
-        size_t openParen = segment.find('(');
-        size_t comma = segment.find(',');
-        if (openParen != std::string::npos && comma != std::string::npos) {
-            try {
-                int from = std::stoi(segment.substr(openParen + 1, comma - openParen - 1));
-                int to = std::stoi(segment.substr(comma + 1));
-                auto edge = urbanGraph.findEdge(from, to);
-                if (edge) {  // Check if edge exists
-                    edge->setIgnoreFlag(true);
-                } else {
-                    std::cout << "Warning: Edge (" << from << ", " << to << ") not found in graph.\n";
-                }
-            } catch (...) {
-                std::cout << "Warning: Invalid edge format in AvoidSegments.\n";
-            }
-        }
     }
 
     dijkstra(&urbanGraph, startNode); // all driving routes from start node

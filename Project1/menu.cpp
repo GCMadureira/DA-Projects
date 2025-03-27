@@ -50,11 +50,12 @@ int getValidInt(const std::string& prompt) {
         std::cin >> value;
 
 
-        if (std::cin.fail() || value < 0) {
+        if (std::cin.fail() || value < 1) {
             std::cin.clear();  // Clear error flag
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignore invalid input
             std::cout << "Invalid input. Please enter a positive integer.\n";
         } else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear buffer before input
             return value;
         }
     }
@@ -66,7 +67,6 @@ std::string getValidList(const std::string& prompt, const std::string& pattern) 
     std::regex regexPattern(pattern);
 
     std::cout << prompt;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear buffer before input
 
     while (true) {
         std::getline(std::cin, input);
@@ -115,6 +115,9 @@ int selectMode(const int choice){
             case 1:
                 receiveInput(choice);
             break;
+            case 2:
+                // automatic input so do nothing
+                break;
             case 3:
                 return 1;
             default:
