@@ -134,3 +134,138 @@ int main() {
 }
 */
 
+
+
+int parseSource(const Graph<int>& graph, const std::string& sourceLine) {
+    int startNode;
+    size_t pos = sourceLine.find(':');
+    if (pos != std::string::npos) {
+        std::string startNodeStr = sourceLine.substr(pos + 1);
+        try {startNode = std::stoi(startNodeStr);}
+        catch (const std::exception& e) {
+            std::cout << "Invalid node format. Source node must be a valid integer.\n";
+            return -1;
+        }
+        if (graph.findVertex(startNode) == nullptr) {
+            std::cout << "The source node " << startNode << " does not exist.\n";
+            return -1;
+        }
+    } else {
+        std::cout << "Invalid input format. Expected 'Source:<id>'\n";
+        return -1;
+    }
+    return startNode;
+}
+
+int parseDestination(const Graph<int>& graph, const std::string& destinationLine) {
+    int endNode;
+    size_t pos = destinationLine.find(':');
+    if (pos != std::string::npos) {
+        std::string endNodeStr = destinationLine.substr(pos + 1);
+        try {endNode = std::stoi(endNodeStr);}
+        catch (const std::exception& e) {
+            std::cout << "Invalid node format. Destination node must be a valid integer.\n";
+            return -1;
+        }
+        if (graph.findVertex(endNode) == nullptr) {
+            std::cout << "The destination node " << endNode << " does not exist.\n";
+            return -1;
+        }
+    } else {
+        std::cout << "Invalid input format. Expected 'Destination:<id>'\n";
+        return -1;
+    }
+    return endNode;
+}
+
+int parseIncludeNode(const Graph<int>& graph, const std::string& includeNodeLine) {
+    int includeNode;
+    size_t pos = includeNodeLine.find(':');
+    if (pos != std::string::npos) {
+        std::string includeNodeStr = includeNodeLine.substr(pos + 1);
+        if (!includeNodeStr.empty()) {
+            try {includeNode = std::stoi(includeNodeStr);}
+            catch (const std::exception& e) {
+                std::cout << "Warning: Invalid node format. Include node must be a valid integer. Ignoring include node.\n";
+                return -1;
+            }
+            if (graph.findVertex(includeNode) == nullptr) {
+                std::cout << "Warning: The include node " << includeNode << " does not exist. Ignoring include node.\n";
+                return -1;
+            }
+        }
+    } else {
+        std::cout << "Invalid input format. Expected 'IncludeNode:<id>'\n";
+        return -1;
+    }
+    return includeNode;
+}
+
+void parseAvoidNodes(const Graph<int>& graph, const std::string& avoidNodesLine, const int startNode, const int endNode) {
+    std::string avoidNodesStr;
+    size_t pos = avoidNodesLine.find(':');
+    if (pos != std::string::npos) avoidNodesStr = avoidNodesLine.substr(pos + 1);
+    std::stringstream ss(avoidNodesStr);
+    std::string nodeStr;
+    while (std::getline(ss, nodeStr, ',')) {
+        try {
+            int nodeId = std::stoi(nodeStr);
+            if (nodeId == startNode || nodeId == endNode) {
+                std::cout << "Warning: Avoid nodes cannot be the same as the source or destination nodes.\n";
+            }
+            else if (auto vertex = graph.findVertex(nodeId)) {  // Check if vertex is not nullptr
+                vertex->setIgnoreFlag(true);
+            } else {
+                std::cout << "Warning: Node " << nodeId << " not found in graph.\n";
+            }
+        } catch (const std::exception&) {
+            std::cout << "Warning: Invalid node format in AvoidNodes.\n";
+        }
+    }
+}
+
+void parseAvoidSegments(const Graph<int>& graph, const std::string& avoidSegmentsLine) {
+    std::string avoidSegmentsStr;
+    size_t pos = avoidSegmentsLine.find(':');
+    if (pos != std::string::npos) avoidSegmentsStr = avoidSegmentsLine.substr(pos + 1);
+    std::stringstream segSS(avoidSegmentsStr);
+    std::string segmentStr;
+    while (std::getline(segSS, segmentStr, ')')) {
+        size_t openParen = segmentStr.find('(');
+        size_t comma = segmentStr.find(',', 1);
+        if (openParen != std::string::npos && comma != std::string::npos) {
+            try {
+                int from = std::stoi(segmentStr.substr(openParen + 1, comma - openParen - 1));
+                int to = std::stoi(segmentStr.substr(comma + 1));
+                if (auto edge = graph.findEdge(from, to)) {  // Check if edge is not nullptr
+                    edge->setIgnoreFlag(true);
+                } else {
+                    std::cout << "Warning: Edge (" << from << ", " << to << ") not found in graph.\n";
+                }
+            } catch (const std::exception&) {
+                std::cout << "Warning: Invalid edge format in AvoidSegments.\n";
+            }
+        }
+    }
+}
+
+int parseMaxWalkTime(const Graph<int>& graph, const std::string& maxWalkTimeLine) {
+    int maxWalkTime;
+    size_t pos = maxWalkTimeLine.find(':');
+    if (pos != std::string::npos) {
+        std::string maxWalkTimeStr = maxWalkTimeLine.substr(pos + 1);
+        try {maxWalkTime = std::stoi(maxWalkTimeStr);}
+        catch (const std::exception& e) {
+            std::cout << "Invalid input format. Max Walk Time must be a valid integer. Ignoring Max Walk Time.\n";
+            return INT_MAX;
+        }
+        if (maxWalkTime <= 0) {
+            std::cout << "Invalid input format. Max Walk Time must be a valid integer. Ignoring Max Walk Time.\n";
+            return INT_MAX;
+        }
+    } else {
+        std::cout << "Invalid input format. Expected 'MaxWalkTime:<int>'\n";
+        return INT_MAX;
+    }
+    return maxWalkTime;
+}

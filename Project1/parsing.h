@@ -34,5 +34,11 @@ bool stringToBool(const std::string &s);
 std::vector<LocationRecord> readLocations(const std::string &filename);
 std::vector<DistanceRecord> readDistances(const std::string &filename);
 
+int parseSource(const Graph<int>& graph, const std::string& sourceLine);
+int parseDestination(const Graph<int>& graph, const std::string& destinationLine);
+int parseIncludeNode(const Graph<int>& graph, const std::string& includeNodeLine);
+void parseAvoidNodes(const Graph<int>& graph, const std::string& avoidNodesLine, int startNode, int endNode);
+void parseAvoidSegments(const Graph<int>& graph, const std::string& avoidSegmentsLine);
+int parseMaxWalkTime(const Graph<int>& graph, const std::string& maxWalkTimeLine);
 
 #endif //URBANMAPPROJECT_PARSING_H

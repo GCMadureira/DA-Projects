@@ -149,6 +149,7 @@ public:
     std::vector<Vertex<T> *> getVertexSet() const;
 
     bool areAdjacent(const int &origin, const int &dest);
+    void setInitialState();
 
 protected:
     std::vector<Vertex<T> *> vertexSet;    // vertex set
@@ -568,6 +569,15 @@ bool Graph<T>::areAdjacent(const int &origin, const int &dest){
     }
     return false;
 }
+
+template<class T>
+void Graph<T>::setInitialState() {
+    for (auto v : getVertexSet()) {
+        v->setIgnoreFlag(false);
+        for (auto e : v->getAdj()) e->setIgnoreFlag(false);
+    }
+}
+
 
 
 inline void deleteMatrix(int **m, int n) {
