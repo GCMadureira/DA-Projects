@@ -4,28 +4,10 @@
 
 #include "parsing.h"
 
-
-/**
- * @brief Convert the Parking field from string to bool.
- *
- * @param s - input string reference
- *
- * @return true if the string is "1" or false otherwise
- */
 bool stringToBool(const std::string &s) {
     return s == "1";
 }
 
-/**
- * @brief Reads and parses an input file and returns a vector of struct LocationRecord.
- *
- * If the input file cannot be opened, exits with an error to std::cerr. <br>
- * Input file must have the format <Location>,<Id>,<Code>,<Parking> and only one entry per line.
- *
- * @param filename - string reference containing the name of the input file
- *
- * @return vector of struct LocationRecord read from input file or empty vector if error opening file
- */
 std::vector<LocationRecord> readLocations(const std::string &filename) {
     std::vector<LocationRecord> records;
     std::ifstream file(filename);
@@ -58,16 +40,6 @@ std::vector<LocationRecord> readLocations(const std::string &filename) {
     return records;
 }
 
-/**
- * @brief Reads and parses an input file and returns a vector of struct DistanceRecord.
- *
- * If the input file cannot be opened, exits with an error to std::cerr. <br>
- * Input file must have the format <Location1>,<Location2>,<Driving>,<Walking> and only one entry per line.
- *
- * @param filename - string reference containing the name of the input file
- *
- * @return vector of struct DistanceRecord read from input file or empty vector if error opening file
- */
 std::vector<DistanceRecord> readDistances(const std::string &filename) {
     std::vector<DistanceRecord> records;
     std::ifstream file(filename);
@@ -103,14 +75,6 @@ std::vector<DistanceRecord> readDistances(const std::string &filename) {
     return records;
 }
 
-/**
- * @brief Loads data into a graph
- *
- * Calls readLocations() and readDistances() to read from the input files Locations.csv and Distances.csv respectively. <br>
- * Then loads the data read into the input graph, skipping invalid edges.
- *
- * @param graph - reference to a graph object where the data will be loaded
- */
 void loadGraph(Graph<int>& graph) {
     std::vector<LocationRecord> locations = readLocations("DataSets/Locations2.csv");
     std::vector<DistanceRecord> distances = readDistances("DataSets/Distances2.csv");
@@ -166,17 +130,6 @@ int main() {
 */
 
 
-/**
- * @brief Parses source node from string sourceLine
- *
- * Parses the sourceLine with the format Source:<id>. <br>
- * If the node has an invalid format or does not exist in the graph it prints an error to the terminal.
- *
- * @param graph - reference to a graph object containing the start node
- * @param sourceLine - string reference to the source line with format Source:<id>
- *
- * @return start node parsed from sourceLine or -1 in case of error
- */
 int parseSource(const Graph<int>& graph, const std::string& sourceLine) {
     int startNode;
     size_t pos = sourceLine.find(':');
@@ -198,17 +151,6 @@ int parseSource(const Graph<int>& graph, const std::string& sourceLine) {
     return startNode;
 }
 
-/**
- * @brief Parses end node from string destinationLine
- *
- * Parses the destinationLine with the format Destination:<id>. <br>
- * If the node has an invalid format or does not exist in the graph it prints an error to the terminal.
- *
- * @param graph - reference to a graph object containing the end node
- * @param destinationLine - string reference to the destination line with format Destination:<id>
- *
- * @return end node parsed from destinationLine or -1 in case of error
- */
 int parseDestination(const Graph<int>& graph, const std::string& destinationLine) {
     int endNode;
     size_t pos = destinationLine.find(':');
@@ -230,17 +172,6 @@ int parseDestination(const Graph<int>& graph, const std::string& destinationLine
     return endNode;
 }
 
-/**
- * @brief Parses include node from string includeNodeLine
- *
- * Parses the includeNodeLine with the format IncludeNode:<id>. <br>
- * If the node has an invalid format or does not exist in the graph it prints a warning to the terminal.
- *
- * @param graph - reference to a graph object containing the include node
- * @param includeNodeLine - string reference to the include node line with format IncludeNode:<id>
- *
- * @return include node parsed from includeNodeLine or -1 in case of error
- */
 int parseIncludeNode(const Graph<int>& graph, const std::string& includeNodeLine) {
     int includeNode = -1;
     size_t pos = includeNodeLine.find(':');
@@ -264,18 +195,6 @@ int parseIncludeNode(const Graph<int>& graph, const std::string& includeNodeLine
     return includeNode;
 }
 
-/**
- * @brief Parses and processes the nodes to avoid from the string avoidNodesLine
- *
- * Parses the avoidNodesLine with the format AvoidNodes:<id>,<id>,.... <br>
- * If any node has an invalid format, is the same as the startNode or endNode or does not exist in the graph it prints a warning to the terminal. <br>
- * If a node is valid it sets its ignore flag to true.
- *
- * @param graph - reference to a graph object containing the nodes to avoid
- * @param avoidNodesLine - string reference to the avoid nodes line with format AvoidNodes:<id>,<id>,...
- * @param startNode - node from which the route to be processed will start
- * @param endNode - node where the route to be processed will end
- */
 void parseAvoidNodes(const Graph<int>& graph, const std::string& avoidNodesLine, const int startNode, const int endNode) {
     std::string avoidNodesStr;
     size_t pos = avoidNodesLine.find(':');
@@ -299,16 +218,6 @@ void parseAvoidNodes(const Graph<int>& graph, const std::string& avoidNodesLine,
     }
 }
 
-/**
- * @brief Parses and processes the segments to avoid from the string avoidSegmentsLine
- *
- * Parses the avoidSegmentsLine with the format AvoidSegments:(id,id),(id,id),.... <br>
- * If any segment has an invalid format or does not exist in the graph it prints a warning to the terminal. <br>
- * If a segment is valid it sets its ignore flag to true.
- *
- * @param graph - reference to a graph object containing the segments to avoid
- * @param avoidSegmentsLine - string reference to the avoid segments line with format AvoidSegments:(id,id),(id,id),...
- */
 void parseAvoidSegments(const Graph<int>& graph, const std::string& avoidSegmentsLine) {
     std::string avoidSegmentsStr;
     size_t pos = avoidSegmentsLine.find(':');
@@ -335,17 +244,6 @@ void parseAvoidSegments(const Graph<int>& graph, const std::string& avoidSegment
     }
 }
 
-/**
- * @brief Parses the max walk time from string maxWalkTimeLine
- *
- * Parses the maxWalkTime with the format MaxWalkTime:<int>. <br>
- * If the value has an invalid format or is negative it prints a warning to the terminal.
- *
- * @param graph - reference to a graph object containing the include node
- * @param maxWalkTimeLine - string reference to the max walk time line with format MaxWalkTime:<int>
- *
- * @return Max Walk Time parsed from maxWalkTimeLine or INT_MAX in case of error
- */
 int parseMaxWalkTime(const Graph<int>& graph, const std::string& maxWalkTimeLine) {
     int maxWalkTime;
     size_t pos = maxWalkTimeLine.find(':');
