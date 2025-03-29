@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <climits>
 #include <string>
 #include <unordered_map>
 #include "data_structures/Graph.h"
