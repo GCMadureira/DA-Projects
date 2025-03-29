@@ -84,7 +84,7 @@ void loadGraph(Graph<int>& graph) {
 
     // Add locations (nodes) to the graph
     for (const auto& loc : locations) {
-        graph.addVertex(loc.id);
+        graph.addVertex(loc.id, loc.location);
         codeToId[loc.code] = loc.id;
         if(loc.parking){
             graph.findVertex(loc.id)->setParking(true);

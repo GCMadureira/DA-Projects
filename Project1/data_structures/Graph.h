@@ -23,6 +23,7 @@ template <class T>
 class Vertex {
 public:
     Vertex(T in);
+    Vertex(T in, const std::string& name);
     bool operator<(Vertex<T> & vertex) const; // // required by MutablePriorityQueue
 
     T getInfo() const;
@@ -34,6 +35,7 @@ public:
     Edge<T> *getPath() const;
     double getSavedDist() const;
     Edge<T> *getSavedPath() const;
+    std::string getName() const;
 
     void setInfo(T info);
     void setVisited(bool visited);
@@ -44,14 +46,16 @@ public:
     void setPath(Edge<T> *path);
     void saveDist();
     void savePath();
+    void setName(const std::string &name);
     Edge<T> * addEdge(Vertex<T> *d, int drivingTime, int walkingTime);
     bool removeEdge(T in);
     void removeOutgoingEdges();
 
     friend class MutablePriorityQueue<Vertex>;
 protected:
-    T info;                // info node
-    std::vector<Edge<T> *> adj;  // outgoing edges
+    T info;                ///< info node
+    std::string name;  ///< name of the node, optional
+    std::vector<Edge<T> *> adj;  ///< outgoing edges
 
     // auxiliary fields
     bool visited = false; ///< used by dijkstra() to tell what nodes were already visisted
@@ -113,6 +117,7 @@ public:
      *  Returns true if successful, and false if a vertex with that content already exists.
      */
     bool addVertex(const T &in);
+    bool addVertex(const T &in, const std::string &name);
     bool removeVertex(const T &in);
 
     bool addBidirectionalEdge(const T &sourc, const T &dest, int drivingTime, int walkingTime);
@@ -146,6 +151,15 @@ protected:
  */
 template <class T>
 Vertex<T>::Vertex(T in): info(in) {}
+
+/**
+ * @brief Vertex constructor from the id and name
+ *
+ * @param in - id of the vertex
+ * @param name - name of the vertex
+ */
+template<class T>
+Vertex<T>::Vertex(T in, const std::string &name): info(in), name(name) {}
 
 /**
  * @brief Auxiliary function to add an outgoing edge to a vertex (this), with a given destination vertex (d) and edge weight (w)
@@ -287,6 +301,17 @@ Edge<T> *Vertex<T>::getSavedPath() const{
 }
 
 /**
+ * @brief Getter for the Vertex::name private member
+ *
+ * @return value of Vertex::name member
+ */
+template<class T>
+std::string Vertex<T>::getName() const {
+    return this->name;
+}
+
+
+/**
  * @brief Setter for the Vertex::ignoreFlag private member
  *
  * @param ignore - new value to be set
@@ -380,6 +405,16 @@ void Vertex<T>::saveDist() {
 template <class T>
 void Vertex<T>::savePath() {
     this->savedPath = path;
+}
+
+/**
+ * @brief Setter for the Vertex::name private member
+ *
+ * @param name - new value to be set
+ */
+template <class T>
+void Vertex<T>::setName(const std::string& name) {
+    this->name = name;
 }
 
 /********************** Edge  ****************************/
@@ -545,6 +580,22 @@ bool Graph<T>::addVertex(const T &in) {
     if (findVertex(in) != nullptr)
         return false;
     vertexSet.push_back(new Vertex<T>(in));
+    return true;
+}
+
+/**
+ * @brief Adds a vertex with a given content or info (in) and name (name) to a graph (this)
+ *
+ * @param in - id of the vertex to add
+ * @param name - name of the vertex to add
+ *
+ * @return true if successful, and false if a vertex with that content already exists
+ */
+template <class T>
+bool Graph<T>::addVertex(const T &in, const std::string &name) {
+    if (findVertex(in) != nullptr)
+        return false;
+    vertexSet.push_back(new Vertex<T>(in, name));
     return true;
 }
 

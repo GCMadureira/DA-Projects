@@ -1,5 +1,64 @@
 #include "menu.h"
 
+void displayOutput(const Graph<int>& graph) {
+    std::ifstream inputFile("inputs/output.txt");
+    if (!inputFile) {
+        std::cerr << "Error opening output.txt.\n";
+        return;
+    }
+
+    std::cout << "\n";
+    std::string currentLine, num;
+    while (std::getline(inputFile, currentLine)) {
+        size_t pos = currentLine.find(':');
+        if (pos == std::string::npos) continue;
+
+        std::string name = currentLine.substr(0, pos); // first part of the line
+        std::string data = currentLine.substr(pos + 1); // second part of the line
+
+        if (name == "Source") {
+            std::cout << "Start Location: ";
+            try {std::cout << graph.findVertex(std::stoi(data))->getName() << "\n";}
+            catch (...) {std::cout << "invalid\n";}
+        }
+        else if (name == "Destination") {
+            std::cout << "Destination: ";
+            try {std::cout << graph.findVertex(std::stoi(data))->getName() << "\n";}
+            catch (...) {std::cout << "invalid\n";}
+        }
+        else if (name.find("Route") != std::string::npos) {
+            int index = 1;
+            std::stringstream lineSS(data);
+            std::cout << "\n" << name << ":\n";
+            if (data == " none") {
+                std::cout << "No route was found.\n";
+                continue;
+            }
+            while (std::getline(lineSS, num, ',')) {
+                std::cout << "   " << index++ << ". " << graph.findVertex(std::stoi(num))->getName() << "\n";
+            }
+
+            size_t open = data.find('(');
+            size_t close = data.find(')');
+            if (open != std::string::npos && close != std::string::npos) {
+                std::cout << "Route time: " << std::stoi(data.substr(open + 1, close - open - 1)) << "\n";
+            }
+        }
+        else if (name.find("ParkingNode") != std::string::npos) {
+            std::cout << "\nParking Location: ";
+            try {std::cout << graph.findVertex(std::stoi(data))->getName() << "\n";}
+            catch (...) {std::cout << "invalid\n";}
+        }
+        else if (name.find("TotalTime") != std::string::npos) {
+            std::cout << "\nTotal Route Time: ";
+            try {std::cout << std::stoi(data) << "\n";}
+            catch (...) {std::cout << "invalid\n";}
+        }
+    }
+    std::cout << "\n";
+}
+
+
 // Function to write inputs to input.txt
 void writeInputToFile(int choice, int source, int destination, int maxWalkTime,
                       const std::string& avoidNodes, const std::string& avoidSegments, int includeNode) {
@@ -103,12 +162,11 @@ int selectMode(const int choice){
         switch (mode) {
             case 1:
                 receiveInput(choice);
-            break;
-            case 2:
-                // automatic input so do nothing
-                break;
-            case 3:
                 return 1;
+            case 2:
+                return 2;
+            case 3:
+                return -1;
             default:
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -120,6 +178,10 @@ int selectMode(const int choice){
 }
 
 int main() {
+    #ifdef _WIN32
+        SetConsoleOutputCP(CP_UTF8);
+    #endif
+
     // Create the graph
     Graph<int> urbanGraph;
     loadGraph(urbanGraph);
@@ -136,17 +198,22 @@ int main() {
         std::cout << "Enter your choice: ";
         std::cin >> choice;
 
+        int mode = -1;
+
         switch (choice) {
             case 1:
-                if (selectMode(choice)) break; // if user goes back from the other menu do not execute the algorithm
+                mode = selectMode(choice);
+                if (mode == -1) break; // if user goes back from the other menu do not execute the algorithm
                 independentRoutePlanning(urbanGraph);
             break;
             case 2:
-                if (selectMode(choice)) break;
+                mode = selectMode(choice);
+                if (mode == -1) break;
                 restrictedRoutePlanning(urbanGraph);
             break;
             case 3:
-                if (selectMode(choice)) break;
+                mode = selectMode(choice);
+                if (mode == -1) break;
                 environmentallyFriendlyRoutePlanning(urbanGraph);
             break;
             case 4:
@@ -158,6 +225,7 @@ int main() {
                 std::cout << "Invalid choice. Please try again.\n";
             break;
         }
+        if (mode == 1) displayOutput(urbanGraph);
     } while (choice != 4);
 
     std::cout << "Program exited.\n";

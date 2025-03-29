@@ -1,6 +1,11 @@
 #ifndef MENU_H
 #define MENU_H
 
+// for displaying in UTF-8 on the Windows terminal
+#ifdef _WIN32
+    #include "windows.h"
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <limits>
@@ -13,6 +18,14 @@
 #include "batchmode.cpp"
 #include "search.h"
 #include <climits>
+
+/**
+ * @brief Displays the output on the terminal with the location names
+ *
+ * Reads the output.txt file line by line and if the name of the line matches any of the recognized names then it prints the data in a user friendly way. <br>
+ * The lines on the output.txt must be in the format <name>:<data> to be valid.
+ */
+void displayOutput();
 
 /**
  * @brief Writes inputs to input.txt
