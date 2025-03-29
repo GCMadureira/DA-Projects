@@ -3,12 +3,11 @@
 //
 
 #include "search.h"
-#include <climits>
 
 using namespace std;
 
 template <class T>
-bool relax(Edge<T> *edge, bool driving=true) { // d[u] + w(u,v) < d[v]
+bool relax(Edge<T> *edge, const bool driving) { // d[u] + w(u,v) < d[v]
     Vertex<T>* neighbor = edge->getDest();
     Vertex<T>* v = edge->getOrig();
     if(driving) {
@@ -29,7 +28,7 @@ bool relax(Edge<T> *edge, bool driving=true) { // d[u] + w(u,v) < d[v]
 }
 
 template <class T>
-void dijkstra(Graph<T> * g, const int &origin, bool driving = true) {
+void dijkstra(Graph<T> * g, const int &origin, const bool driving) {
     if (!g->findVertex(origin)) return;
 
     std::vector<Vertex<T>*> vertices = g->getVertexSet();
@@ -64,7 +63,7 @@ void dijkstra(Graph<T> * g, const int &origin, bool driving = true) {
 }
 
 template <class T>
-static std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, bool savedPath = false) {
+std::vector<T> getPath(Graph<T> * g, const int &origin, const int &dest, const bool savedPath) {
     std::vector<T> path;
     Vertex<T>* v = g->findVertex(dest);
 

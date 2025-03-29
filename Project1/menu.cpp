@@ -1,15 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <limits>
-#include <regex>
-#include "data_structures/Graph.h"
-#include "data_structures/MutablePriorityQueue.h"
-#include "parsing.cpp"
-#include "search.cpp"
-#include "parsing.h"
-#include "batchmode.cpp"
-#include "search.h"
-#include <climits>
+#include "menu.h"
 
 // Function to write inputs to input.txt
 void writeInputToFile(int choice, int source, int destination, int maxWalkTime,

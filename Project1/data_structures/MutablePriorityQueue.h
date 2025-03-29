@@ -30,9 +30,12 @@ public:
 };
 
 // Index calculations
-#define parent(i) ((i) / 2)
-#define leftChild(i) ((i) * 2)
+#define parent(i) ((i) / 2) ///< get the parent's index from the child's index
+#define leftChild(i) ((i) * 2) ///< get the left child's index from the parent's index
 
+/**
+ * @brief Mutable Priority Queue default constructor
+ */
 template <class T>
 MutablePriorityQueue<T>::MutablePriorityQueue() {
     H.push_back(nullptr);
@@ -40,11 +43,21 @@ MutablePriorityQueue<T>::MutablePriorityQueue() {
     // to facilitate parent/child calculations
 }
 
+/**
+ * @brief Checks it the queue is empty
+ *
+ * @return true if the queue is empty, false otherwise
+ */
 template <class T>
 bool MutablePriorityQueue<T>::empty() {
     return H.size() == 1;
 }
 
+/**
+ * @brief Extracts the item with the minimum key
+ *
+ * @return pointer to the item extracted
+ */
 template <class T>
 T* MutablePriorityQueue<T>::extractMin() {
     auto x = H[1];
@@ -55,17 +68,32 @@ T* MutablePriorityQueue<T>::extractMin() {
     return x;
 }
 
+/**
+ * @brief Inserts a new item at the end of the queue and calls heapifyUp()
+ *
+ * @param x - item to be inserted
+ */
 template <class T>
 void MutablePriorityQueue<T>::insert(T *x) {
     H.push_back(x);
     heapifyUp(H.size()-1);
 }
 
+/**
+ * @brief Decreases the key of the item x using heapifyUp()
+ *
+ * @param x - item to have the key decreased
+ */
 template <class T>
 void MutablePriorityQueue<T>::decreaseKey(T *x) {
     heapifyUp(x->queueIndex);
 }
 
+/**
+ * @brief Pushes the item with index i up the tree
+ *
+ * @param i - index of the item to be pushed up
+ */
 template <class T>
 void MutablePriorityQueue<T>::heapifyUp(unsigned i) {
     auto x = H[i];
@@ -76,6 +104,11 @@ void MutablePriorityQueue<T>::heapifyUp(unsigned i) {
     set(i, x);
 }
 
+/**
+ * @brief Pushes the item with index i down the tree
+ *
+ * @param i - index of the item to be pushed down
+ */
 template <class T>
 void MutablePriorityQueue<T>::heapifyDown(unsigned i) {
     auto x = H[i];
@@ -93,6 +126,12 @@ void MutablePriorityQueue<T>::heapifyDown(unsigned i) {
     set(i, x);
 }
 
+/**
+ * @brief Changes the value at index i to x
+ *
+ * @param i - index where the item will be changed
+ * @param x - item to be inserted
+ */
 template <class T>
 void MutablePriorityQueue<T>::set(unsigned i, T * x) {
     H[i] = x;
