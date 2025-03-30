@@ -76,8 +76,8 @@ std::vector<DistanceRecord> readDistances(const std::string &filename) {
 }
 
 void loadGraph(Graph<int>& graph) {
-    std::vector<LocationRecord> locations = readLocations("DataSets/Locations2.csv");
-    std::vector<DistanceRecord> distances = readDistances("DataSets/Distances2.csv");
+    std::vector<LocationRecord> locations = readLocations("DataSets/Locations.csv");
+    std::vector<DistanceRecord> distances = readDistances("DataSets/Distances.csv");
 
     std::unordered_map<std::string, int> codeToId;
 
