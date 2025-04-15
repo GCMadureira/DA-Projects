@@ -1,0 +1,10 @@
+Source: 400
+Destination: 500
+DrivingRoute1: (2147483647)
+ParkingNode1:531
+WalkingRoute1: (2147483647)
+TotalTime1:-2147483648
+DrivingRoute2:400, 833, 1255, 1097, 482, 553, 611, 451 (40)
+ParkingNode2:451
+WalkingRoute2:451, 500 (240)
+TotalTime2:280

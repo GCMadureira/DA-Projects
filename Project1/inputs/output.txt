@@ -1,6 +1,0 @@
-Source: 2git
-Destination: 501
-DrivingRoute:2, 420, 428, 301, 1089, 227, 1086 (58)
-ParkingNode:1086
-WalkingRoute:1086, 742, 750, 705, 1090, 1085, 181, 702, 703, 1084, 58, 501 (121)
-TotalTime:179
