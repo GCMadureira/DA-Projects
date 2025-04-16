@@ -9,4 +9,5 @@ include_directories(src)
 add_executable(Project2
         Parsing/PalletPacking.h
         Parsing/parsing.cpp
-        src/main.cpp)
+        src/main.cpp
+        src/algorithms.cpp)
