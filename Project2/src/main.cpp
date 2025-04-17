@@ -3,6 +3,7 @@
 //
 
 #include "../Parsing/PalletPacking.h"
+#include "Dp.cpp"
 #include <iostream>
 
 void showMenu() {
@@ -28,8 +29,16 @@ int main() {
             case 1:
                 // Call brute-force function
                 break;
-            case 2:
-                // Call dynamic programming function
+            case 2: {
+                    KnapsackResult result = dp_approach(instance);
+
+                    std::cout << "Maximum profit: " << result.maxProfit << "\n";
+                    std::cout << "Selected pallet IDs:\n";
+                    for (int id: result.selectedPalletIds) {
+                        std::cout << "  - " << id << "\n";
+                    }
+                }
+                std::cout <<"\n";
                 break;
             case 3:
                 // Call greedy approximation function
