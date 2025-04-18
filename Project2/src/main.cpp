@@ -3,7 +3,9 @@
 //
 
 #include "../Parsing/PalletPacking.h"
+#include "algorithms.cpp"
 #include <iostream>
+#include <vector>
 
 void showMenu() {
     std::cout << "===== Pallet Packing Optimization Tool =====\n";
@@ -18,22 +20,31 @@ void showMenu() {
 int main() {
     ProblemInstance instance;
     int choice;
-    instance = readData("../data/TruckAndPallets_01.csv", "../data/Pallets_01.csv");
+    instance = readData("../data/TruckAndPallets_07.csv", "../data/Pallets_07.csv");
     std::cout << "Dataset loaded. Pallets: " << instance.pallets.size() << ", Capacity: " << instance.truckCapacity << "\n";
 
     do {
         showMenu();
         std::cin >> choice;
         switch (choice) {
-            case 1:
-                // Call brute-force function
+            case 1: {
+             	//Call brute force function
                 break;
             case 2:
                 // Call dynamic programming function
                 break;
-            case 3:
-                // Call greedy approximation function
+            case 3:{
+              KnapsackResult result = g_approach(instance);
+
+                    std::cout << "Maximum profit: " << result.maxProfit << "\n";
+                    std::cout << "Selected pallet IDs:\n";
+                    for (int id: result.selectedPalletIds) {
+                        std::cout << "  - " << id << "\n";
+                    }
+                }
+                std::cout <<"\n";
                 break;
+            }
             case 4:
                 // Call ILP or advanced algorithm
                 break;
