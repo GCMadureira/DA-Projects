@@ -2,14 +2,7 @@
 // Created by Gabriel Sousa on 17/04/2025.
 //
 
-#include "../Parsing/PalletPacking.h"
-#include <vector>
-#include <algorithm>
-
-struct KnapsackResult {
-    int maxProfit;
-    std::vector<int> selectedPalletIds;
-};
+#include "algorithms.h"
 
 
 KnapsackResult g_approach(const ProblemInstance& instance) {
