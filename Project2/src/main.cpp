@@ -25,10 +25,19 @@ int main() {
         showMenu();
         std::cin >> choice;
         switch (choice) {
-            case 1:
-             	//Call brute force function
+            case 1: {
+                KnapsackResult result = g_approach(instance);
+
+                std::cout << "Maximum profit: " << result.maxProfit << "\n";
+                std::cout << "Selected pallet IDs:\n";
+                for (int id: result.selectedPalletIds) {
+                    std::cout << "  - " << id << "\n";
+                }
+
+                std::cout <<"\n";
                 break;
-            case 2: {
+            }
+            case 2:{
                 KnapsackResult result = dp_approach(instance);
 
                 std::cout << "Maximum profit: " << result.maxProfit << "\n";

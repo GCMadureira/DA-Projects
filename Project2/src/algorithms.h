@@ -1,7 +1,3 @@
-//
-// Created by GustavoCM on 21/04/2025.
-//
-
 #ifndef PROJECT2_ALGORITHMS_H
 #define PROJECT2_ALGORITHMS_H
 
@@ -16,7 +12,7 @@ struct KnapsackResult {
     std::vector<int> selectedPalletIds;
 };
 
-
+KnapsackResult bruteForce(const ProblemInstance& instance);
 KnapsackResult dp_approach(const ProblemInstance& instance);
 KnapsackResult g_approach(const ProblemInstance& instance);
 

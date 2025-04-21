@@ -10,6 +10,7 @@ add_executable(Project2
         Parsing/PalletPacking.h
         Parsing/parsing.cpp
         src/main.cpp
+        src/algorithms.h
+        src/bruteForce.cpp
         src/greedy.cpp
-        src/dynamicP.cpp
-        src/algorithms.h)
+        src/dynamicP.cpp)
