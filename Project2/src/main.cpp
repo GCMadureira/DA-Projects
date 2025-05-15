@@ -3,6 +3,9 @@
 //
 
 #include "algorithms.h"
+#include "test_runner.cpp"
+#include <iostream>
+#include <string>
 
 void showMainMenu() {
     std::cout << "===== Pallet Packing Optimization Tool =====\n";
@@ -17,7 +20,6 @@ void showMainMenu() {
 std::string selectDatasetPath() {
     int sourceChoice, datasetNumber;
 
-    // Choose dataset source
     std::cout << "Select dataset source:\n";
     std::cout << "1. Provided datasets\n";
     std::cout << "2. Your own datasets\n";
@@ -34,7 +36,6 @@ std::string selectDatasetPath() {
         basePath = "../data/Provided/";
     }
 
-    // Choose dataset number
     std::cout << "Choose dataset number (1 to 10): ";
     std::cin >> datasetNumber;
     if (datasetNumber < 1 || datasetNumber > 10) {
@@ -46,11 +47,10 @@ std::string selectDatasetPath() {
     std::string truckFile = basePath + "TruckAndPallets_" + datasetId + ".csv";
     std::string palletFile = basePath + "Pallets_" + datasetId + ".csv";
 
-    // Load and return combined path string (you could return them separately if needed)
     return truckFile + ";" + palletFile;
 }
 
-int main() {
+void runInteractiveMode() {
     std::string datasetPath = selectDatasetPath();
     size_t sep = datasetPath.find(';');
     std::string truckFile = datasetPath.substr(0, sep);
@@ -77,13 +77,18 @@ int main() {
                 break;
             case 3:
                 result = g_approach(instance);
+                // Compare greedy with optimal (DP)
+                if (result.maxProfit == dp_approach(instance).maxProfit)
+                    std::cout << "✅ Greedy solution is OPTIMAL.\n";
+                else
+                    std::cout << "⚠️ Greedy solution is NOT optimal.\n";
                 break;
             case 4:
                 std::cout << "ILP / Advanced algorithm is not implemented.\n";
                 continue;
             case 0:
                 std::cout << "Exiting...\n";
-                continue;
+                return;
             default:
                 std::cout << "Invalid choice.\n";
                 continue;
@@ -91,12 +96,29 @@ int main() {
 
         std::cout << "Maximum profit: " << result.maxProfit << "\n";
         std::cout << "Selected pallet IDs:\n";
-        for (int id: result.selectedPalletIds) {
+        for (int id : result.selectedPalletIds) {
             std::cout << "  - " << id << "\n";
         }
         std::cout << "\n";
 
     } while (choice != 0);
+}
+
+int main() {
+    std::cout << "=== Select Mode ===\n";
+    std::cout << "1. Normal Use (Interactive)\n";
+    std::cout << "2. Run Automated Benchmark Tests\n";
+    std::cout << "Choice: ";
+
+    int modeChoice;
+    std::cin >> modeChoice;
+
+    if (modeChoice == 1)
+        runInteractiveMode();
+    else if (modeChoice == 2)
+        runTestMode();
+    else
+        std::cout << "Invalid choice. Exiting...\n";
 
     return 0;
 }
