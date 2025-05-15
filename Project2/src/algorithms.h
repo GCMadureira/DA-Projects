@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <iostream>
 #include "PalletPacking.h"
+#include "functional"
 
 /**
  * @struct KnapsackResult
@@ -29,10 +30,12 @@ KnapsackResult bruteForce(const ProblemInstance& instance);
 /**
  * @brief Solves the pallet packing problem using a dynamic programming approach.
  *
- * Uses a bottom-up method with memoization to find the best combination of pallets for maximum profit.
+ * Uses a bottom-up method to compute the optimal combination of pallets for maximum profit.
+ * Depending on the truck capacity or dataset size, it dynamically chooses between using a
+ * vector-based or unordered_map-based DP table for performance efficiency.
  *
  * @param instance The problem instance containing truck capacity and pallet list.
- * @return The result containing maximum profit and selected pallets.
+ * @return The result containing maximum profit and selected pallet IDs.
  */
 KnapsackResult dp_approach(const ProblemInstance& instance);
 
