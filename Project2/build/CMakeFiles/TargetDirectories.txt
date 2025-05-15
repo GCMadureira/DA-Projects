@@ -1,0 +1,3 @@
+D:/Programming/CLion_c++_DA/DA/Project2/build/CMakeFiles/Project2.dir
+D:/Programming/CLion_c++_DA/DA/Project2/build/CMakeFiles/ALL_BUILD.dir
+D:/Programming/CLion_c++_DA/DA/Project2/build/CMakeFiles/ZERO_CHECK.dir

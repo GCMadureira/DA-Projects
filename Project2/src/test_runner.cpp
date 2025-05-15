@@ -9,7 +9,7 @@
 #include <functional>
 
 const int NUM_RUNS = 5;
-const int BRUTE_FORCE_LIMIT = 40;
+const int BRUTE_FORCE_LIMIT = 25;
 
 // Generic average timing wrapper
 double averageTime(std::function<void()> func) {
@@ -34,7 +34,7 @@ void runTestMode() {
         return;
     }
 
-    output << "Dataset,BruteForce(s),DynamicProgramming(s),Greedy(s),GreedyOptimal\n";
+    output << "Dataset,BruteForce(s),DynamicProgramming(s),Greedy(s),GreedyOptimal,ILP\n";
 
     for (int i = 1; i <= 10; ++i) {
         std::string datasetId = (i < 10 ? "0" + std::to_string(i) : std::to_string(i));
@@ -73,13 +73,20 @@ void runTestMode() {
         bool isOptimal = (greedyRes.maxProfit == dpRes.maxProfit);
         std::cout << " -> " << (isOptimal ? "OPTIMAL" : "NOT OPTIMAL") << "\n";
 
+        // --- ILP ---
+        KnapsackResult ilpRes;
+        double timeILP = averageTime([&]() {
+            ilpRes = ilp_approach(instance);
+        });
+        std::cout << "  ILP Avg Time: " << timeILP << "s";
+
         // Write results
         output << datasetId << ",";
         if (timeBrute < 0)
             output << "SKIPPED,";
         else
             output << timeBrute << ",";
-        output << timeDP << "," << timeGreedy << "," << (isOptimal ? "Yes" : "No") << "\n";
+        output << timeDP << "," << timeGreedy << "," << (isOptimal ? "Yes" : "No") << "," << timeILP << "\n";
     }
 
     output.close();

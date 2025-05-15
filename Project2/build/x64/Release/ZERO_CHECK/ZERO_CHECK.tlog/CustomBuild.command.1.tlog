@@ -1,0 +1,10 @@
+^D:\PROGRAMMING\CLION_C++_DA\DA\PROJECT2\BUILD\CMAKEFILES\0A22BAB8A6D360339A7DDF060A98CE3B\GENERATE.STAMP.RULE
+setlocal
+"D:\Programas\CLion\CLion 2024.3.2\bin\cmake\win\x64\bin\cmake.exe" -SD:/Programming/CLion_c++_DA/DA/Project2 -BD:/Programming/CLion_c++_DA/DA/Project2/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/Programming/CLion_c++_DA/DA/Project2/build/Project2.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
