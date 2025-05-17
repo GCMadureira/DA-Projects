@@ -14,6 +14,7 @@
  */
 struct KnapsackResult {
     int maxProfit;
+    int occupiedWeight;
     std::vector<int> selectedPalletIds;
 };
 

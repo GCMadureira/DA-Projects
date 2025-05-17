@@ -38,13 +38,14 @@ KnapsackResult bruteForce(const ProblemInstance& instance) {
     exploreLevel(instance, 0, currentPacking, 0, 0);
 
     std::vector<int> result;
-    int profit = 0;
+    int profit = 0, weight = 0;
     for(int i = 0; i < instance.pallets.size(); i++) {
       if(currentPacking[i]) {
         result.push_back(instance.pallets[i].id);
         profit += instance.pallets[i].profit;
+        weight += instance.pallets[i].weight;
       }
     }
 
-    return {profit, result};
+    return {profit, weight, result};
 }

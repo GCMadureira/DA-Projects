@@ -95,6 +95,7 @@ void runInteractiveMode() {
         }
 
         std::cout << "Maximum profit: " << result.maxProfit << "\n";
+        std::cout << "Weight occupied: " << result.occupiedWeight << "/" << instance.truckCapacity << "\n";
         std::cout << "Selected pallet IDs:\n";
         for (int id : result.selectedPalletIds) {
             std::cout << "  - " << id << "\n";

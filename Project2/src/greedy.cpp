@@ -26,5 +26,7 @@ KnapsackResult g_approach(const ProblemInstance& instance) {
         }
     }
 
+    result.occupiedWeight = currentWeight;
+
     return result;
 }

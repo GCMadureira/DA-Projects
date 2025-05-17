@@ -38,7 +38,13 @@ KnapsackResult dp_approach(const ProblemInstance& instance) {
             }
         }
 
-        return KnapsackResult{maxProfit, bestSelection};
+        int weight = 0;
+        for (Pallet pallet : instance.pallets) {
+            if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
+                weight += pallet.weight;
+        }
+
+        return KnapsackResult{maxProfit, weight, bestSelection};
     };
 
     std::function<KnapsackResult()> useHashMap = [&]() {
@@ -73,7 +79,13 @@ KnapsackResult dp_approach(const ProblemInstance& instance) {
             }
         }
 
-        return KnapsackResult{maxProfit, bestSelection};
+        int weight = 0;
+        for (Pallet pallet : instance.pallets) {
+            if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
+                weight += pallet.weight;
+        }
+
+        return KnapsackResult{maxProfit, weight, bestSelection};
     };
 
     if (capacity <= 10000)
