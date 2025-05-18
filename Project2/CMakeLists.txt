@@ -13,4 +13,6 @@ add_executable(Project2
         src/algorithms.h
         src/bruteForce.cpp
         src/greedy.cpp
-        src/dynamicP.cpp)
+        src/dynamicP.cpp
+        src/branchBound.cpp
+)

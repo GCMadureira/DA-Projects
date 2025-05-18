@@ -8,8 +8,8 @@
 #include <chrono>
 #include <functional>
 
-const int NUM_RUNS = 5;
-const int BRUTE_FORCE_LIMIT = 40;
+const int NUM_RUNS = 15;
+const int BRUTE_FORCE_LIMIT = 25;
 
 // Generic average timing wrapper
 double averageTime(std::function<void()> func) {
@@ -34,7 +34,7 @@ void runTestMode() {
         return;
     }
 
-    output << "Dataset,BruteForce(s),DynamicProgramming(s),Greedy(s),GreedyOptimal\n";
+    output << "Dataset,BruteForce(s),BranchAndBound(s),DynamicProgramming(s),Greedy(s),GreedyOptimal\n";
 
     for (int i = 1; i <= 10; ++i) {
         std::string datasetId = (i < 10 ? "0" + std::to_string(i) : std::to_string(i));
@@ -49,11 +49,23 @@ void runTestMode() {
         KnapsackResult bruteRes;
         if (instance.pallets.size() <= BRUTE_FORCE_LIMIT) {
             timeBrute = averageTime([&]() {
-                bruteRes = bruteForce(instance);
+                bruteRes = bf_approach(instance);
             });
             std::cout << "  Brute-Force Avg Time: " << timeBrute << "s\n";
         } else {
             std::cout << "  Brute-Force skipped (too many pallets: " << instance.pallets.size() << ")\n";
+        }
+
+        // --- Brute-Force ---
+        double timeBranch = -1.0;
+        KnapsackResult branchRes;
+        if (instance.pallets.size() <= BRUTE_FORCE_LIMIT) {
+            timeBranch = averageTime([&]() {
+                branchRes = bb_approach(instance);
+            });
+            std::cout << "  Branch and Bounding Avg Time: " << timeBranch << "s\n";
+        } else {
+            std::cout << "  Branch and Bounding skipped (too many pallets: " << instance.pallets.size() << ")\n";
         }
 
         // --- Dynamic Programming ---
@@ -78,7 +90,7 @@ void runTestMode() {
         if (timeBrute < 0)
             output << "SKIPPED,";
         else
-            output << timeBrute << ",";
+            output << timeBrute << "," << timeBranch << ",";
         output << timeDP << "," << timeGreedy << "," << (isOptimal ? "Yes" : "No") << "\n";
     }
 

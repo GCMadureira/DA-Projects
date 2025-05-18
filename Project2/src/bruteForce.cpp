@@ -4,12 +4,14 @@
 
 #include "algorithms.h"
 
-void exploreLevel(const ProblemInstance& instance, int level, std::vector<bool>& currentPacking, int currentValue, int currentWeight) {
-    static std::vector<bool> bestPacking(instance.pallets.size(), false);
-    static int bestValue = 0;
+static ProblemInstance problemInstance;
+static std::vector<bool> currentPacking;
+static std::vector<bool> bestPacking;
+static int bestValue;
 
+static void exploreLevel(int level, int currentValue, int currentWeight) {
     // reached the end of the tree
-    if(level == instance.pallets.size()) {
+    if(level == problemInstance.pallets.size()) {
       if(currentValue > bestValue) {
         bestPacking = currentPacking;
         bestValue = currentValue;
@@ -17,30 +19,30 @@ void exploreLevel(const ProblemInstance& instance, int level, std::vector<bool>&
       return;
     }
 
-    const Pallet currentPallet = instance.pallets[level];
+    const Pallet currentPallet = problemInstance.pallets[level];
 
     currentPacking[level] = true; // choose to add the current pallet if it fits
-    if(currentWeight + currentPallet.weight <= instance.truckCapacity)
-      exploreLevel(instance, level + 1, currentPacking, currentValue + currentPallet.profit, currentWeight + currentPallet.weight);
+    if(currentWeight + currentPallet.weight <= problemInstance.truckCapacity)
+      exploreLevel(level + 1, currentValue + currentPallet.profit, currentWeight + currentPallet.weight);
 
     currentPacking[level] = false; // choose not to add the current pallet
-    exploreLevel(instance, level + 1, currentPacking, currentValue, currentWeight);
-
-    if(level == 0) { // pass the answer on the currentPacking parameter
-      currentPacking = bestPacking;
-    }
+    exploreLevel(level + 1, currentValue, currentWeight);
 }
 
 // explores every combination of pallets through backtracking, in each node, can decide to add the current level's pallet or not
-KnapsackResult bruteForce(const ProblemInstance& instance) {
-    std::vector<bool> currentPacking(instance.pallets.size(), false);
+KnapsackResult bf_approach(const ProblemInstance& instance) {
+    // set the static variables for this iteration of the algorithm
+    problemInstance = instance;
+    currentPacking = std::vector<bool>(instance.pallets.size(), false);
+    bestPacking = std::vector<bool>(instance.pallets.size(), false);
+    bestValue = 0;
 
-    exploreLevel(instance, 0, currentPacking, 0, 0);
+    exploreLevel(0, 0, 0);
 
     std::vector<int> result;
     int profit = 0, weight = 0;
     for(int i = 0; i < instance.pallets.size(); i++) {
-      if(currentPacking[i]) {
+      if(bestPacking[i]) {
         result.push_back(instance.pallets[i].id);
         profit += instance.pallets[i].profit;
         weight += instance.pallets[i].weight;

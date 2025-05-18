@@ -27,7 +27,9 @@ struct KnapsackResult {
  * @param instance The problem instance containing the truck capacity and pallet list.
  * @return The result containing the maximum profit and selected pallets.
  */
-KnapsackResult bruteForce(const ProblemInstance& instance);
+KnapsackResult bf_approach(const ProblemInstance& instance);
+
+KnapsackResult bb_approach(const ProblemInstance& instance);
 
 /**
  * @brief Solves the pallet packing problem using a dynamic programming approach.
