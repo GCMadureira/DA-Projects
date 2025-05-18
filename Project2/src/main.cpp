@@ -8,19 +8,19 @@
 #include <string>
 
 void showMainMenu() {
-    std::cout << "===== Pallet Packing Optimization Tool =====\n";
+    std::cout << "\n===== Pallet Packing Optimization Tool =====\n";
     std::cout << "1. Run Brute-Force\n";
     std::cout << "2. Run Dynamic Programming\n";
     std::cout << "3. Run Greedy Approximation\n";
     std::cout << "4. Run ILP / Advanced Algorithm (Not implemented)\n";
-    std::cout << "0. Exit\n";
+    std::cout << "0. Back\n";
     std::cout << "Choose an option: ";
 }
 
 std::string selectDatasetPath() {
     int sourceChoice, datasetNumber;
 
-    std::cout << "Select dataset source:\n";
+    std::cout << "\nSelect dataset source:\n";
     std::cout << "1. Provided datasets\n";
     std::cout << "2. Your own datasets\n";
     std::cout << "Choice: ";
@@ -75,51 +75,65 @@ void runInteractiveMode() {
             case 2:
                 result = dp_approach(instance);
                 break;
-            case 3:
+            case 3: {
                 result = g_approach(instance);
                 // Compare greedy with optimal (DP)
-                if (result.maxProfit == dp_approach(instance).maxProfit)
-                    std::cout << "✅ Greedy solution is OPTIMAL.\n";
+                int dpResult = dp_approach(instance).maxProfit;
+                if (result.maxProfit == dpResult)
+                    std::cout << "\nGreedy solution is OPTIMAL.\n";
                 else
-                    std::cout << "⚠️ Greedy solution is NOT optimal.\n";
+                    std::cout << "\nGreedy solution is NOT optimal -> " << result.maxProfit << "/" << dpResult << ", " << 100*result.maxProfit/dpResult << "% of the optimal solution" << "\n";
                 break;
+            }
             case 4:
                 std::cout << "ILP / Advanced algorithm is not implemented.\n";
                 continue;
             case 0:
-                std::cout << "Exiting...\n";
                 return;
             default:
                 std::cout << "Invalid choice.\n";
                 continue;
         }
 
-        std::cout << "Maximum profit: " << result.maxProfit << "\n";
+        std::sort(result.selectedPalletIds.begin(), result.selectedPalletIds.end());
+
+        std::cout << "\nMaximum profit: " << result.maxProfit << "\n";
         std::cout << "Weight occupied: " << result.occupiedWeight << "/" << instance.truckCapacity << "\n";
         std::cout << "Selected pallet IDs:\n";
         for (int id : result.selectedPalletIds) {
-            std::cout << "  - " << id << "\n";
+            std::cout << id << " ";
         }
-        std::cout << "\n";
+        std::cout << "\n\n";
 
     } while (choice != 0);
 }
 
 int main() {
-    std::cout << "=== Select Mode ===\n";
-    std::cout << "1. Normal Use (Interactive)\n";
-    std::cout << "2. Run Automated Benchmark Tests\n";
-    std::cout << "Choice: ";
-
     int modeChoice;
-    std::cin >> modeChoice;
+    do {
+        std::cout << "\n=== Select Mode ===\n";
+        std::cout << "1. Normal Use (Interactive)\n";
+        std::cout << "2. Run Automated Benchmark Tests\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Choice: ";
+        std::cin >> modeChoice;
 
-    if (modeChoice == 1)
-        runInteractiveMode();
-    else if (modeChoice == 2)
-        runTestMode();
-    else
-        std::cout << "Invalid choice. Exiting...\n";
+        KnapsackResult result;
+
+        switch (modeChoice) {
+            case 1:
+                runInteractiveMode();
+            break;
+            case 2:
+                runTestMode();
+            break;
+            case 0:
+                std::cout << "Exiting...\n";
+            return 0;
+            default:
+                std::cout << "Invalid choice.\n";
+        }
+    } while (modeChoice != 0);
 
     return 0;
 }
