@@ -54,4 +54,6 @@ KnapsackResult dp_approach(const ProblemInstance& instance);
  */
 KnapsackResult g_approach(const ProblemInstance& instance);
 
+KnapsackResult app_approach(const ProblemInstance& instance);
+
 #endif //PROJECT2_ALGORITHMS_H

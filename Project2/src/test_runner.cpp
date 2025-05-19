@@ -26,7 +26,7 @@ double averageTime(std::function<void()> func) {
 void runTestMode() {
     std::cout << "===== Automated Benchmark Mode =====\n";
 
-    std::string basePath = "../data/Own/";
+    std::string basePath = "../data/Provided/";
     std::ofstream output("../results/benchmark_results.csv");
 
     if (!output.is_open()) {
@@ -34,7 +34,7 @@ void runTestMode() {
         return;
     }
 
-    output << "Dataset,BruteForce(s),BranchAndBound(s),DynamicProgramming(s),Greedy(s),GreedyOptimal\n";
+    output << "Dataset,BruteForce(s),BranchAndBound(s),DynamicProgramming(s),Greedy(s),GreedyOptimal,Approximation(s),ApproximationOptimal\n";
 
     for (int i = 1; i <= 10; ++i) {
         std::string datasetId = (i < 10 ? "0" + std::to_string(i) : std::to_string(i));
@@ -56,7 +56,7 @@ void runTestMode() {
             std::cout << "  Brute-Force skipped (too many pallets: " << instance.pallets.size() << ")\n";
         }
 
-        // --- Brute-Force ---
+        // --- Branch-And-Bound ---
         double timeBranch = -1.0;
         KnapsackResult branchRes;
         if (instance.pallets.size() <= BRUTE_FORCE_LIMIT) {
@@ -75,6 +75,7 @@ void runTestMode() {
         });
         std::cout << "  DP Avg Time: " << timeDP << "s\n";
 
+
         // --- Greedy ---
         KnapsackResult greedyRes;
         double timeGreedy = averageTime([&]() {
@@ -82,16 +83,26 @@ void runTestMode() {
         });
         std::cout << "  Greedy Avg Time: " << timeGreedy << "s";
 
-        bool isOptimal = (greedyRes.maxProfit == dpRes.maxProfit);
-        std::cout << " -> " << (isOptimal ? "OPTIMAL" : "NOT OPTIMAL") << "\n";
+        bool isOptimalGreedy = (greedyRes.maxProfit == dpRes.maxProfit);
+        std::cout << " -> " << (isOptimalGreedy ? "OPTIMAL" : "NOT OPTIMAL") << "\n";
+
+        // --- Approximation ---
+        KnapsackResult appRes;
+        double timeApp = averageTime([&]() {
+            appRes = app_approach(instance);
+        });
+        std::cout << "  Approximation Avg Time: " << timeApp << "s";
+
+        bool isOptimalApp = (appRes.maxProfit == dpRes.maxProfit);
+        std::cout << " -> " << (isOptimalApp ? "OPTIMAL" : "NOT OPTIMAL") << "\n";
 
         // Write results
         output << datasetId << ",";
         if (timeBrute < 0)
-            output << "SKIPPED,";
+            output << "SKIPPED, SKIPPED";
         else
             output << timeBrute << "," << timeBranch << ",";
-        output << timeDP << "," << timeGreedy << "," << (isOptimal ? "Yes" : "No") << "\n";
+        output << timeDP << "," << timeGreedy << "," << (isOptimalGreedy ? "Yes" : "No") << timeGreedy << (isOptimalApp ? "Yes" : "No") << timeApp << "\n";
     }
 
     output.close();

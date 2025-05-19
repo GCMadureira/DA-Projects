@@ -13,7 +13,8 @@ void showMainMenu() {
     std::cout << "2. Run Branch and Bound\n";
     std::cout << "3. Run Dynamic Programming\n";
     std::cout << "4. Run Greedy Approximation\n";
-    std::cout << "5. Run ILP / Advanced Algorithm (Not implemented)\n";
+    std::cout << "5. Run Approximation Approximation\n";
+    std::cout << "6. Run ILP / Advanced Algorithm (Not implemented)\n";
     std::cout << "0. Back\n";
     std::cout << "Choose an option: ";
 }
@@ -89,7 +90,17 @@ void runInteractiveMode() {
                     std::cout << "\nGreedy solution is NOT optimal -> " << result.maxProfit << "/" << dpResult << ", " << 100*result.maxProfit/(double)dpResult << "% of the optimal solution" << "\n";
                 break;
             }
-            case 5:
+            case 5: {
+                result = app_approach(instance);
+                // Compare approximation with optimal (DP)
+                int dpResult = dp_approach(instance).maxProfit;
+                if (result.maxProfit == dpResult)
+                    std::cout << "\nApproximation solution is OPTIMAL.\n";
+                else
+                    std::cout << "\nApproximation solution is NOT optimal -> " << result.maxProfit << "/" << dpResult << ", " << 100*result.maxProfit/(double)dpResult << "% of the optimal solution" << "\n";
+                break;
+            }
+            case 6:
                 std::cout << "ILP / Advanced algorithm is not implemented.\n";
                 continue;
             case 0:
