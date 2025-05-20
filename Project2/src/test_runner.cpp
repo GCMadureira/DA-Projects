@@ -32,7 +32,8 @@ void runBenchmark(const std::string& datasetType, int datasetCount) {
         return;
     }
 
-    output << "Dataset,BruteForce(s),BranchAndBound(s),DynamicProgramming(s),Greedy(s),GreedyOptimal,Approximation(s),ApproximationOptimal,ILP(s)\n";
+    // CSV header updated: no dp_approach, just vector/hashmap
+    output << "Dataset,PalletCount,BruteForce(s),BranchAndBound(s),DP_Vector(s),DP_Hash(s),Greedy(s),GreedyOptimal,Approximation(s),ApproximationOptimal,ILP(s)\n";
 
     for (int i = 1; i <= datasetCount; ++i) {
         std::string datasetId = (i < 10 ? "0" + std::to_string(i) : std::to_string(i));
@@ -45,45 +46,53 @@ void runBenchmark(const std::string& datasetType, int datasetCount) {
         }
 
         ProblemInstance instance = readData(truckFile, palletFile);
-        std::cout << "\nRunning tests for dataset " << datasetId << "...\n";
+        int palletCount = instance.pallets.size();
+        std::cout << "\nRunning tests for dataset " << datasetId << " (" << palletCount << " pallets)...\n";
 
         // --- Brute Force ---
         double timeBrute = -1.0;
         KnapsackResult bruteRes;
-        if (instance.pallets.size() <= BRUTE_FORCE_LIMIT) {
+        if (palletCount <= BRUTE_FORCE_LIMIT) {
             timeBrute = averageTime([&]() {
                 bruteRes = bf_approach(instance);
             });
             std::cout << "  Brute-Force Avg Time: " << timeBrute << "s\n";
         } else {
-            std::cout << "  Brute-Force skipped (too many pallets: " << instance.pallets.size() << ")\n";
+            std::cout << "  Brute-Force skipped (too many pallets)\n";
         }
 
-        // --- Branch & Bound ---
+        // --- Branch and Bound ---
         double timeBranch = -1.0;
         KnapsackResult branchRes;
-        if (instance.pallets.size() <= BRUTE_FORCE_LIMIT) {
+        if (palletCount <= BRUTE_FORCE_LIMIT) {
             timeBranch = averageTime([&]() {
                 branchRes = bb_approach(instance);
             });
             std::cout << "  Branch and Bound Avg Time: " << timeBranch << "s\n";
         } else {
-            std::cout << "  Branch and Bound skipped (too many pallets: " << instance.pallets.size() << ")\n";
+            std::cout << "  Branch and Bound skipped (too many pallets)\n";
         }
 
-        // --- Dynamic Programming ---
-        KnapsackResult dpRes;
-        double timeDP = averageTime([&]() {
-            dpRes = dp_approach(instance);
+        // --- DP Vector ---
+        KnapsackResult dpVecRes;
+        double timeDPVec = averageTime([&]() {
+            dpVecRes = dp_array_approach(instance);
         });
-        std::cout << "  DP Avg Time: " << timeDP << "s\n";
+        std::cout << "  DP Vector Avg Time: " << timeDPVec << "s\n";
+
+        // --- DP Hashmap ---
+        KnapsackResult dpHashRes;
+        double timeDPHash = averageTime([&]() {
+            dpHashRes = dp_hashmap_approach(instance);
+        });
+        std::cout << "  DP HashMap Avg Time: " << timeDPHash << "s\n";
 
         // --- Greedy ---
         KnapsackResult greedyRes;
         double timeGreedy = averageTime([&]() {
             greedyRes = g_approach(instance);
         });
-        bool isOptimalGreedy = (greedyRes.maxProfit == dpRes.maxProfit);
+        bool isOptimalGreedy = (greedyRes.maxProfit == dpVecRes.maxProfit || greedyRes.maxProfit == dpHashRes.maxProfit);
         std::cout << "  Greedy Avg Time: " << timeGreedy << "s -> " << (isOptimalGreedy ? "OPTIMAL" : "NOT OPTIMAL") << "\n";
 
         // --- Approximation ---
@@ -91,7 +100,7 @@ void runBenchmark(const std::string& datasetType, int datasetCount) {
         double timeApp = averageTime([&]() {
             appRes = app_approach(instance);
         });
-        bool isOptimalApp = (appRes.maxProfit == dpRes.maxProfit);
+        bool isOptimalApp = (appRes.maxProfit == dpVecRes.maxProfit || appRes.maxProfit == dpHashRes.maxProfit);
         std::cout << "  Approximation Avg Time: " << timeApp << "s -> " << (isOptimalApp ? "OPTIMAL" : "NOT OPTIMAL") << "\n";
 
         // --- ILP ---
@@ -102,12 +111,14 @@ void runBenchmark(const std::string& datasetType, int datasetCount) {
         std::cout << "  ILP Avg Time: " << timeILP << "s\n";
 
         // --- Write to CSV ---
-        output << datasetId << ",";
+        output << datasetId << "," << palletCount << ",";
         if (timeBrute < 0)
             output << "SKIPPED,SKIPPED,";
         else
             output << timeBrute << "," << timeBranch << ",";
-        output << timeDP << "," << timeGreedy << "," << (isOptimalGreedy ? "Yes" : "No") << ",";
+
+        output << timeDPVec << "," << timeDPHash << ",";
+        output << timeGreedy << "," << (isOptimalGreedy ? "Yes" : "No") << ",";
         output << timeApp << "," << (isOptimalApp ? "Yes" : "No") << ",";
         output << timeILP << "\n";
     }
