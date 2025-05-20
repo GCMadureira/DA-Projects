@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <unordered_map>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "PalletPacking.h"
 #include "functional"
 
@@ -54,6 +56,10 @@ KnapsackResult dp_approach(const ProblemInstance& instance);
  */
 KnapsackResult g_approach(const ProblemInstance& instance);
 
+
 KnapsackResult app_approach(const ProblemInstance& instance);
+
+KnapsackResult ilp_approach(const ProblemInstance& instance);
+
 
 #endif //PROJECT2_ALGORITHMS_H

@@ -1,10 +1,17 @@
 cmake_minimum_required(VERSION 3.26.4)
 project(Project2)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 
-include_directories(Parsing)
-include_directories(src)
+#set(ORTOOLS_ROOT "${CMAKE_SOURCE_DIR}/or-tools")
+
+include_directories(
+        Parsing
+        src
+        #${ORTOOLS_ROOT}/include
+)
+
+#link_directories(${ORTOOLS_ROOT}/lib)
 
 add_executable(Project2
         Parsing/PalletPacking.h
@@ -17,4 +24,8 @@ add_executable(Project2
         src/branchBound.cpp
         src/approximation.cpp
         src/approximation.cpp
+        src/ilp.cpp
 )
+
+#file(GLOB ORTOOLS_ALL_LIBS "${ORTOOLS_ROOT}/lib/*.lib")
+#target_link_libraries(Project2 ${ORTOOLS_ALL_LIBS})

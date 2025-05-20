@@ -1,0 +1,10 @@
+^D:\PROGRAMMING\CLION_C++_DA\DA\PROJECT2\CMAKELISTS.TXT
+setlocal
+"D:\Programas\CLion\CLion 2024.3.2\bin\cmake\win\x64\bin\cmake.exe" -SD:/Programming/CLion_c++_DA/DA/Project2 -BD:/Programming/CLion_c++_DA/DA/Project2/build --check-stamp-file D:/Programming/CLion_c++_DA/DA/Project2/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
