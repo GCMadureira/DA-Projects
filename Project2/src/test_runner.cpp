@@ -129,5 +129,5 @@ void runBenchmark(const std::string& datasetType, int datasetCount) {
 
 void runTestMode() {
     runBenchmark("Provided", 10);
-    runBenchmark("Own", 10);
+    runBenchmark("Own", 60);
 }
