@@ -4,93 +4,95 @@
 
 #include "algorithms.h"
 
-
-KnapsackResult dp_approach(const ProblemInstance& instance) {
+KnapsackResult dp_array_approach(const ProblemInstance& instance) {
     int capacity = instance.truckCapacity;
-
     using State = std::pair<int, std::vector<int>>;
 
-    std::function<KnapsackResult()> useVector = [&]() {
-        std::vector<State> dp(capacity + 1, {-1, {}});
-        dp[0] = {0, {}};
+    std::vector<State> dp(capacity + 1, {-1, {}});
+    dp[0] = {0, {}};
 
-        for (const auto& pallet : instance.pallets) {
-            for (int w = capacity - pallet.weight; w >= 0; --w) {
-                if (dp[w].first != -1) {
-                    int newW = w + pallet.weight;
-                    int newProfit = dp[w].first + pallet.profit;
+    for (const auto& pallet : instance.pallets) {
+        for (int w = capacity - pallet.weight; w >= 0; --w) {
+            if (dp[w].first != -1) {
+                int newW = w + pallet.weight;
+                int newProfit = dp[w].first + pallet.profit;
 
-                    if (dp[newW].first < newProfit) {
-                        dp[newW].first = newProfit;
-                        dp[newW].second = dp[w].second;
-                        dp[newW].second.push_back(pallet.id);
-                    }
+                if (dp[newW].first < newProfit) {
+                    dp[newW].first = newProfit;
+                    dp[newW].second = dp[w].second;
+                    dp[newW].second.push_back(pallet.id);
                 }
             }
         }
+    }
 
-        int maxProfit = 0;
-        std::vector<int> bestSelection;
-        for (int w = 0; w <= capacity; ++w) {
-            if (dp[w].first > maxProfit) {
-                maxProfit = dp[w].first;
-                bestSelection = dp[w].second;
-            }
+    int maxProfit = 0;
+    std::vector<int> bestSelection;
+    for (int w = 0; w <= capacity; ++w) {
+        if (dp[w].first > maxProfit) {
+            maxProfit = dp[w].first;
+            bestSelection = dp[w].second;
         }
+    }
 
-        int weight = 0;
-        for (Pallet pallet : instance.pallets) {
-            if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
-                weight += pallet.weight;
-        }
+    int weight = 0;
+    for (const Pallet& pallet : instance.pallets) {
+        if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
+            weight += pallet.weight;
+    }
 
-        return KnapsackResult{maxProfit, weight, bestSelection};
-    };
+    return KnapsackResult{maxProfit, weight, bestSelection};
+}
 
-    std::function<KnapsackResult()> useHashMap = [&]() {
-        std::unordered_map<int, State> dp;
-        dp[0] = {0, {}};
+KnapsackResult dp_hashmap_approach(const ProblemInstance& instance) {
+    int capacity = instance.truckCapacity;
+    using State = std::pair<int, std::vector<int>>;
 
-        for (const auto& pallet : instance.pallets) {
-            std::unordered_map<int, State> next = dp;
+    std::unordered_map<int, State> dp;
+    dp[0] = {0, {}};
 
-            for (const auto& [weight, state] : dp) {
-                int newWeight = weight + pallet.weight;
-                if (newWeight > capacity) continue;
+    for (const auto& pallet : instance.pallets) {
+        std::unordered_map<int, State> next = dp;
 
-                int newProfit = state.first + pallet.profit;
-
-                if (next.find(newWeight) == next.end() || next[newWeight].first < newProfit) {
-                    std::vector<int> newSelection = state.second;
-                    newSelection.push_back(pallet.id);
-                    next[newWeight] = {newProfit, std::move(newSelection)};
-                }
-            }
-
-            dp = std::move(next);
-        }
-
-        int maxProfit = 0;
-        std::vector<int> bestSelection;
         for (const auto& [weight, state] : dp) {
-            if (state.first > maxProfit) {
-                maxProfit = state.first;
-                bestSelection = state.second;
+            int newWeight = weight + pallet.weight;
+            if (newWeight > capacity) continue;
+
+            int newProfit = state.first + pallet.profit;
+
+            if (next.find(newWeight) == next.end() || next[newWeight].first < newProfit) {
+                std::vector<int> newSelection = state.second;
+                newSelection.push_back(pallet.id);
+                next[newWeight] = {newProfit, std::move(newSelection)};
             }
         }
 
-        int weight = 0;
-        for (Pallet pallet : instance.pallets) {
-            if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
-                weight += pallet.weight;
+        dp = std::move(next);
+    }
+
+    int maxProfit = 0;
+    std::vector<int> bestSelection;
+    for (const auto& [weight, state] : dp) {
+        if (state.first > maxProfit) {
+            maxProfit = state.first;
+            bestSelection = state.second;
         }
+    }
 
-        return KnapsackResult{maxProfit, weight, bestSelection};
-    };
+    int weight = 0;
+    for (const Pallet& pallet : instance.pallets) {
+        if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
+            weight += pallet.weight;
+    }
 
-    if (capacity <= 10000)
-        return useVector();
-    else
-        return useHashMap();
+    return KnapsackResult{maxProfit, weight, bestSelection};
+}
+
+KnapsackResult dp_approach(const ProblemInstance& instance) {
+    if (instance.truckCapacity <= 10000) {
+        return dp_array_approach(instance);
+    } else {
+        return dp_hashmap_approach(instance);
+    }
 }
 

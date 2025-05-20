@@ -44,6 +44,8 @@ KnapsackResult bb_approach(const ProblemInstance& instance);
  * @return The result containing the maximum profit and selected pallet IDs.
  */
 KnapsackResult dp_approach(const ProblemInstance& instance);
+KnapsackResult dp_array_approach(const ProblemInstance& instance);
+KnapsackResult dp_hashmap_approach(const ProblemInstance& instance);
 
 /**
  * @brief Solves the pallet packing problem using a greedy approach.
