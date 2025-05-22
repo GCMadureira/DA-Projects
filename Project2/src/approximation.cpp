@@ -25,5 +25,8 @@ KnapsackResult app_approach(const ProblemInstance& instance) {
 
     result2.occupiedWeight = currentWeight;
 
-    return result1.maxProfit > result2.maxProfit ? result1 : result2;
+    return (result1.maxProfit > result2.maxProfit ||
+        (result1.maxProfit == result2.maxProfit && result1.selectedPallets.size() < result2.selectedPallets.size()) ||
+        (result1.maxProfit == result2.maxProfit && result1.selectedPallets.size() == result2.selectedPallets.size() && result1.occupiedWeight < result2.occupiedWeight)
+            ? result1 : result2);
 }
