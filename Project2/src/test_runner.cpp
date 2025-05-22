@@ -5,7 +5,7 @@
 #include <functional>
 #include <filesystem>
 
-const int NUM_RUNS = 5;
+const int NUM_RUNS = 10;
 const int BRUTE_FORCE_LIMIT = 25;
 
 // Generic average timing wrapper
@@ -129,5 +129,5 @@ void runBenchmark(const std::string& datasetType, int datasetCount) {
 
 void runTestMode() {
     runBenchmark("Provided", 10);
-    runBenchmark("Own", 60);
+    runBenchmark("Own", 80);
 }
