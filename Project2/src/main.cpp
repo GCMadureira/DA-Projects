@@ -14,7 +14,7 @@ void showMainMenu() {
     std::cout << "3. Run Dynamic Programming\n";
     std::cout << "4. Run Greedy Approximation\n";
     std::cout << "5. Run Approximation Approximation\n";
-    std::cout << "6. Run ILP / Advanced Algorithm (Not implemented)\n";
+    std::cout << "6. Run ILP / Advanced Algorithm\n";
     std::cout << "0. Back\n";
     std::cout << "Choose an option: ";
 }
@@ -77,7 +77,7 @@ void runInteractiveMode() {
                 break;
             case 2:
                 result = bb_approach(instance);
-            break;
+                break;
             case 3:
                 result = dp_approach(instance);
                 break;
