@@ -17,7 +17,8 @@ KnapsackResult dp_array_approach(const ProblemInstance& instance) {
                 int newW = w + pallet.weight;
                 int newProfit = dp[w].first + pallet.profit;
 
-                if (dp[newW].first < newProfit) {
+                if (dp[newW].first < newProfit ||
+                    (dp[newW].first == newProfit && dp[newW].second.size() > dp[w].second.size() + 1)) {
                     dp[newW].first = newProfit;
                     dp[newW].second = dp[w].second;
                     dp[newW].second.push_back(pallet.id);
@@ -29,7 +30,8 @@ KnapsackResult dp_array_approach(const ProblemInstance& instance) {
     int maxProfit = 0;
     std::vector<int> bestSelection;
     for (int w = 0; w <= capacity; ++w) {
-        if (dp[w].first > maxProfit) {
+        if (dp[w].first > maxProfit ||
+            (dp[w].first == maxProfit && dp[w].second.size() < bestSelection.size())) {
             maxProfit = dp[w].first;
             bestSelection = dp[w].second;
         }
@@ -60,7 +62,10 @@ KnapsackResult dp_hashmap_approach(const ProblemInstance& instance) {
 
             int newProfit = state.first + pallet.profit;
 
-            if (next.find(newWeight) == next.end() || next[newWeight].first < newProfit) {
+            auto it = next.find(newWeight);
+            if (it == next.end() ||
+                it->second.first < newProfit ||
+                (it->second.first == newProfit && it->second.second.size() > state.second.size() + 1)) {
                 std::vector<int> newSelection = state.second;
                 newSelection.push_back(pallet.id);
                 next[newWeight] = {newProfit, std::move(newSelection)};
@@ -73,7 +78,8 @@ KnapsackResult dp_hashmap_approach(const ProblemInstance& instance) {
     int maxProfit = 0;
     std::vector<int> bestSelection;
     for (const auto& [weight, state] : dp) {
-        if (state.first > maxProfit) {
+        if (state.first > maxProfit ||
+            (state.first == maxProfit && state.second.size() < bestSelection.size())) {
             maxProfit = state.first;
             bestSelection = state.second;
         }
