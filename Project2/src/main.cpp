@@ -34,13 +34,14 @@ std::string selectDatasetPath() {
     else if (sourceChoice == 2)
         basePath = "../data/Own/";
     else {
+        sourceChoice = 1;
         std::cerr << "Invalid source choice. Defaulting to Provided.\n";
         basePath = "../data/Provided/";
     }
 
-    std::cout << "Choose dataset number (1 to 10): ";
+    std::cout << std::format("Choose dataset number (1 to {}): ", sourceChoice == 1 ? "10" : "80");
     std::cin >> datasetNumber;
-    if (datasetNumber < 1 || datasetNumber > 10) {
+    if (datasetNumber < 1 || datasetNumber > (sourceChoice == 1 ? 10 : 80)) {
         std::cerr << "Invalid dataset number. Defaulting to 1.\n";
         datasetNumber = 1;
     }
@@ -101,8 +102,8 @@ void runInteractiveMode() {
                 break;
             }
             case 6:
-                std::cout << "ILP / Advanced algorithm is not implemented.\n";
-                continue;
+                result = ilp_approach(instance);
+                break;
             case 0:
                 return;
             default:
@@ -110,13 +111,13 @@ void runInteractiveMode() {
                 continue;
         }
 
-        std::sort(result.selectedPalletIds.begin(), result.selectedPalletIds.end());
+        std::sort(result.selectedPallets.begin(), result.selectedPallets.end(), [](Pallet left, Pallet right) {return left.id < right.id;});
 
         std::cout << "\nMaximum profit: " << result.maxProfit << "\n";
         std::cout << "Weight occupied: " << result.occupiedWeight << "/" << instance.truckCapacity << "\n";
-        std::cout << "Selected pallet IDs:\n";
-        for (int id : result.selectedPalletIds) {
-            std::cout << id << " ";
+        std::cout << "Selected pallets (id:(profit,weight)):\n| ";
+        for (Pallet pallet : result.selectedPallets) {
+            std::cout << pallet.id << ":(" << pallet.profit << "," << pallet.weight << ") | "; ;
         }
         std::cout << "\n\n";
 

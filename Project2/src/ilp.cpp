@@ -37,11 +37,14 @@ KnapsackResult ilp_approach(const ProblemInstance& instance) {
 
     int index;
     KnapsackResult result;
+    std::unordered_set<int> selectedPallets;
+
     std::string line;
 
     //get the total profit on the first line
     std::getline(output, line);
     result.maxProfit = std::stoi(line);
+    result.occupiedWeight = 0;
 
     //get the total weight on the second line
     std::getline(output, line);
@@ -50,7 +53,16 @@ KnapsackResult ilp_approach(const ProblemInstance& instance) {
     std::getline(output, line);
     std::istringstream iss(line);
     while (iss >> index)
-        result.selectedPalletIds.push_back(index);
+        selectedPallets.insert(index);
+
+    // create the solution
+    for (const Pallet& pallet : instance.pallets) {
+        if (selectedPallets.contains(pallet.id)) {
+            result.selectedPallets.push_back(pallet);
+            result.occupiedWeight += pallet.weight;
+        }
+    }
+
 
 
     return result;

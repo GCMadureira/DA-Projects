@@ -2,6 +2,7 @@
 #define PROJECT2_ALGORITHMS_H
 
 #include <vector>
+#include <unordered_set>
 #include <algorithm>
 #include <unordered_map>
 #include <iostream>
@@ -17,7 +18,7 @@
 struct KnapsackResult {
     int maxProfit; ///< the maximum profit obtained in the solution
     int occupiedWeight; ///< the weight occupied by the selected items in the solution
-    std::vector<int> selectedPalletIds; ///< the ids of the select pallets
+    std::vector<Pallet> selectedPallets; ///< the ids of the select pallets
 };
 
 /**

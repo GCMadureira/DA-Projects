@@ -19,7 +19,7 @@ KnapsackResult app_approach(const ProblemInstance& instance) {
         if (currentWeight + pallet.weight <= instance.truckCapacity) {
             currentWeight += pallet.weight;
             result2.maxProfit += pallet.profit;
-            result2.selectedPalletIds.push_back(pallet.id);
+            result2.selectedPallets.push_back(pallet);
         }
     }
 

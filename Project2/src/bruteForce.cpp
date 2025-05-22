@@ -39,11 +39,11 @@ KnapsackResult bf_approach(const ProblemInstance& instance) {
 
     exploreLevel(0, 0, 0);
 
-    std::vector<int> result;
+    std::vector<Pallet> result;
     int profit = 0, weight = 0;
     for(int i = 0; i < instance.pallets.size(); i++) {
       if(bestPacking[i]) {
-        result.push_back(instance.pallets[i].id);
+        result.push_back(instance.pallets[i]);
         profit += instance.pallets[i].profit;
         weight += instance.pallets[i].weight;
       }
