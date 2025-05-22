@@ -19,11 +19,14 @@ KnapsackResult app_approach(const ProblemInstance& instance) {
         if (currentWeight + pallet.weight <= instance.truckCapacity) {
             currentWeight += pallet.weight;
             result2.maxProfit += pallet.profit;
-            result2.selectedPalletIds.push_back(pallet.id);
+            result2.selectedPallets.push_back(pallet);
         }
     }
 
     result2.occupiedWeight = currentWeight;
 
-    return result1.maxProfit > result2.maxProfit ? result1 : result2;
+    return (result1.maxProfit > result2.maxProfit ||
+        (result1.maxProfit == result2.maxProfit && result1.selectedPallets.size() < result2.selectedPallets.size()) ||
+        (result1.maxProfit == result2.maxProfit && result1.selectedPallets.size() == result2.selectedPallets.size() && result1.occupiedWeight < result2.occupiedWeight)
+            ? result1 : result2);
 }

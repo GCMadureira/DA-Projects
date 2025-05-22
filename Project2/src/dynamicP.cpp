@@ -37,13 +37,17 @@ KnapsackResult dp_array_approach(const ProblemInstance& instance) {
         }
     }
 
+    std::unordered_set<int> selectedPallets(bestSelection.begin(), bestSelection.end());
+    std::vector<Pallet> result;
     int weight = 0;
     for (const Pallet& pallet : instance.pallets) {
-        if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
+        if (selectedPallets.contains(pallet.id)) {
+            result.push_back(pallet);
             weight += pallet.weight;
+        }
     }
 
-    return KnapsackResult{maxProfit, weight, bestSelection};
+    return KnapsackResult{maxProfit, weight, result};
 }
 
 KnapsackResult dp_hashmap_approach(const ProblemInstance& instance) {
@@ -85,13 +89,17 @@ KnapsackResult dp_hashmap_approach(const ProblemInstance& instance) {
         }
     }
 
+    std::unordered_set<int> selectedPallets(bestSelection.begin(), bestSelection.end());
+    std::vector<Pallet> result;
     int weight = 0;
     for (const Pallet& pallet : instance.pallets) {
-        if (std::find(bestSelection.begin(), bestSelection.end(), pallet.id) != bestSelection.end())
+        if (selectedPallets.contains(pallet.id)) {
+            result.push_back(pallet);
             weight += pallet.weight;
+        }
     }
 
-    return KnapsackResult{maxProfit, weight, bestSelection};
+    return KnapsackResult{maxProfit, weight, result};
 }
 
 KnapsackResult dp_approach(const ProblemInstance& instance) {

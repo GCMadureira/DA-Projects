@@ -14,6 +14,8 @@ with open(sys.argv[1], 'r') as f:
     weights = list(map(int, lines[2].strip().split()))
     profits = list(map(int, lines[3].strip().split()))
 
+
+
 # Setup LP problem
 model = LpProblem("Knapsack", LpMaximize)
 x = [LpVariable(f"x{i}", cat="Binary") for i in range(n)]

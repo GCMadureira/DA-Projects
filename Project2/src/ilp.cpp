@@ -37,6 +37,8 @@ KnapsackResult ilp_approach(const ProblemInstance& instance) {
 
     int index;
     KnapsackResult result;
+    std::unordered_set<int> selectedPallets;
+
     std::string line;
 
     //get the total profit on the first line
@@ -45,12 +47,22 @@ KnapsackResult ilp_approach(const ProblemInstance& instance) {
 
     //get the total weight on the second line
     std::getline(output, line);
+    result.occupiedWeight = std::stoi(line);
 
     //get the selected items' ids
     std::getline(output, line);
     std::istringstream iss(line);
-    while (iss >> index)
-        result.selectedPalletIds.push_back(index);
+    while (iss >> index) {
+        selectedPallets.insert(index + 1);
+    }
+
+    // create the solution
+    for (const Pallet& pallet : instance.pallets) {
+        if (selectedPallets.contains(pallet.id)) {
+            result.selectedPallets.push_back(pallet);
+        }
+    }
+
 
 
     return result;
