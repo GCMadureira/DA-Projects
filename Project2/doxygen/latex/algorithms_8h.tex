@@ -1,0 +1,230 @@
+\doxysection{src/algorithms.h File Reference}
+\hypertarget{algorithms_8h}{}\label{algorithms_8h}\index{src/algorithms.h@{src/algorithms.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+set$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+map$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include "{}Pallet\+Packing.\+h"{}}\newline
+{\ttfamily \#include "{}functional"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}}
+\begin{DoxyCompactList}\small\item\em Represents the result of a knapsack algorithm, including total profit and selected pallet IDs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_afa49429474e8f92648f14b856f3d42b4}{bf\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a brute-\/force backtracking approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_a293e06a9d47ac4696d69c5ebeab372c3}{bb\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a branch and bound approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_a509b42d2fced8a73f0df85298490d59a}{dp\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a dynamic programming approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_a585935b4f3d5e1b3381316fc43eccb1a}{dp\+\_\+array\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a vector based dynamic programming approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_a906e92f84678ce17ec3224fb357dd73c}{dp\+\_\+hashmap\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a hash map based dynamic programming approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_ab0d5b5c4009cffd8e30f39333cb08c7d}{g\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a greedy approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_a1b897f1b5e312947ffd029d6cf414822}{app\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a 2-\/approximation approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{algorithms_8h_a87ac10654bcc9e8dfcbf463e056de4f3}{ilp\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using an integer linear programming approach. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{algorithms_8h_a1b897f1b5e312947ffd029d6cf414822}\index{algorithms.h@{algorithms.h}!app\_approach@{app\_approach}}
+\index{app\_approach@{app\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{app\_approach()}{app\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_a1b897f1b5e312947ffd029d6cf414822} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} app\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a 2-\/approximation approach. 
+
+Uses two greedy algorithms and then chooses the best option out of both results. The first algorithm selects pallets based on increasing weight-\/to-\/profit ratio until the truck is full or no more pallets fit. To do so it sorts all the pallets based on said ratio first and iterates through the sorted vector. The second algorithm selects pallets based on profit until the truck is full or no more pallets fit. To do so it sorts all the pallets in decreasing order of profit and then iterates through the sorted vector. Has an O(n\texorpdfstring{$\ast$}{*}log(n)) time complexity since it sorts all the pallets twice, once on each algorithm, and an O(n) space complexity since it uses two vectors to store the sorted pallets, also one in each algorithm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing estimated profit and selected pallets (not guaranteed to be optimal). 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{approximation_8cpp_source_l00008}{8}} of file \mbox{\hyperlink{approximation_8cpp_source}{approximation.\+cpp}}.
+
+\Hypertarget{algorithms_8h_a293e06a9d47ac4696d69c5ebeab372c3}\index{algorithms.h@{algorithms.h}!bb\_approach@{bb\_approach}}
+\index{bb\_approach@{bb\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{bb\_approach()}{bb\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_a293e06a9d47ac4696d69c5ebeab372c3} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} bb\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a branch and bound approach. 
+
+Explores a tree of possible combinations, and at each level chooses to add or not to add an item, exploring those two subtrees. Sorts the pallets by ascending order of weights first. If the remaining profit of unselected items is not enough to reach the current best solution, it abandons the exploration of that subtree. On the same manner, since the weights are sorted, if selecting the next weight exceeds the truck capacity, then abandon the exploration of that subtree. Has an O(2\texorpdfstring{$^\wedge$}{\string^}n) asymptotic time complexity since, in the worst case scenario it explores all possible combinations(generally better than that), and an O(n) space complexity since it only needs to store 2 vectors of size n and a constant number of variables.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallets. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{branch_bound_8cpp_source_l00040}{40}} of file \mbox{\hyperlink{branch_bound_8cpp_source}{branch\+Bound.\+cpp}}.
+
+\Hypertarget{algorithms_8h_afa49429474e8f92648f14b856f3d42b4}\index{algorithms.h@{algorithms.h}!bf\_approach@{bf\_approach}}
+\index{bf\_approach@{bf\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{bf\_approach()}{bf\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_afa49429474e8f92648f14b856f3d42b4} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} bf\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a brute-\/force backtracking approach. 
+
+Explores all possible combinations of pallets to find the maximum profit without exceeding the truck\textquotesingle{}s capacity. Uses a backtracking approach without bounding, effectively exploring all the branches/combinations. Has an O(2\texorpdfstring{$^\wedge$}{\string^}n) time complexity since it always explores all possible combinations, and an O(n) space complexity since it only needs to store 2 vectors of size n and a constant number of variables.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallets. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{brute_force_8cpp_source_l00037}{37}} of file \mbox{\hyperlink{brute_force_8cpp_source}{brute\+Force.\+cpp}}.
+
+\Hypertarget{algorithms_8h_a509b42d2fced8a73f0df85298490d59a}\index{algorithms.h@{algorithms.h}!dp\_approach@{dp\_approach}}
+\index{dp\_approach@{dp\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{dp\_approach()}{dp\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_a509b42d2fced8a73f0df85298490d59a} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} dp\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a dynamic programming approach. 
+
+Uses a bottom-\/up method to compute the optimal combination of pallets for maximum profit. Depending on the truck capacity or dataset size, it dynamically chooses between using a vector-\/based or unordered\+\_\+map-\/based DP table for performance efficiency. Using the vector based approach, it has an O(n\texorpdfstring{$\ast$}{*}\+W) time complexity since it iterates through all n pallets, and for each it processes (W -\/ pallet.\+weight) weights, and an O(n\texorpdfstring{$\ast$}{*}\+W) space complexity since it uses a vector of size W+1 containing other vectors with size of at most n. Using the hash map based approach, it has an O(n\texorpdfstring{$\ast$}{*}k) time complexity and an O(n\texorpdfstring{$\ast$}{*}k) space complexity for the same reasons as the vector based approach, except k is the number of reachable unique weights, which is generally way smaller than C.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallet IDs. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dynamic_p_8cpp_source_l00105}{105}} of file \mbox{\hyperlink{dynamic_p_8cpp_source}{dynamic\+P.\+cpp}}.
+
+\Hypertarget{algorithms_8h_a585935b4f3d5e1b3381316fc43eccb1a}\index{algorithms.h@{algorithms.h}!dp\_array\_approach@{dp\_array\_approach}}
+\index{dp\_array\_approach@{dp\_array\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{dp\_array\_approach()}{dp\_array\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_a585935b4f3d5e1b3381316fc43eccb1a} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} dp\+\_\+array\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a vector based dynamic programming approach. 
+
+Uses a bottom-\/up method to compute the optimal combination of pallets for maximum profit. It has an O(n\texorpdfstring{$\ast$}{*}\+W) time complexity since it iterates through all n pallets, and for each it processes (W -\/ pallet.\+weight) weights, and an O(n\texorpdfstring{$\ast$}{*}\+W) space complexity since it uses a vector of size W+1 containing other vectors with size of at most n.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallet IDs. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dynamic_p_8cpp_source_l00007}{7}} of file \mbox{\hyperlink{dynamic_p_8cpp_source}{dynamic\+P.\+cpp}}.
+
+\Hypertarget{algorithms_8h_a906e92f84678ce17ec3224fb357dd73c}\index{algorithms.h@{algorithms.h}!dp\_hashmap\_approach@{dp\_hashmap\_approach}}
+\index{dp\_hashmap\_approach@{dp\_hashmap\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{dp\_hashmap\_approach()}{dp\_hashmap\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_a906e92f84678ce17ec3224fb357dd73c} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} dp\+\_\+hashmap\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a hash map based dynamic programming approach. 
+
+Uses a bottom-\/up method to compute the optimal combination of pallets for maximum profit. It has an O(n\texorpdfstring{$\ast$}{*}k) time complexity and an O(n\texorpdfstring{$\ast$}{*}k) space complexity for the same reasons as the vector based approach, except k is the number of reachable unique weights, which is generally way smaller than C.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallet IDs. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dynamic_p_8cpp_source_l00053}{53}} of file \mbox{\hyperlink{dynamic_p_8cpp_source}{dynamic\+P.\+cpp}}.
+
+\Hypertarget{algorithms_8h_ab0d5b5c4009cffd8e30f39333cb08c7d}\index{algorithms.h@{algorithms.h}!g\_approach@{g\_approach}}
+\index{g\_approach@{g\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{g\_approach()}{g\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_ab0d5b5c4009cffd8e30f39333cb08c7d} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} g\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a greedy approach. 
+
+Selects pallets based on increasing weight-\/to-\/profit ratio until the truck is full or no more pallets fit. To do so it sorts all the pallets based on said ratio first and iterates through the sorted vector. Has an O(n\texorpdfstring{$\ast$}{*}log(n)) time complexity since it sorts all the pallets once, and an O(n) space complexity since it uses a vector to store the sorted pallets.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing estimated profit and selected pallets (not guaranteed to be optimal). 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{greedy_8cpp_source_l00008}{8}} of file \mbox{\hyperlink{greedy_8cpp_source}{greedy.\+cpp}}.
+
+\Hypertarget{algorithms_8h_a87ac10654bcc9e8dfcbf463e056de4f3}\index{algorithms.h@{algorithms.h}!ilp\_approach@{ilp\_approach}}
+\index{ilp\_approach@{ilp\_approach}!algorithms.h@{algorithms.h}}
+\doxysubsubsection{\texorpdfstring{ilp\_approach()}{ilp\_approach()}}
+{\footnotesize\ttfamily \label{algorithms_8h_a87ac10654bcc9e8dfcbf463e056de4f3} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} ilp\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using an integer linear programming approach. 
+
+Each pallet is converted to a binary variable, that is, it only has values \texorpdfstring{$<$}{<}=0 or \texorpdfstring{$>$}{>}=1. The objective function is the sum of the variables multiplied by the profit of the pallet that it originated from. This way, if a variable is set to 1, it means the pallet is selected and is contributing to the objective function. The only starting constraint is one where the sum of all the variables, each times the weight of the pallet of origin, is less or equal to the truck capacity. Has an O(2\texorpdfstring{$^\wedge$}{\string^}n) time complexity in the worst case, since it needs to explore an exponential number of nodes (it is an NP problem), but in the average case is much more efficient. Has an O(n) space complexity where n is the number of variables (pallets) and m is the number of constraints needed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing estimated profit and selected pallets (not guaranteed to be optimal). 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{ilp_8cpp_source_l00009}{9}} of file \mbox{\hyperlink{ilp_8cpp_source}{ilp.\+cpp}}.
+

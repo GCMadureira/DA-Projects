@@ -7,6 +7,9 @@
 #include <iostream>
 #include <string>
 
+/**
+ * @brief Prints the main menu on the terminal
+ */
 void showMainMenu() {
     std::cout << "\n===== Pallet Packing Optimization Tool =====\n";
     std::cout << "1. Run Brute-Force\n";
@@ -19,6 +22,14 @@ void showMainMenu() {
     std::cout << "Choose an option: ";
 }
 
+/**
+ * @brief Small menu to select the dataset to be used during the interactive mode
+ *
+ * Prompts the user to choose between 'Provided' and 'Own' datasets, defaulting to the provided ones if the selection is invalid.
+ * Then prompts to choose the dataset number, defaulting to 1 if the selection is invalid.
+ *
+ * @return The datasets to be used in the format <path/to/TruckAndPallets_<datasetNumber>.csv;path/to/Pallets_<datasetNumber>.csv>
+ */
 std::string selectDatasetPath() {
     int sourceChoice, datasetNumber;
 
@@ -53,6 +64,11 @@ std::string selectDatasetPath() {
     return truckFile + ";" + palletFile;
 }
 
+/**
+ * @brief Runs the interactive mode where the user can test the different approaches and see their results with the chosen dataset
+ *
+ * Prints a menu with all the algorithms available and prompts the user to choose one, executing it and finally printing the results on the terminal.
+ */
 void runInteractiveMode() {
     std::string datasetPath = selectDatasetPath();
     size_t sep = datasetPath.find(';');
@@ -124,6 +140,9 @@ void runInteractiveMode() {
     } while (choice != 0);
 }
 
+/**
+ * @brief Main function of the project, shows the starting menu to choose which mode to execute or to exit the program.
+ */
 int main() {
     int modeChoice;
     do {

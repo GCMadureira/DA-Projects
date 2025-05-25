@@ -1,0 +1,117 @@
+\doxysection{src/test\+\_\+runner.cpp File Reference}
+\hypertarget{test__runner_8cpp}{}\label{test__runner_8cpp}\index{src/test\_runner.cpp@{src/test\_runner.cpp}}
+{\ttfamily \#include "{}algorithms.\+h"{}}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{test__runner_8cpp_a047b5c312e375be60913f796aee277f4}{average\+Time}} (std\+::function$<$ void()$>$ func)
+\begin{DoxyCompactList}\small\item\em Executes the function func NUM\+\_\+\+RUNS times and then calculates the mean of the execution time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{test__runner_8cpp_a446df87838cf765f4195fafd2ac590a5}{run\+Benchmark}} (const std\+::string \&dataset\+Type, int dataset\+Count)
+\begin{DoxyCompactList}\small\item\em Runs a benchmark measuring the execution time of all the approaches with several datasets. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{test__runner_8cpp_a19510a4fd4be5f796b1bf7667ee23101}{run\+Test\+Mode}} ()
+\begin{DoxyCompactList}\small\item\em Runs the function \doxylink{test__runner_8cpp_a446df87838cf765f4195fafd2ac590a5}{run\+Benchmark()} on both the datasets provided and the ones created for further testing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{test__runner_8cpp_ab2fc152d307b11a69229b2cd380be257}{NUM\+\_\+\+RUNS}} = 10
+\begin{DoxyCompactList}\small\item\em the number of runs to execute each algorithm, used to calculate the mean of the times \end{DoxyCompactList}\item 
+const int \mbox{\hyperlink{test__runner_8cpp_a64685d0a1660784eed33d76b9b9b62fe}{BRUTE\+\_\+\+FORCE\+\_\+\+LIMIT}} = 25
+\begin{DoxyCompactList}\small\item\em the maximum number of pallets allowed on the bruteforce approaches to obtain a testable execution time \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{test__runner_8cpp_a047b5c312e375be60913f796aee277f4}\index{test\_runner.cpp@{test\_runner.cpp}!averageTime@{averageTime}}
+\index{averageTime@{averageTime}!test\_runner.cpp@{test\_runner.cpp}}
+\doxysubsubsection{\texorpdfstring{averageTime()}{averageTime()}}
+{\footnotesize\ttfamily \label{test__runner_8cpp_a047b5c312e375be60913f796aee277f4} 
+double average\+Time (\begin{DoxyParamCaption}\item[{std\+::function$<$ void()$>$}]{func}{}\end{DoxyParamCaption})}
+
+
+
+Executes the function func NUM\+\_\+\+RUNS times and then calculates the mean of the execution time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em func} & The function to be executed\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The average time taken to execute func over all the runs. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{test__runner_8cpp_source_l00019}{19}} of file \mbox{\hyperlink{test__runner_8cpp_source}{test\+\_\+runner.\+cpp}}.
+
+\Hypertarget{test__runner_8cpp_a446df87838cf765f4195fafd2ac590a5}\index{test\_runner.cpp@{test\_runner.cpp}!runBenchmark@{runBenchmark}}
+\index{runBenchmark@{runBenchmark}!test\_runner.cpp@{test\_runner.cpp}}
+\doxysubsubsection{\texorpdfstring{runBenchmark()}{runBenchmark()}}
+{\footnotesize\ttfamily \label{test__runner_8cpp_a446df87838cf765f4195fafd2ac590a5} 
+void run\+Benchmark (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{dataset\+Type}{, }\item[{int}]{dataset\+Count}{}\end{DoxyParamCaption})}
+
+
+
+Runs a benchmark measuring the execution time of all the approaches with several datasets. 
+
+Uses function \doxylink{test__runner_8cpp_a047b5c312e375be60913f796aee277f4}{average\+Time()} to calculate the average time each approach takes to execute during all the runs, for each of the datasets. Writes the results of the benchmark in results/results\+\_\+$<$dataset\+Type$>$\+\_\+\+Datasets.\+csv.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dataset\+Type} & The type of the dataset to be used, Own or Provided \\
+\hline
+{\em dataset\+Count} & The number of the datasets to be considered on the benchmark \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{test__runner_8cpp_source_l00040}{40}} of file \mbox{\hyperlink{test__runner_8cpp_source}{test\+\_\+runner.\+cpp}}.
+
+\Hypertarget{test__runner_8cpp_a19510a4fd4be5f796b1bf7667ee23101}\index{test\_runner.cpp@{test\_runner.cpp}!runTestMode@{runTestMode}}
+\index{runTestMode@{runTestMode}!test\_runner.cpp@{test\_runner.cpp}}
+\doxysubsubsection{\texorpdfstring{runTestMode()}{runTestMode()}}
+{\footnotesize\ttfamily \label{test__runner_8cpp_a19510a4fd4be5f796b1bf7667ee23101} 
+void run\+Test\+Mode (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Runs the function \doxylink{test__runner_8cpp_a446df87838cf765f4195fafd2ac590a5}{run\+Benchmark()} on both the datasets provided and the ones created for further testing. 
+
+
+
+Definition at line \mbox{\hyperlink{test__runner_8cpp_source_l00150}{150}} of file \mbox{\hyperlink{test__runner_8cpp_source}{test\+\_\+runner.\+cpp}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{test__runner_8cpp_a64685d0a1660784eed33d76b9b9b62fe}\index{test\_runner.cpp@{test\_runner.cpp}!BRUTE\_FORCE\_LIMIT@{BRUTE\_FORCE\_LIMIT}}
+\index{BRUTE\_FORCE\_LIMIT@{BRUTE\_FORCE\_LIMIT}!test\_runner.cpp@{test\_runner.cpp}}
+\doxysubsubsection{\texorpdfstring{BRUTE\_FORCE\_LIMIT}{BRUTE\_FORCE\_LIMIT}}
+{\footnotesize\ttfamily \label{test__runner_8cpp_a64685d0a1660784eed33d76b9b9b62fe} 
+const int BRUTE\+\_\+\+FORCE\+\_\+\+LIMIT = 25}
+
+
+
+the maximum number of pallets allowed on the bruteforce approaches to obtain a testable execution time 
+
+
+
+Definition at line \mbox{\hyperlink{test__runner_8cpp_source_l00009}{9}} of file \mbox{\hyperlink{test__runner_8cpp_source}{test\+\_\+runner.\+cpp}}.
+
+\Hypertarget{test__runner_8cpp_ab2fc152d307b11a69229b2cd380be257}\index{test\_runner.cpp@{test\_runner.cpp}!NUM\_RUNS@{NUM\_RUNS}}
+\index{NUM\_RUNS@{NUM\_RUNS}!test\_runner.cpp@{test\_runner.cpp}}
+\doxysubsubsection{\texorpdfstring{NUM\_RUNS}{NUM\_RUNS}}
+{\footnotesize\ttfamily \label{test__runner_8cpp_ab2fc152d307b11a69229b2cd380be257} 
+const int NUM\+\_\+\+RUNS = 10}
+
+
+
+the number of runs to execute each algorithm, used to calculate the mean of the times 
+
+
+
+Definition at line \mbox{\hyperlink{test__runner_8cpp_source_l00008}{8}} of file \mbox{\hyperlink{test__runner_8cpp_source}{test\+\_\+runner.\+cpp}}.
+

@@ -1,0 +1,88 @@
+\doxysection{parsing.\+cpp}
+\hypertarget{parsing_8cpp_source}{}\label{parsing_8cpp_source}\index{Parsing/parsing.cpp@{Parsing/parsing.cpp}}
+\mbox{\hyperlink{parsing_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ Gabriel\ Sousa\ on\ 15/04/2025.}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_pallet_packing_8h}{PalletPacking.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00010}\mbox{\hyperlink{parsing_8cpp_a141a52308df580a3fd93edcc66fb4dec}{00010}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{parsing_8cpp_a141a52308df580a3fd93edcc66fb4dec}{parseInt}}(\textcolor{keyword}{const}\ std::string\&\ str,\ \textcolor{keywordtype}{int}\&\ value)\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00011}00011\ \ \ \ \ std::stringstream\ ss(str);}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00012}00012\ \ \ \ \ ss\ >>\ value;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00013}00013\ \ \ \ \ \textcolor{keywordflow}{return}\ !ss.fail()\ \&\&\ ss.eof();\ \textcolor{comment}{//\ eof\ ensures\ full\ conversion}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00014}00014\ \}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00016}\mbox{\hyperlink{_pallet_packing_8h_a8427454de6d95c974a171a39f45b0461}{00016}}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\ \mbox{\hyperlink{parsing_8cpp_a8427454de6d95c974a171a39f45b0461}{readData}}(\textcolor{keyword}{const}\ std::string\&\ truckFile,\ \textcolor{keyword}{const}\ std::string\&\ palletFile)\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\ instance;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00018}00018\ \ \ \ \ std::ifstream\ truck(truckFile);}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00019}00019\ \ \ \ \ std::ifstream\ pallets(palletFile);}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00021}00021\ \ \ \ \ std::string\ line;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00023}00023\ \ \ \ \ \textcolor{comment}{//\ Read\ truck\ capacity}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00024}00024\ \ \ \ \ getline(truck,\ line);\ \textcolor{comment}{//\ Skip\ header}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00025}00025\ \ \ \ \ \textcolor{keywordflow}{if}\ (!getline(truck,\ line))\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00026}00026\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ read\ truck\ data\ line.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00028}00028\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00030}00030\ \ \ \ \ \textcolor{comment}{//\ Remove\ carriage\ return\ if\ present\ }}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{if}\ (!line.empty()\ \&\&\ line.back()\ ==\ \textcolor{charliteral}{'\(\backslash\)r'})}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00032}00032\ \ \ \ \ \ \ \ \ line.pop\_back();}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00034}00034\ \ \ \ \ std::stringstream\ ss(line);}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00035}00035\ \ \ \ \ std::string\ token;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{comment}{//\ Capacity}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00038}00038\ \ \ \ \ getline(ss,\ token,\ \textcolor{charliteral}{','});}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00039}00039\ \ \ \ \ token.erase(0,\ token.find\_first\_not\_of(\textcolor{stringliteral}{"{}\ \(\backslash\)t"{}}));\ \textcolor{comment}{//\ trim\ left}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00040}00040\ \ \ \ \ token.erase(token.find\_last\_not\_of(\textcolor{stringliteral}{"{}\ \(\backslash\)t"{}})\ +\ 1);\ \textcolor{comment}{//\ trim\ right}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00041}00041\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{parsing_8cpp_a141a52308df580a3fd93edcc66fb4dec}{parseInt}}(token,\ instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}}))\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ parse\ truck\ Capacity:\ "{}}\ <<\ token\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00043}00043\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00045}00045\ \ \ \ \ \textcolor{comment}{//\ Read\ Pallets}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00046}00046\ \ \ \ \ getline(pallets,\ line);\ \textcolor{comment}{//\ Skip\ header}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00047}00047\ \ \ \ \ \textcolor{keywordflow}{while}\ (getline(pallets,\ line))\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (line.empty())\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!line.empty()\ \&\&\ line.back()\ ==\ \textcolor{charliteral}{'\(\backslash\)r'})}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ line.pop\_back();}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00053}00053\ \ \ \ \ \ \ \ \ std::stringstream\ ps(line);}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00054}00054\ \ \ \ \ \ \ \ \ std::string\ token;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_pallet}{Pallet}}\ p;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pallet\ ID}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00058}00058\ \ \ \ \ \ \ \ \ getline(ps,\ token,\ \textcolor{charliteral}{','});}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{parsing_8cpp_a141a52308df580a3fd93edcc66fb4dec}{parseInt}}(token,\ p.\mbox{\hyperlink{struct_pallet_a9e5a10be32ec564eeb8c62f057394cb0}{id}}))\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ parse\ ID:\ "{}}\ <<\ token\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Weight}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00065}00065\ \ \ \ \ \ \ \ \ getline(ps,\ token,\ \textcolor{charliteral}{','});}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00066}00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{parsing_8cpp_a141a52308df580a3fd93edcc66fb4dec}{parseInt}}(token,\ p.\mbox{\hyperlink{struct_pallet_a216a90fe257bc40e1f5412dc9627b322}{weight}}))\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ parse\ weight:\ "{}}\ <<\ token\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00069}00069\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Profit}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ getline(ps,\ token,\ \textcolor{charliteral}{','});}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{parsing_8cpp_a141a52308df580a3fd93edcc66fb4dec}{parseInt}}(token,\ p.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}}))\ \{}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ parse\ profit:\ "{}}\ <<\ token\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00078}00078\ \ \ \ \ \ \ \ \ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}.push\_back(p);}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00079}00079\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00081}00081\ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{\Hypertarget{parsing_8cpp_source_l00082}00082\ \}}
+
+\end{DoxyCode}

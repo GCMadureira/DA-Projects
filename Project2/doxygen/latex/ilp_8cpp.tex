@@ -1,0 +1,35 @@
+\doxysection{src/ilp.cpp File Reference}
+\hypertarget{ilp_8cpp}{}\label{ilp_8cpp}\index{src/ilp.cpp@{src/ilp.cpp}}
+{\ttfamily \#include "{}algorithms.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{ilp_8cpp_a87ac10654bcc9e8dfcbf463e056de4f3}{ilp\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using an integer linear programming approach. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{ilp_8cpp_a87ac10654bcc9e8dfcbf463e056de4f3}\index{ilp.cpp@{ilp.cpp}!ilp\_approach@{ilp\_approach}}
+\index{ilp\_approach@{ilp\_approach}!ilp.cpp@{ilp.cpp}}
+\doxysubsubsection{\texorpdfstring{ilp\_approach()}{ilp\_approach()}}
+{\footnotesize\ttfamily \label{ilp_8cpp_a87ac10654bcc9e8dfcbf463e056de4f3} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} ilp\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using an integer linear programming approach. 
+
+Each pallet is converted to a binary variable, that is, it only has values \texorpdfstring{$<$}{<}=0 or \texorpdfstring{$>$}{>}=1. The objective function is the sum of the variables multiplied by the profit of the pallet that it originated from. This way, if a variable is set to 1, it means the pallet is selected and is contributing to the objective function. The only starting constraint is one where the sum of all the variables, each times the weight of the pallet of origin, is less or equal to the truck capacity. Has an O(2\texorpdfstring{$^\wedge$}{\string^}n) time complexity in the worst case, since it needs to explore an exponential number of nodes (it is an NP problem), but in the average case is much more efficient. Has an O(n) space complexity where n is the number of variables (pallets) and m is the number of constraints needed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing estimated profit and selected pallets (not guaranteed to be optimal). 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{ilp_8cpp_source_l00009}{9}} of file \mbox{\hyperlink{ilp_8cpp_source}{ilp.\+cpp}}.
+

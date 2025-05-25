@@ -1,0 +1,35 @@
+\doxysection{src/approximation.cpp File Reference}
+\hypertarget{approximation_8cpp}{}\label{approximation_8cpp}\index{src/approximation.cpp@{src/approximation.cpp}}
+{\ttfamily \#include "{}algorithms.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{approximation_8cpp_a1b897f1b5e312947ffd029d6cf414822}{app\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a 2-\/approximation approach. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{approximation_8cpp_a1b897f1b5e312947ffd029d6cf414822}\index{approximation.cpp@{approximation.cpp}!app\_approach@{app\_approach}}
+\index{app\_approach@{app\_approach}!approximation.cpp@{approximation.cpp}}
+\doxysubsubsection{\texorpdfstring{app\_approach()}{app\_approach()}}
+{\footnotesize\ttfamily \label{approximation_8cpp_a1b897f1b5e312947ffd029d6cf414822} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} app\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a 2-\/approximation approach. 
+
+Uses two greedy algorithms and then chooses the best option out of both results. The first algorithm selects pallets based on increasing weight-\/to-\/profit ratio until the truck is full or no more pallets fit. To do so it sorts all the pallets based on said ratio first and iterates through the sorted vector. The second algorithm selects pallets based on profit until the truck is full or no more pallets fit. To do so it sorts all the pallets in decreasing order of profit and then iterates through the sorted vector. Has an O(n\texorpdfstring{$\ast$}{*}log(n)) time complexity since it sorts all the pallets twice, once on each algorithm, and an O(n) space complexity since it uses two vectors to store the sorted pallets, also one in each algorithm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing estimated profit and selected pallets (not guaranteed to be optimal). 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{approximation_8cpp_source_l00008}{8}} of file \mbox{\hyperlink{approximation_8cpp_source}{approximation.\+cpp}}.
+

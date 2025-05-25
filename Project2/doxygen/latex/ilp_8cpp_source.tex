@@ -1,0 +1,75 @@
+\doxysection{ilp.\+cpp}
+\hypertarget{ilp_8cpp_source}{}\label{ilp_8cpp_source}\index{src/ilp.cpp@{src/ilp.cpp}}
+\mbox{\hyperlink{ilp_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ GustavoCM\ on\ 15/05/2025.}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{algorithms_8h}{algorithms.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00009}\mbox{\hyperlink{algorithms_8h_a87ac10654bcc9e8dfcbf463e056de4f3}{00009}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{ilp_8cpp_a87ac10654bcc9e8dfcbf463e056de4f3}{ilp\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00010}00010\ \ \ \ \ std::ofstream\ input(\textcolor{stringliteral}{"{}../ilp\_solver/input.txt"{}});}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00011}00011\ \ \ \ \ std::ifstream\ output(\textcolor{stringliteral}{"{}../ilp\_solver/output.txt"{}});}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00012}00012\ \ \ \ \ \textcolor{keywordflow}{if}\ (!input.is\_open()\ ||\ !output.is\_open())\ \{}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00013}00013\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error:\ Could\ not\ open\ the\ input\ or/and\ the\ output\ files.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00014}00014\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00015}00015\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00017}00017\ \ \ \ \ \textcolor{comment}{//the\ first\ line\ is\ the\ number\ of\ items,\ the\ second\ is\ the\ max\ weight}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00018}00018\ \ \ \ \ input\ <<\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}.size()\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00019}00019\ \ \ \ \ input\ <<\ instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00021}00021\ \ \ \ \ \textcolor{comment}{//the\ third\ line\ is\ the\ weights\ of\ the\ pallets\ separated\ by\ spaces}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00022}00022\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{struct_pallet}{Pallet}}\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ input\ <<\ pallet.\mbox{\hyperlink{struct_pallet_a216a90fe257bc40e1f5412dc9627b322}{weight}}\ <<\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00024}00024\ \ \ \ \ input\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00026}00026\ \ \ \ \ \textcolor{comment}{//the\ fourth\ and\ last\ line\ is\ the\ profits\ of\ the\ pallets\ separated\ by\ spaces}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00027}00027\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{struct_pallet}{Pallet}}\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ input\ <<\ pallet.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}}\ <<\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00029}00029\ \ \ \ \ input\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00031}00031\ \ \ \ \ \textcolor{comment}{//call\ the\ solver}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00032}00032\ \ \ \ \ \textcolor{keywordtype}{int}\ ret\ =\ system(\textcolor{stringliteral}{"{}python\ ../ilp\_solver/knapsack\_solver.py\ ../ilp\_solver/input.txt\ ../ilp\_solver/output.txt"{}});}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00033}00033\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00034}00034\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ run\ knapsack\_solver.py"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00036}00036\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{keywordtype}{int}\ index;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00039}00039\ \ \ \ \ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ result;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00040}00040\ \ \ \ \ std::unordered\_set<int>\ selectedPallets;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00042}00042\ \ \ \ \ std::string\ line;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00044}00044\ \ \ \ \ \textcolor{comment}{//get\ the\ total\ profit\ on\ the\ first\ line}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00045}00045\ \ \ \ \ std::getline(output,\ line);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00046}00046\ \ \ \ \ result.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ =\ std::stoi(line);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00048}00048\ \ \ \ \ \textcolor{comment}{//get\ the\ total\ weight\ on\ the\ second\ line}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00049}00049\ \ \ \ \ std::getline(output,\ line);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00050}00050\ \ \ \ \ result.\mbox{\hyperlink{struct_knapsack_result_a02bcc1dc37d861607ed1bc4c4b004d10}{occupiedWeight}}\ =\ std::stoi(line);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00052}00052\ \ \ \ \ \textcolor{comment}{//get\ the\ selected\ items'\ ids}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00053}00053\ \ \ \ \ std::getline(output,\ line);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00054}00054\ \ \ \ \ std::istringstream\ iss(line);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00055}00055\ \ \ \ \ \textcolor{keywordflow}{while}\ (iss\ >>\ index)\ \{}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00056}00056\ \ \ \ \ \ \ \ \ selectedPallets.insert(index\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00057}00057\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00059}00059\ \ \ \ \ \textcolor{comment}{//\ create\ the\ solution}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00060}00060\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\&\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})\ \{}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selectedPallets.contains(pallet.\mbox{\hyperlink{struct_pallet_a9e5a10be32ec564eeb8c62f057394cb0}{id}}))\ \{}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ result.\mbox{\hyperlink{struct_knapsack_result_a6ee2c948a423520176e908a1eb8dc8c1}{selectedPallets}}.push\_back(pallet);}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00064}00064\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00068}00068\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{ilp_8cpp_source_l00069}00069\ \}}
+
+\end{DoxyCode}

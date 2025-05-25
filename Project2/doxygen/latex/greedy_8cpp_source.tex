@@ -1,0 +1,38 @@
+\doxysection{greedy.\+cpp}
+\hypertarget{greedy_8cpp_source}{}\label{greedy_8cpp_source}\index{src/greedy.cpp@{src/greedy.cpp}}
+\mbox{\hyperlink{greedy_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ Gabriel\ Sousa\ on\ 17/04/2025.}}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{algorithms_8h}{algorithms.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00008}\mbox{\hyperlink{algorithms_8h_ab0d5b5c4009cffd8e30f39333cb08c7d}{00008}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{greedy_8cpp_ab0d5b5c4009cffd8e30f39333cb08c7d}{g\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00009}00009\ \ \ \ \ std::vector<Pallet>\ sortedPallets\ =\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}};}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00011}00011\ \ \ \ \ std::sort(sortedPallets.begin(),\ sortedPallets.end(),\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\ \&a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\ \&b)\ \{}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00012}00012\ \ \ \ \ \ \ \ \ double\ ra\ =\ static\_cast<double>(a.weight)\ /\ a.profit;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00013}00013\ \ \ \ \ \ \ \ \ double\ rb\ =\ static\_cast<double>(b.weight)\ /\ b.profit;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00014}00014\ \ \ \ \ \ \ \ \ return\ ra\ <\ rb;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00015}00015\ \ \ \ \ \});}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ result;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00018}00018\ \ \ \ \ result.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00019}00019\ \ \ \ \ \textcolor{keywordtype}{int}\ currentWeight\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00021}00021\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pallet\ :\ sortedPallets)\ \{}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (currentWeight\ +\ pallet.weight\ <=\ instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}})\ \{}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ currentWeight\ +=\ pallet.weight;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ result.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ +=\ pallet.profit;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ result.\mbox{\hyperlink{struct_knapsack_result_a6ee2c948a423520176e908a1eb8dc8c1}{selectedPallets}}.push\_back(pallet);}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00026}00026\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00027}00027\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00029}00029\ \ \ \ \ result.\mbox{\hyperlink{struct_knapsack_result_a02bcc1dc37d861607ed1bc4c4b004d10}{occupiedWeight}}\ =\ currentWeight;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{greedy_8cpp_source_l00032}00032\ \}}
+
+\end{DoxyCode}

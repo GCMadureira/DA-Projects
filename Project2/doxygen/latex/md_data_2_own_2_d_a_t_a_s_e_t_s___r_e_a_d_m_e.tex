@@ -1,0 +1,126 @@
+\chapter{Delivery Truck Pallet Packing Optimization -\/ Test Datasets}
+\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e}{}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e}\index{Delivery Truck Pallet Packing Optimization -\/ Test Datasets@{Delivery Truck Pallet Packing Optimization -\/ Test Datasets}}
+\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md0}%
+\Hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md0}%
+
+
+This document describes the test datasets provided for the Delivery Truck \doxylink{struct_pallet}{Pallet} Packing Optimization problem. Each dataset is designed to test specific aspects of your algorithms and highlight the trade-\/offs between different approaches.
+
+Notice that the datasets (as well as this document ((except this phrase))) where created using AI, so there might be a few things wrong.\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md1}{}\doxysection{\texorpdfstring{Dataset Characteristics}{Dataset Characteristics}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md1}
+\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md2}{}\doxysubsection{\texorpdfstring{Dataset 01 -\/ Basic Test Case}{Dataset 01 -\/ Basic Test Case}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md2}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 100
+\item {\bfseries{Number of Pallets\+:}} 9
+\item {\bfseries{Characteristics\+:}} Small dataset suitable for initial testing and algorithm development.
+\item {\bfseries{Purpose\+:}} Provides a simple baseline for verifying correctness of all algorithm implementations.
+\item {\bfseries{Not an edge case\+:}} This is a standard, well-\/balanced test case.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md3}{}\doxysubsection{\texorpdfstring{Dataset 02 -\/ Medium Size}{Dataset 02 -\/ Medium Size}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md3}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 500
+\item {\bfseries{Number of Pallets\+:}} 20
+\item {\bfseries{Characteristics\+:}} Medium-\/sized dataset with varied weight-\/profit relationships.
+\item {\bfseries{Purpose\+:}} Tests basic performance differences between exhaustive and more efficient approaches.
+\item {\bfseries{Not an edge case\+:}} This is a standard test case with moderate complexity.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{\texorpdfstring{Dataset 03 -\/ Large Size}{Dataset 03 -\/ Large Size}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md4}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 1000
+\item {\bfseries{Number of Pallets\+:}} 50
+\item {\bfseries{Characteristics\+:}} Large dataset that should still be manageable with dynamic programming.
+\item {\bfseries{Purpose\+:}} Demonstrates the performance limits of brute-\/force approaches and the advantages of dynamic programming.
+\item {\bfseries{Not an edge case\+:}} Standard large test case.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md5}{}\doxysubsection{\texorpdfstring{Dataset 04 -\/ Very Large Size}{Dataset 04 -\/ Very Large Size}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md5}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 5000
+\item {\bfseries{Number of Pallets\+:}} 100
+\item {\bfseries{Characteristics\+:}} Very large dataset impractical for brute force approaches.
+\item {\bfseries{Purpose\+:}} Demonstrates the necessity of efficient algorithms like dynamic programming and approximation methods.
+\item {\bfseries{Edge case\+:}} Pushes the limits of what dynamic programming can handle efficiently due to the number of pallets and large capacity.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md6}{}\doxysubsection{\texorpdfstring{Dataset 05 -\/ Same Weight-\/to-\/\+Profit Ratio}{Dataset 05 -\/ Same Weight-\/to-\/\+Profit Ratio}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md6}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 400
+\item {\bfseries{Number of Pallets\+:}} 15
+\item {\bfseries{Characteristics\+:}} All pallets have the exact same weight-\/to-\/profit ratio (2\+:1).
+\item {\bfseries{Purpose\+:}} Tests greedy algorithms that rely on weight-\/to-\/profit ratio sorting.
+\item {\bfseries{Edge case\+:}} Since all items have identical profit-\/to-\/weight ratios, greedy algorithms that sort by this metric will struggle to make optimal decisions, as there\textquotesingle{}s no clear preference between items. For this specific case, the optimal solution might involve taking the maximum number of lightest items or heaviest items depending on how the capacity aligns.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md7}{}\doxysubsection{\texorpdfstring{Dataset 06 -\/ Tight Capacity Constraint}{Dataset 06 -\/ Tight Capacity Constraint}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md7}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 100
+\item {\bfseries{Number of Pallets\+:}} 10
+\item {\bfseries{Characteristics\+:}} Total weight of all pallets (275) significantly exceeds truck capacity.
+\item {\bfseries{Purpose\+:}} Tests how algorithms handle scenarios with tight constraints where only a small subset of items can be selected.
+\item {\bfseries{Edge case\+:}} The tight capacity means that the algorithm must be very selective, potentially leading to situations where a suboptimal greedy choice (selecting smaller high-\/profit items) could outperform a typically optimal approach.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md8}{}\doxysubsection{\texorpdfstring{Dataset 07 -\/ Many Small Items}{Dataset 07 -\/ Many Small Items}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md8}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 1000
+\item {\bfseries{Number of Pallets\+:}} 30
+\item {\bfseries{Characteristics\+:}} All pallets have small weights (≤40 units).
+\item {\bfseries{Purpose\+:}} Tests how algorithms handle cases where many items can fit, leading to a large number of possible combinations.
+\item {\bfseries{Edge case\+:}} With many small items that can fit within the capacity, the solution space becomes very large. This challenges exhaustive search algorithms and can also test how well approximation algorithms handle highly combinatorial problems.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md9}{}\doxysubsection{\texorpdfstring{Dataset 08 -\/ One Dominant High-\/\+Value Item}{Dataset 08 -\/ One Dominant High-\/\+Value Item}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md9}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 200
+\item {\bfseries{Number of Pallets\+:}} 10
+\item {\bfseries{Characteristics\+:}} Contains one extremely valuable pallet (weight\+: 180, profit\+: 1000) that takes up 90\% of capacity.
+\item {\bfseries{Purpose\+:}} Tests if algorithms correctly identify that the single high-\/value item is better than any combination of other items.
+\item {\bfseries{Edge case\+:}} This tests whether algorithms can identify the "{}obvious"{} choice when there\textquotesingle{}s one item that dominates all others in terms of profit, even though it consumes most of the capacity. Some approximation algorithms might mistakenly prefer combinations of smaller items.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md10}{}\doxysubsection{\texorpdfstring{Dataset 09 -\/ Random Weight-\/\+Profit Relationships}{Dataset 09 -\/ Random Weight-\/\+Profit Relationships}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md10}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 300
+\item {\bfseries{Number of Pallets\+:}} 12
+\item {\bfseries{Characteristics\+:}} Features pallets with counter-\/intuitive weight-\/profit relationships (heavy items with low profit, light items with high profit).
+\item {\bfseries{Purpose\+:}} Challenges sorting-\/based heuristics and tests how well algorithms can find optimal combinations.
+\item {\bfseries{Edge case\+:}} The unpredictable relationship between weight and profit makes it difficult for greedy algorithms to make good choices based on simple heuristics, requiring more careful optimization.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md11}{}\doxysubsection{\texorpdfstring{Dataset 10 -\/ Extreme Size}{Dataset 10 -\/ Extreme Size}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md11}
+
+\begin{DoxyItemize}
+\item {\bfseries{Truck Capacity\+:}} 10000
+\item {\bfseries{Number of Pallets\+:}} 200
+\item {\bfseries{Characteristics\+:}} Extremely large dataset with high computational requirements.
+\item {\bfseries{Purpose\+:}} Tests the limits of approximation algorithms when exact solutions are practically impossible.
+\item {\bfseries{Edge case\+:}} This is an extreme case that would be impossible to solve optimally with exact methods on most computers, requiring efficient approximation algorithms.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md12}{}\doxysection{\texorpdfstring{Algorithm Performance Expectations}{Algorithm Performance Expectations}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md12}
+\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md13}{}\doxysubsection{\texorpdfstring{Exhaustive Search (Brute Force)}{Exhaustive Search (Brute Force)}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md13}
+
+\begin{DoxyItemize}
+\item {\bfseries{Suitable for\+:}} Datasets 01, 02 (possibly 03 with optimizations)
+\item {\bfseries{Expected behavior\+:}} Will find optimal solutions but becomes prohibitively slow for larger datasets.
+\item {\bfseries{Key challenges\+:}} Dataset 03 and larger will likely cause timeouts or excessive runtime.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md14}{}\doxysubsection{\texorpdfstring{Dynamic Programming}{Dynamic Programming}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md14}
+
+\begin{DoxyItemize}
+\item {\bfseries{Suitable for\+:}} Datasets 01-\/04
+\item {\bfseries{Expected behavior\+:}} Will find optimal solutions with polynomial time complexity relative to capacity and number of items.
+\item {\bfseries{Key challenges\+:}} Dataset 04 will test memory efficiency of the implementation. Dataset 10 will likely be too large for standard dynamic programming.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md15}{}\doxysubsection{\texorpdfstring{Greedy Approximation}{Greedy Approximation}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md15}
+
+\begin{DoxyItemize}
+\item {\bfseries{Suitable for\+:}} All datasets
+\item {\bfseries{Expected behavior\+:}} Will run quickly even on very large datasets, but may not find optimal solutions.
+\item {\bfseries{Key challenges\+:}} Will likely produce suboptimal solutions for Datasets 05, 08, and 09 due to their special characteristics.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md16}{}\doxysubsection{\texorpdfstring{Integer Linear Programming}{Integer Linear Programming}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md16}
+
+\begin{DoxyItemize}
+\item {\bfseries{Suitable for\+:}} Datasets 01-\/04
+\item {\bfseries{Expected behavior\+:}} Will find optimal solutions if implemented correctly.
+\item {\bfseries{Key challenges\+:}} May struggle with Dataset 04 and larger due to computational complexity.
+\end{DoxyItemize}\hypertarget{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md17}{}\doxysection{\texorpdfstring{Testing Methodology}{Testing Methodology}}\label{md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e_autotoc_md17}
+When evaluating your algorithms with these datasets, consider\+:
+
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Correctness\+:}} For smaller datasets where you can compute the optimal solution, compare the results of your approximation algorithms against the optimal value.
+\item {\bfseries{Running time\+:}} Measure and compare the execution time of different algorithms on the same dataset.
+\item {\bfseries{Memory usage\+:}} Monitor memory consumption, especially for dynamic programming on larger datasets.
+\item {\bfseries{Approximation ratio\+:}} For greedy algorithms, calculate how close the approximate solution is to the optimal solution (when available).
+\end{DoxyEnumerate}
+
+By systematically testing your algorithms against these diverse datasets, you\textquotesingle{}ll gain valuable insights into the trade-\/offs between optimality, efficiency, and feasibility in solving the Delivery Truck \doxylink{struct_pallet}{Pallet} Packing Optimization problem. 

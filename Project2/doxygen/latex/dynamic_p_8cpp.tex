@@ -1,0 +1,87 @@
+\doxysection{src/dynamicP.cpp File Reference}
+\hypertarget{dynamic_p_8cpp}{}\label{dynamic_p_8cpp}\index{src/dynamicP.cpp@{src/dynamicP.cpp}}
+{\ttfamily \#include "{}algorithms.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{dynamic_p_8cpp_a585935b4f3d5e1b3381316fc43eccb1a}{dp\+\_\+array\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a vector based dynamic programming approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{dynamic_p_8cpp_a906e92f84678ce17ec3224fb357dd73c}{dp\+\_\+hashmap\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a hash map based dynamic programming approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{dynamic_p_8cpp_a509b42d2fced8a73f0df85298490d59a}{dp\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a dynamic programming approach. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{dynamic_p_8cpp_a509b42d2fced8a73f0df85298490d59a}\index{dynamicP.cpp@{dynamicP.cpp}!dp\_approach@{dp\_approach}}
+\index{dp\_approach@{dp\_approach}!dynamicP.cpp@{dynamicP.cpp}}
+\doxysubsubsection{\texorpdfstring{dp\_approach()}{dp\_approach()}}
+{\footnotesize\ttfamily \label{dynamic_p_8cpp_a509b42d2fced8a73f0df85298490d59a} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} dp\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a dynamic programming approach. 
+
+Uses a bottom-\/up method to compute the optimal combination of pallets for maximum profit. Depending on the truck capacity or dataset size, it dynamically chooses between using a vector-\/based or unordered\+\_\+map-\/based DP table for performance efficiency. Using the vector based approach, it has an O(n\texorpdfstring{$\ast$}{*}\+W) time complexity since it iterates through all n pallets, and for each it processes (W -\/ pallet.\+weight) weights, and an O(n\texorpdfstring{$\ast$}{*}\+W) space complexity since it uses a vector of size W+1 containing other vectors with size of at most n. Using the hash map based approach, it has an O(n\texorpdfstring{$\ast$}{*}k) time complexity and an O(n\texorpdfstring{$\ast$}{*}k) space complexity for the same reasons as the vector based approach, except k is the number of reachable unique weights, which is generally way smaller than C.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallet IDs. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dynamic_p_8cpp_source_l00105}{105}} of file \mbox{\hyperlink{dynamic_p_8cpp_source}{dynamic\+P.\+cpp}}.
+
+\Hypertarget{dynamic_p_8cpp_a585935b4f3d5e1b3381316fc43eccb1a}\index{dynamicP.cpp@{dynamicP.cpp}!dp\_array\_approach@{dp\_array\_approach}}
+\index{dp\_array\_approach@{dp\_array\_approach}!dynamicP.cpp@{dynamicP.cpp}}
+\doxysubsubsection{\texorpdfstring{dp\_array\_approach()}{dp\_array\_approach()}}
+{\footnotesize\ttfamily \label{dynamic_p_8cpp_a585935b4f3d5e1b3381316fc43eccb1a} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} dp\+\_\+array\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a vector based dynamic programming approach. 
+
+Uses a bottom-\/up method to compute the optimal combination of pallets for maximum profit. It has an O(n\texorpdfstring{$\ast$}{*}\+W) time complexity since it iterates through all n pallets, and for each it processes (W -\/ pallet.\+weight) weights, and an O(n\texorpdfstring{$\ast$}{*}\+W) space complexity since it uses a vector of size W+1 containing other vectors with size of at most n.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallet IDs. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dynamic_p_8cpp_source_l00007}{7}} of file \mbox{\hyperlink{dynamic_p_8cpp_source}{dynamic\+P.\+cpp}}.
+
+\Hypertarget{dynamic_p_8cpp_a906e92f84678ce17ec3224fb357dd73c}\index{dynamicP.cpp@{dynamicP.cpp}!dp\_hashmap\_approach@{dp\_hashmap\_approach}}
+\index{dp\_hashmap\_approach@{dp\_hashmap\_approach}!dynamicP.cpp@{dynamicP.cpp}}
+\doxysubsubsection{\texorpdfstring{dp\_hashmap\_approach()}{dp\_hashmap\_approach()}}
+{\footnotesize\ttfamily \label{dynamic_p_8cpp_a906e92f84678ce17ec3224fb357dd73c} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} dp\+\_\+hashmap\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a hash map based dynamic programming approach. 
+
+Uses a bottom-\/up method to compute the optimal combination of pallets for maximum profit. It has an O(n\texorpdfstring{$\ast$}{*}k) time complexity and an O(n\texorpdfstring{$\ast$}{*}k) space complexity for the same reasons as the vector based approach, except k is the number of reachable unique weights, which is generally way smaller than C.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallet IDs. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dynamic_p_8cpp_source_l00053}{53}} of file \mbox{\hyperlink{dynamic_p_8cpp_source}{dynamic\+P.\+cpp}}.
+

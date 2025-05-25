@@ -1,0 +1,73 @@
+\doxysection{branch\+Bound.\+cpp}
+\hypertarget{branch_bound_8cpp_source}{}\label{branch_bound_8cpp_source}\index{src/branchBound.cpp@{src/branchBound.cpp}}
+\mbox{\hyperlink{branch_bound_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ GustavoCM\ on\ 18/05/2025.}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{algorithms_8h}{algorithms.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00008}00008\ \textcolor{keyword}{static}\ std::vector<Pallet>\ sortedPallets;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00009}00009\ \textcolor{keyword}{static}\ std::vector<bool>\ currentPacking;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00010}00010\ \textcolor{keyword}{static}\ std::vector<bool>\ bestPacking;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00011}00011\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ bestValue,\ bestWeight,\ bestSize;\ \textcolor{comment}{//\ information\ about\ the\ current\ best\ packing}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00012}00012\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ maxWeight;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00014}00014\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ exploreLevel(\textcolor{keywordtype}{int}\ level,\ \textcolor{keywordtype}{int}\ currentValue,\ \textcolor{keywordtype}{int}\ currentWeight,\ \textcolor{keywordtype}{int}\ currentSize,\ \textcolor{keywordtype}{int}\ remainingValue)\ \{}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00015}00015\ \ \ \ \ \textcolor{comment}{//\ reached\ the\ end\ of\ the\ tree\ OR\ the\ current\ pallet\ does\ not\ fit,\ so\ the\ following\ also\ do\ not}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00016}00016\ \ \ \ \ \textcolor{keywordflow}{if}(level\ ==\ sortedPallets.size()\ ||\ currentWeight\ +\ sortedPallets[level].weight\ >\ maxWeight)\ \{}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentValue\ >\ bestValue\ ||\ (currentValue\ ==\ bestValue\ \&\&\ currentSize\ <\ bestSize)}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ ||\ (currentValue\ ==\ bestValue\ \&\&\ currentSize\ ==\ bestSize\ \&\&\ currentWeight\ <\ bestWeight))\ \{}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//choose\ the\ solution\ based\ on\ profit,\ number\ of\ pallets\ and\ weight,\ in\ this\ order\ of\ priority}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \ \ \ \ bestPacking\ =\ currentPacking;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ bestValue\ =\ currentValue;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ bestWeight\ =\ currentWeight;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ bestSize\ =\ currentSize;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00024}00024\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00026}00026\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00028}00028\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\ currentPallet\ =\ sortedPallets[level];}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00030}00030\ \ \ \ \ currentPacking[level]\ =\ \textcolor{keyword}{true};\ \textcolor{comment}{//\ choose\ to\ add\ the\ current\ pallet\ if\ it\ fits}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00031}00031\ \ \ \ \ exploreLevel(level\ +\ 1,\ currentValue\ +\ currentPallet.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}},\ currentWeight\ +\ currentPallet.\mbox{\hyperlink{struct_pallet_a216a90fe257bc40e1f5412dc9627b322}{weight}},\ currentSize\ +\ 1,\ remainingValue\ -\/\ currentPallet.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}});}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00033}00033\ \ \ \ \ currentPacking[level]\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{//\ choose\ not\ to\ add\ the\ current\ pallet}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//\ if\ you\ choose\ not\ to\ add\ the\ pallet\ and\ it\ cannot\ lead\ to\ an\ optimal\ solution}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00035}00035\ \ \ \ \ \textcolor{keywordflow}{if}\ (currentValue\ +\ remainingValue\ -\/\ currentPallet.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}}\ <\ bestValue)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00036}00036\ \ \ \ \ exploreLevel(level\ +\ 1,\ currentValue,\ currentWeight,\ currentSize,\ remainingValue\ -\/\ currentPallet.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}});}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00037}00037\ \}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00039}00039\ \textcolor{comment}{//\ explores\ the\ combinations\ of\ pallets\ through\ backtracking,\ in\ each\ node,\ can\ decide\ to\ add\ the\ current\ level's\ pallet\ or\ not,\ uses\ bounding/branch\ pruning}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00040}\mbox{\hyperlink{algorithms_8h_a293e06a9d47ac4696d69c5ebeab372c3}{00040}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{branch_bound_8cpp_a293e06a9d47ac4696d69c5ebeab372c3}{bb\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00041}00041\ \ \ \ \ \textcolor{comment}{//\ set\ the\ static\ variables\ for\ this\ iteration\ of\ the\ algorithm}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00042}00042\ \ \ \ \ sortedPallets\ =\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}};}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00043}00043\ \ \ \ \ currentPacking\ =\ std::vector<bool>(instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}.size(),\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00044}00044\ \ \ \ \ bestPacking\ =\ std::vector<bool>(instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}.size(),\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00045}00045\ \ \ \ \ bestValue\ =\ 0;\ bestWeight\ =\ INT\_MAX;\ bestSize\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00046}00046\ \ \ \ \ maxWeight\ =\ instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}};}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00048}00048\ \ \ \ \ \textcolor{keywordtype}{int}\ remainingValue\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00049}00049\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{struct_pallet}{Pallet}}\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})\ remainingValue\ +=\ pallet.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}};}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{comment}{//\ sort\ the\ pallets\ according\ to\ their\ weights\ (asc)}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00052}00052\ \ \ \ \ std::sort(sortedPallets.begin(),\ sortedPallets.end(),\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\&\ left,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\&\ right)\ \{return\ left.weight\ <\ right.weight;\});}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00054}00054\ \ \ \ \ exploreLevel(0,\ 0,\ 0,\ 0,\ remainingValue);}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00056}00056\ \ \ \ \ std::vector<Pallet>\ result;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{keywordtype}{int}\ profit\ =\ 0,\ weight\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00058}00058\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ sortedPallets.size();\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(bestPacking[i])\ \{}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ result.push\_back(sortedPallets[i]);}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ profit\ +=\ sortedPallets[i].profit;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ weight\ +=\ sortedPallets[i].weight;}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00064}00064\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00066}00066\ \ \ \ \ \textcolor{keywordflow}{return}\ \{profit,\ weight,\ result\};}
+\DoxyCodeLine{\Hypertarget{branch_bound_8cpp_source_l00067}00067\ \}}
+
+\end{DoxyCode}

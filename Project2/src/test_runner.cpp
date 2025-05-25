@@ -5,10 +5,17 @@
 #include <functional>
 #include <filesystem>
 
-const int NUM_RUNS = 10;
-const int BRUTE_FORCE_LIMIT = 25;
+const int NUM_RUNS = 10; ///< the number of runs to execute each algorithm, used to calculate the mean of the times
+const int BRUTE_FORCE_LIMIT = 25; ///< the maximum number of pallets allowed on the bruteforce approaches to obtain a testable execution time
 
 // Generic average timing wrapper
+/**
+ * @brief Executes the function func NUM_RUNS times and then calculates the mean of the execution time.
+ *
+ * @param func The function to be executed
+ *
+ * @return The average time taken to execute func over all the runs.
+ */
 double averageTime(std::function<void()> func) {
     double totalTime = 0.0;
     for (int i = 0; i < NUM_RUNS; ++i) {
@@ -20,6 +27,16 @@ double averageTime(std::function<void()> func) {
     return totalTime / NUM_RUNS;
 }
 
+// Generic average timing wrapper
+/**
+ * @brief Runs a benchmark measuring the execution time of all the approaches with several datasets
+ *
+ * Uses function averageTime() to calculate the average time each approach takes to execute during all the runs, for each of the datasets.
+ * Writes the results of the benchmark in results/results_<datasetType>_Datasets.csv.
+ *
+ * @param datasetType The type of the dataset to be used, Own or Provided
+ * @param datasetCount The number of the datasets to be considered on the benchmark
+ */
 void runBenchmark(const std::string& datasetType, int datasetCount) {
     std::cout << "\n===== Benchmarking " << datasetType << " Datasets =====\n";
 
@@ -127,6 +144,9 @@ void runBenchmark(const std::string& datasetType, int datasetCount) {
     std::cout << "\nResults saved to " << outputPath << "\n";
 }
 
+/**
+ * @brief Runs the function runBenchmark() on both the datasets provided and the ones created for further testing.
+ */
 void runTestMode() {
     runBenchmark("Provided", 10);
     runBenchmark("Own", 80);

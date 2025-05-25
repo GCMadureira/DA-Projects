@@ -1,0 +1,43 @@
+\doxysection{Parsing/\+Pallet\+Packing.h File Reference}
+\hypertarget{_pallet_packing_8h}{}\label{_pallet_packing_8h}\index{Parsing/PalletPacking.h@{Parsing/PalletPacking.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_pallet}{Pallet}}
+\begin{DoxyCompactList}\small\item\em Represents a pallet with an ID, weight, and profit. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}}
+\begin{DoxyCompactList}\small\item\em Contains data for a packing problem instance, including truck capacity and a list of pallets. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \mbox{\hyperlink{_pallet_packing_8h_a8427454de6d95c974a171a39f45b0461}{read\+Data}} (const std\+::string \&truck\+File, const std\+::string \&pallet\+File)
+\begin{DoxyCompactList}\small\item\em Reads the truck capacity and pallet data from CSV files. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_pallet_packing_8h_a8427454de6d95c974a171a39f45b0461}\index{PalletPacking.h@{PalletPacking.h}!readData@{readData}}
+\index{readData@{readData}!PalletPacking.h@{PalletPacking.h}}
+\doxysubsubsection{\texorpdfstring{readData()}{readData()}}
+{\footnotesize\ttfamily \label{_pallet_packing_8h_a8427454de6d95c974a171a39f45b0461} 
+\mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} read\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{truck\+File}{, }\item[{const std\+::string \&}]{pallet\+File}{}\end{DoxyParamCaption})}
+
+
+
+Reads the truck capacity and pallet data from CSV files. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em truck\+File} & Path to the CSV file containing the truck capacity (expects a single line of data). \\
+\hline
+{\em pallet\+File} & Path to the CSV file containing the pallet list (expects lines with ID, weight, and profit).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A populated \doxylink{struct_problem_instance}{Problem\+Instance} object. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{parsing_8cpp_source_l00016}{16}} of file \mbox{\hyperlink{parsing_8cpp_source}{parsing.\+cpp}}.
+

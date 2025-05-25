@@ -1,0 +1,58 @@
+\doxysection{main.\+cpp}
+\hypertarget{ilp__solver_2main_8cpp_source}{}\label{ilp__solver_2main_8cpp_source}\index{ilp\_solver/main.cpp@{ilp\_solver/main.cpp}}
+\mbox{\hyperlink{ilp__solver_2main_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <cstdlib>}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00007}\mbox{\hyperlink{ilp__solver_2main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{00007}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{ilp__solver_2main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00008}00008\ \ \ \ \ \textcolor{comment}{//\ Run\ Python\ script\ (must\ be\ .py)}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00009}00009\ \ \ \ \ \textcolor{keywordtype}{int}\ ret\ =\ system(\textcolor{stringliteral}{"{}python\ knapsack\_solver.py\ input.txt\ output.txt"{}});}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00010}00010\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00011}00011\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ run\ knapsack\_solver.py"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00012}00012\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00013}00013\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00015}00015\ \ \ \ \ \textcolor{comment}{//\ Open\ output.txt}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00016}00016\ \ \ \ \ std::ifstream\ infile(\textcolor{stringliteral}{"{}output.txt"{}});}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00017}00017\ \ \ \ \ \textcolor{keywordflow}{if}\ (!infile.is\_open())\ \{}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ opening\ output.txt"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00020}00020\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{int}\ totalProfit,\ totalWeight,\ totalCapacity;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00023}00023\ \ \ \ \ std::string\ line;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00025}00025\ \ \ \ \ std::getline(infile,\ line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00026}00026\ \ \ \ \ totalProfit\ =\ std::stoi(line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00028}00028\ \ \ \ \ std::getline(infile,\ line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00029}00029\ \ \ \ \ totalWeight\ =\ std::stoi(line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00031}00031\ \ \ \ \ std::getline(infile,\ line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00032}00032\ \ \ \ \ totalCapacity\ =\ std::stoi(line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00034}00034\ \ \ \ \ std::getline(infile,\ line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00035}00035\ \ \ \ \ std::istringstream\ iss(line);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00036}00036\ \ \ \ \ std::vector<int>\ selectedIndices;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{keywordtype}{int}\ index;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{keywordflow}{while}\ (iss\ >>\ index)\ \{}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ selectedIndices.push\_back(index);}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00040}00040\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00042}00042\ \ \ \ \ infile.close();}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00044}00044\ \ \ \ \ \textcolor{comment}{//\ Print\ results}}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00045}00045\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}===\ Knapsack\ Results\ (Python\ ILP)\ ==="{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00046}00046\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Total\ Profit:\ "{}}\ <<\ totalProfit\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00047}00047\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Total\ Weight:\ "{}}\ <<\ totalWeight\ <<\ \textcolor{stringliteral}{"{}\ /\ "{}}\ <<\ totalCapacity\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00049}00049\ \ \ \ \ std::cout\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{ilp__solver_2main_8cpp_source_l00052}00052\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,63 @@
+\doxysection{brute\+Force.\+cpp}
+\hypertarget{brute_force_8cpp_source}{}\label{brute_force_8cpp_source}\index{src/bruteForce.cpp@{src/bruteForce.cpp}}
+\mbox{\hyperlink{brute_force_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ GustavoCM\ on\ 16/04/2025.}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{algorithms_8h}{algorithms.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00007}00007\ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\ problemInstance;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00008}00008\ \textcolor{keyword}{static}\ std::vector<bool>\ currentPacking;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00009}00009\ \textcolor{keyword}{static}\ std::vector<bool>\ bestPacking;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00010}00010\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ bestValue,\ bestWeight,\ bestSize;\ \textcolor{comment}{//\ information\ about\ the\ current\ best\ packing}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00012}00012\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ exploreLevel(\textcolor{keywordtype}{int}\ level,\ \textcolor{keywordtype}{int}\ currentValue,\ \textcolor{keywordtype}{int}\ currentWeight,\ \textcolor{keywordtype}{int}\ currentSize)\ \{}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00013}00013\ \ \ \ \ \textcolor{comment}{//\ reached\ the\ end\ of\ the\ tree}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00014}00014\ \ \ \ \ \textcolor{keywordflow}{if}(level\ ==\ problemInstance.pallets.size())\ \{}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00015}00015\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(currentValue\ >\ bestValue\ ||\ (currentValue\ ==\ bestValue\ \&\&\ currentSize\ <\ bestSize)}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00016}00016\ \ \ \ \ \ \ \ \ ||\ (currentValue\ ==\ bestValue\ \&\&\ currentSize\ ==\ bestSize\ \&\&\ currentWeight\ <\ bestWeight))\ \{}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \textcolor{comment}{//choose\ the\ solution\ based\ on\ profit,\ number\ of\ pallets\ and\ weight,\ in\ this\ order\ of\ priority}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ bestPacking\ =\ currentPacking;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ bestValue\ =\ currentValue;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ bestWeight\ =\ currentWeight;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ bestSize\ =\ currentSize;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00022}00022\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00023}00023\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00024}00024\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00026}00026\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\ currentPallet\ =\ problemInstance.pallets[level];}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00028}00028\ \ \ \ \ currentPacking[level]\ =\ \textcolor{keyword}{true};\ \textcolor{comment}{//\ choose\ to\ add\ the\ current\ pallet\ if\ it\ fits}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00029}00029\ \ \ \ \ \textcolor{keywordflow}{if}(currentWeight\ +\ currentPallet.\mbox{\hyperlink{struct_pallet_a216a90fe257bc40e1f5412dc9627b322}{weight}}\ <=\ problemInstance.truckCapacity)}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00030}00030\ \ \ \ \ \ \ exploreLevel(level\ +\ 1,\ currentValue\ +\ currentPallet.\mbox{\hyperlink{struct_pallet_a73f875ee2c33b680d2d4ed218636a9fc}{profit}},\ currentWeight\ +\ currentPallet.\mbox{\hyperlink{struct_pallet_a216a90fe257bc40e1f5412dc9627b322}{weight}},\ currentSize\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00032}00032\ \ \ \ \ currentPacking[level]\ =\ \textcolor{keyword}{false};\ -\/-\/currentSize;\ \textcolor{comment}{//\ choose\ not\ to\ add\ the\ current\ pallet}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00033}00033\ \ \ \ \ exploreLevel(level\ +\ 1,\ currentValue,\ currentWeight,\ currentSize);}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00034}00034\ \}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00036}00036\ \textcolor{comment}{//\ explores\ every\ combination\ of\ pallets\ through\ backtracking,\ in\ each\ node,\ can\ decide\ to\ add\ the\ current\ level's\ pallet\ or\ not}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00037}\mbox{\hyperlink{algorithms_8h_afa49429474e8f92648f14b856f3d42b4}{00037}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{brute_force_8cpp_afa49429474e8f92648f14b856f3d42b4}{bf\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{comment}{//\ set\ the\ static\ variables\ for\ this\ iteration\ of\ the\ algorithm}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00039}00039\ \ \ \ \ problemInstance\ =\ instance;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00040}00040\ \ \ \ \ currentPacking\ =\ std::vector<bool>(instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}.size(),\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00041}00041\ \ \ \ \ bestPacking\ =\ std::vector<bool>(instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}.size(),\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00042}00042\ \ \ \ \ bestValue\ =\ 0;\ bestWeight\ =\ INT\_MAX;\ bestSize\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00044}00044\ \ \ \ \ exploreLevel(0,\ 0,\ 0,\ 0);}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00046}00046\ \ \ \ \ std::vector<Pallet>\ result;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00047}00047\ \ \ \ \ \textcolor{keywordtype}{int}\ profit\ =\ 0,\ weight\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00048}00048\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}.size();\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00049}00049\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(bestPacking[i])\ \{}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ result.push\_back(instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}[i]);}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ profit\ +=\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}[i].profit;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00052}00052\ \ \ \ \ \ \ \ \ weight\ +=\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}}[i].weight;}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00053}00053\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00054}00054\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00056}00056\ \ \ \ \ \textcolor{keywordflow}{return}\ \{profit,\ weight,\ result\};}
+\DoxyCodeLine{\Hypertarget{brute_force_8cpp_source_l00057}00057\ \}}
+
+\end{DoxyCode}

@@ -52,14 +52,34 @@ KnapsackResult bb_approach(const ProblemInstance& instance);
  * Uses a bottom-up method to compute the optimal combination of pallets for maximum profit.
  * Depending on the truck capacity or dataset size, it dynamically chooses between using a
  * vector-based or unordered_map-based DP table for performance efficiency.
- * Using the vector based approach, it has an O(n*W) time complexity since it iterates through all n pallets, and for each processes (W - pallet.weight) weights, and an O(n*W) space complexity since it uses a vector of size W+1 containing other vectors with size of at most n.
+ * Using the vector based approach, it has an O(n*W) time complexity since it iterates through all n pallets, and for each it processes (W - pallet.weight) weights, and an O(n*W) space complexity since it uses a vector of size W+1 containing other vectors with size of at most n.
  * Using the hash map based approach, it has an O(n*k) time complexity and an O(n*k) space complexity for the same reasons as the vector based approach, except k is the number of reachable unique weights, which is generally way smaller than C.
  *
  * @param instance The problem instance containing the truck capacity and pallet list.
  * @return The result containing the maximum profit and selected pallet IDs.
  */
 KnapsackResult dp_approach(const ProblemInstance& instance);
+
+/**
+ * @brief Solves the pallet packing problem using a vector based dynamic programming approach.
+ *
+ * Uses a bottom-up method to compute the optimal combination of pallets for maximum profit.
+ * It has an O(n*W) time complexity since it iterates through all n pallets, and for each it processes (W - pallet.weight) weights, and an O(n*W) space complexity since it uses a vector of size W+1 containing other vectors with size of at most n.
+ *
+ * @param instance The problem instance containing the truck capacity and pallet list.
+ * @return The result containing the maximum profit and selected pallet IDs.
+ */
 KnapsackResult dp_array_approach(const ProblemInstance& instance);
+
+/**
+ * @brief Solves the pallet packing problem using a hash map based dynamic programming approach.
+ *
+ * Uses a bottom-up method to compute the optimal combination of pallets for maximum profit.
+ * It has an O(n*k) time complexity and an O(n*k) space complexity for the same reasons as the vector based approach, except k is the number of reachable unique weights, which is generally way smaller than C.
+ *
+ * @param instance The problem instance containing the truck capacity and pallet list.
+ * @return The result containing the maximum profit and selected pallet IDs.
+ */
 KnapsackResult dp_hashmap_approach(const ProblemInstance& instance);
 
 /**

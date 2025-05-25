@@ -1,0 +1,35 @@
+\doxysection{src/branch\+Bound.cpp File Reference}
+\hypertarget{branch_bound_8cpp}{}\label{branch_bound_8cpp}\index{src/branchBound.cpp@{src/branchBound.cpp}}
+{\ttfamily \#include "{}algorithms.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{branch_bound_8cpp_a293e06a9d47ac4696d69c5ebeab372c3}{bb\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a branch and bound approach. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{branch_bound_8cpp_a293e06a9d47ac4696d69c5ebeab372c3}\index{branchBound.cpp@{branchBound.cpp}!bb\_approach@{bb\_approach}}
+\index{bb\_approach@{bb\_approach}!branchBound.cpp@{branchBound.cpp}}
+\doxysubsubsection{\texorpdfstring{bb\_approach()}{bb\_approach()}}
+{\footnotesize\ttfamily \label{branch_bound_8cpp_a293e06a9d47ac4696d69c5ebeab372c3} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} bb\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a branch and bound approach. 
+
+Explores a tree of possible combinations, and at each level chooses to add or not to add an item, exploring those two subtrees. Sorts the pallets by ascending order of weights first. If the remaining profit of unselected items is not enough to reach the current best solution, it abandons the exploration of that subtree. On the same manner, since the weights are sorted, if selecting the next weight exceeds the truck capacity, then abandon the exploration of that subtree. Has an O(2\texorpdfstring{$^\wedge$}{\string^}n) asymptotic time complexity since, in the worst case scenario it explores all possible combinations(generally better than that), and an O(n) space complexity since it only needs to store 2 vectors of size n and a constant number of variables.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing the truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing the maximum profit and selected pallets. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{branch_bound_8cpp_source_l00040}{40}} of file \mbox{\hyperlink{branch_bound_8cpp_source}{branch\+Bound.\+cpp}}.
+

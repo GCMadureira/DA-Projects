@@ -1,0 +1,38 @@
+\doxysection{approximation.\+cpp}
+\hypertarget{approximation_8cpp_source}{}\label{approximation_8cpp_source}\index{src/approximation.cpp@{src/approximation.cpp}}
+\mbox{\hyperlink{approximation_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ up202304978\ on\ 19-\/05-\/2025.}}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{algorithms_8h}{algorithms.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00008}\mbox{\hyperlink{algorithms_8h_a1b897f1b5e312947ffd029d6cf414822}{00008}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{approximation_8cpp_a1b897f1b5e312947ffd029d6cf414822}{app\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00009}00009\ \ \ \ \ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ result1\ =\ \mbox{\hyperlink{algorithms_8h_ab0d5b5c4009cffd8e30f39333cb08c7d}{g\_approach}}(instance);}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00010}00010\ \ \ \ \ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ result2;}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00012}00012\ \ \ \ \ std::vector<Pallet>\ sortedPallets\ =\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}};}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00013}00013\ \ \ \ \ std::sort(sortedPallets.begin(),\ sortedPallets.end(),\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\ \&a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\ \&b)\ \{return\ a.profit\ >\ b.profit;\});}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00015}00015\ \ \ \ \ result2.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00016}00016\ \ \ \ \ \textcolor{keywordtype}{int}\ currentWeight\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00018}00018\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pallet\ :\ sortedPallets)\ \{}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (currentWeight\ +\ pallet.weight\ <=\ instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}})\ \{}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \ \ \ \ currentWeight\ +=\ pallet.weight;}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ result2.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ +=\ pallet.profit;}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ result2.\mbox{\hyperlink{struct_knapsack_result_a6ee2c948a423520176e908a1eb8dc8c1}{selectedPallets}}.push\_back(pallet);}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00024}00024\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00026}00026\ \ \ \ \ result2.\mbox{\hyperlink{struct_knapsack_result_a02bcc1dc37d861607ed1bc4c4b004d10}{occupiedWeight}}\ =\ currentWeight;}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00028}00028\ \ \ \ \ \textcolor{keywordflow}{return}\ (result1.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ >\ result2.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ ||}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00029}00029\ \ \ \ \ \ \ \ \ (result1.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ ==\ result2.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ \&\&\ result1.\mbox{\hyperlink{struct_knapsack_result_a6ee2c948a423520176e908a1eb8dc8c1}{selectedPallets}}.size()\ <\ result2.\mbox{\hyperlink{struct_knapsack_result_a6ee2c948a423520176e908a1eb8dc8c1}{selectedPallets}}.size())\ ||}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ (result1.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ ==\ result2.\mbox{\hyperlink{struct_knapsack_result_abed189d9c7cde723648cc40c7fbecab8}{maxProfit}}\ \&\&\ result1.\mbox{\hyperlink{struct_knapsack_result_a6ee2c948a423520176e908a1eb8dc8c1}{selectedPallets}}.size()\ ==\ result2.\mbox{\hyperlink{struct_knapsack_result_a6ee2c948a423520176e908a1eb8dc8c1}{selectedPallets}}.size()\ \&\&\ result1.\mbox{\hyperlink{struct_knapsack_result_a02bcc1dc37d861607ed1bc4c4b004d10}{occupiedWeight}}\ <\ result2.\mbox{\hyperlink{struct_knapsack_result_a02bcc1dc37d861607ed1bc4c4b004d10}{occupiedWeight}})}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ ?\ result1\ :\ result2);}
+\DoxyCodeLine{\Hypertarget{approximation_8cpp_source_l00032}00032\ \}}
+
+\end{DoxyCode}

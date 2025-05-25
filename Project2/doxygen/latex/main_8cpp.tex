@@ -1,0 +1,81 @@
+\doxysection{src/main.cpp File Reference}
+\hypertarget{main_8cpp}{}\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+{\ttfamily \#include "{}algorithms.\+h"{}}\newline
+{\ttfamily \#include "{}test\+\_\+runner.\+cpp"{}}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8cpp_a547646815560a705ed2ab461dbf46d04}{show\+Main\+Menu}} ()
+\begin{DoxyCompactList}\small\item\em Prints the main menu on the terminal. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{main_8cpp_ad89e898305c3f01d2d95ac9be7355325}{select\+Dataset\+Path}} ()
+\begin{DoxyCompactList}\small\item\em Small menu to select the dataset to be used during the interactive mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8cpp_ae6ac188a08bbf3ab7b3ed1dc9057624d}{run\+Interactive\+Mode}} ()
+\begin{DoxyCompactList}\small\item\em Runs the interactive mode where the user can test the different approaches and see their results with the chosen dataset. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\begin{DoxyCompactList}\small\item\em Main function of the project, shows the starting menu to choose which mode to execute or to exit the program. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+int main (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Main function of the project, shows the starting menu to choose which mode to execute or to exit the program. 
+
+
+
+Definition at line \mbox{\hyperlink{main_8cpp_source_l00146}{146}} of file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+
+\Hypertarget{main_8cpp_ae6ac188a08bbf3ab7b3ed1dc9057624d}\index{main.cpp@{main.cpp}!runInteractiveMode@{runInteractiveMode}}
+\index{runInteractiveMode@{runInteractiveMode}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{runInteractiveMode()}{runInteractiveMode()}}
+{\footnotesize\ttfamily \label{main_8cpp_ae6ac188a08bbf3ab7b3ed1dc9057624d} 
+void run\+Interactive\+Mode (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Runs the interactive mode where the user can test the different approaches and see their results with the chosen dataset. 
+
+Prints a menu with all the algorithms available and prompts the user to choose one, executing it and finally printing the results on the terminal. 
+
+Definition at line \mbox{\hyperlink{main_8cpp_source_l00072}{72}} of file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+
+\Hypertarget{main_8cpp_ad89e898305c3f01d2d95ac9be7355325}\index{main.cpp@{main.cpp}!selectDatasetPath@{selectDatasetPath}}
+\index{selectDatasetPath@{selectDatasetPath}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{selectDatasetPath()}{selectDatasetPath()}}
+{\footnotesize\ttfamily \label{main_8cpp_ad89e898305c3f01d2d95ac9be7355325} 
+std\+::string select\+Dataset\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Small menu to select the dataset to be used during the interactive mode. 
+
+Prompts the user to choose between \textquotesingle{}Provided\textquotesingle{} and \textquotesingle{}Own\textquotesingle{} datasets, defaulting to the provided ones if the selection is invalid. Then prompts to choose the dataset number, defaulting to 1 if the selection is invalid.
+
+\begin{DoxyReturn}{Returns}
+The datasets to be used in the format \texorpdfstring{$<$}{<}path/to/\+Truck\+And\+Pallets\+\_\+$<$dataset\+Number$>$.csv;path/to/\+Pallets\+\_\+$<$dataset\+Number$>$.csv\texorpdfstring{$>$}{>} 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{main_8cpp_source_l00033}{33}} of file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+
+\Hypertarget{main_8cpp_a547646815560a705ed2ab461dbf46d04}\index{main.cpp@{main.cpp}!showMainMenu@{showMainMenu}}
+\index{showMainMenu@{showMainMenu}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{showMainMenu()}{showMainMenu()}}
+{\footnotesize\ttfamily \label{main_8cpp_a547646815560a705ed2ab461dbf46d04} 
+void show\+Main\+Menu (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Prints the main menu on the terminal. 
+
+
+
+Definition at line \mbox{\hyperlink{main_8cpp_source_l00013}{13}} of file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+

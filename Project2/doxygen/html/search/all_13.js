@@ -1,0 +1,14 @@
+var searchData=
+[
+  ['same_20weight_20to_20profit_20ratio_0',['Dataset 05 - Same Weight-to-Profit Ratio',['../md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e.html#autotoc_md6',1,'']]],
+  ['search_20brute_20force_1',['Exhaustive Search (Brute Force)',['../md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e.html#autotoc_md13',1,'']]],
+  ['selectdatasetpath_2',['selectDatasetPath',['../main_8cpp.html#ad89e898305c3f01d2d95ac9be7355325',1,'main.cpp']]],
+  ['selected_3',['selected',['../namespaceknapsack__solver.html#a009c016aeb47ea9314ef635d6e1d757f',1,'knapsack_solver']]],
+  ['selectedpallets_4',['selectedPallets',['../struct_knapsack_result.html#a6ee2c948a423520176e908a1eb8dc8c1',1,'KnapsackResult']]],
+  ['showmainmenu_5',['showMainMenu',['../main_8cpp.html#a547646815560a705ed2ab461dbf46d04',1,'main.cpp']]],
+  ['size_6',['Size',['../md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e.html#autotoc_md3',1,'Dataset 02 - Medium Size'],['../md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e.html#autotoc_md4',1,'Dataset 03 - Large Size'],['../md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e.html#autotoc_md5',1,'Dataset 04 - Very Large Size'],['../md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e.html#autotoc_md11',1,'Dataset 10 - Extreme Size']]],
+  ['small_20items_7',['Dataset 07 - Many Small Items',['../md_data_2_own_2_d_a_t_a_s_e_t_s___r_e_a_d_m_e.html#autotoc_md8',1,'']]],
+  ['solver_8',['solver',['../namespaceknapsack__solver.html#abb3b184b6239871550a55167d2e1cfae',1,'knapsack_solver']]],
+  ['stringify_9',['STRINGIFY',['../build_2_c_make_files_23_830_85_2_compiler_id_c_2_c_make_c_compiler_id_8c.html#a43e1cad902b6477bec893cb6430bd6c8',1,'STRINGIFY:&#160;CMakeCCompilerId.c'],['../build_2_c_make_files_23_830_85_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#a43e1cad902b6477bec893cb6430bd6c8',1,'STRINGIFY:&#160;CMakeCXXCompilerId.cpp'],['../cmake-build-debug_2_c_make_files_23_830_85_2_compiler_id_c_2_c_make_c_compiler_id_8c.html#a43e1cad902b6477bec893cb6430bd6c8',1,'STRINGIFY:&#160;CMakeCCompilerId.c'],['../cmake-build-debug_2_c_make_files_23_830_85_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#a43e1cad902b6477bec893cb6430bd6c8',1,'STRINGIFY:&#160;CMakeCXXCompilerId.cpp']]],
+  ['stringify_5fhelper_10',['STRINGIFY_HELPER',['../build_2_c_make_files_23_830_85_2_compiler_id_c_2_c_make_c_compiler_id_8c.html#a2ae9b72bb13abaabfcf2ee0ba7d3fa1d',1,'STRINGIFY_HELPER:&#160;CMakeCCompilerId.c'],['../build_2_c_make_files_23_830_85_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#a2ae9b72bb13abaabfcf2ee0ba7d3fa1d',1,'STRINGIFY_HELPER:&#160;CMakeCXXCompilerId.cpp'],['../cmake-build-debug_2_c_make_files_23_830_85_2_compiler_id_c_2_c_make_c_compiler_id_8c.html#a2ae9b72bb13abaabfcf2ee0ba7d3fa1d',1,'STRINGIFY_HELPER:&#160;CMakeCCompilerId.c'],['../cmake-build-debug_2_c_make_files_23_830_85_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#a2ae9b72bb13abaabfcf2ee0ba7d3fa1d',1,'STRINGIFY_HELPER:&#160;CMakeCXXCompilerId.cpp']]]
+];

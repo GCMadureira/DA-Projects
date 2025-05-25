@@ -1,0 +1,35 @@
+\doxysection{src/greedy.cpp File Reference}
+\hypertarget{greedy_8cpp}{}\label{greedy_8cpp}\index{src/greedy.cpp@{src/greedy.cpp}}
+{\ttfamily \#include "{}algorithms.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} \mbox{\hyperlink{greedy_8cpp_ab0d5b5c4009cffd8e30f39333cb08c7d}{g\+\_\+approach}} (const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&instance)
+\begin{DoxyCompactList}\small\item\em Solves the pallet packing problem using a greedy approach. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{greedy_8cpp_ab0d5b5c4009cffd8e30f39333cb08c7d}\index{greedy.cpp@{greedy.cpp}!g\_approach@{g\_approach}}
+\index{g\_approach@{g\_approach}!greedy.cpp@{greedy.cpp}}
+\doxysubsubsection{\texorpdfstring{g\_approach()}{g\_approach()}}
+{\footnotesize\ttfamily \label{greedy_8cpp_ab0d5b5c4009cffd8e30f39333cb08c7d} 
+\mbox{\hyperlink{struct_knapsack_result}{Knapsack\+Result}} g\+\_\+approach (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_problem_instance}{Problem\+Instance}} \&}]{instance}{}\end{DoxyParamCaption})}
+
+
+
+Solves the pallet packing problem using a greedy approach. 
+
+Selects pallets based on increasing weight-\/to-\/profit ratio until the truck is full or no more pallets fit. To do so it sorts all the pallets based on said ratio first and iterates through the sorted vector. Has an O(n\texorpdfstring{$\ast$}{*}log(n)) time complexity since it sorts all the pallets once, and an O(n) space complexity since it uses a vector to store the sorted pallets.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instance} & The problem instance containing truck capacity and pallet list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result containing estimated profit and selected pallets (not guaranteed to be optimal). 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{greedy_8cpp_source_l00008}{8}} of file \mbox{\hyperlink{greedy_8cpp_source}{greedy.\+cpp}}.
+

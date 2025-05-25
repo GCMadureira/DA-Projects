@@ -1,0 +1,118 @@
+\doxysection{dynamic\+P.\+cpp}
+\hypertarget{dynamic_p_8cpp_source}{}\label{dynamic_p_8cpp_source}\index{src/dynamicP.cpp@{src/dynamicP.cpp}}
+\mbox{\hyperlink{dynamic_p_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ Gabriel\ Sousa\ on\ 17/04/2025.}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{algorithms_8h}{algorithms.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00007}\mbox{\hyperlink{algorithms_8h_a585935b4f3d5e1b3381316fc43eccb1a}{00007}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{dynamic_p_8cpp_a585935b4f3d5e1b3381316fc43eccb1a}{dp\_array\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00008}00008\ \ \ \ \ \textcolor{keywordtype}{int}\ capacity\ =\ instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00009}00009\ \ \ \ \ \textcolor{keyword}{using\ }State\ =\ std::pair<int,\ std::vector<int>>;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00011}00011\ \ \ \ \ std::vector<State>\ dp(capacity\ +\ 1,\ \{-\/1,\ \{\}\});}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00012}00012\ \ \ \ \ dp[0]\ =\ \{0,\ \{\}\};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00014}00014\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00015}00015\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ w\ =\ capacity\ -\/\ pallet.weight;\ w\ >=\ 0;\ -\/-\/w)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00016}00016\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dp[w].first\ !=\ -\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ newW\ =\ w\ +\ pallet.weight;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ newProfit\ =\ dp[w].first\ +\ pallet.profit;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dp[newW].first\ <\ newProfit\ ||}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (dp[newW].first\ ==\ newProfit\ \&\&\ dp[newW].second.size()\ >\ dp[w].second.size()\ +\ 1))\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dp[newW].first\ =\ newProfit;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dp[newW].second\ =\ dp[w].second;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dp[newW].second.push\_back(pallet.id);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00028}00028\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00030}00030\ \ \ \ \ \textcolor{keywordtype}{int}\ maxProfit\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00031}00031\ \ \ \ \ std::vector<int>\ bestSelection;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00032}00032\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ w\ =\ 0;\ w\ <=\ capacity;\ ++w)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00033}00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dp[w].first\ >\ maxProfit\ ||}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ (dp[w].first\ ==\ maxProfit\ \&\&\ dp[w].second.size()\ <\ bestSelection.size()))\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ maxProfit\ =\ dp[w].first;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ bestSelection\ =\ dp[w].second;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00038}00038\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00040}00040\ \ \ \ \ std::unordered\_set<int>\ selectedPallets(bestSelection.begin(),\ bestSelection.end());}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00041}00041\ \ \ \ \ std::vector<Pallet>\ result;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00042}00042\ \ \ \ \ \textcolor{keywordtype}{int}\ weight\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00043}00043\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\&\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selectedPallets.contains(pallet.\mbox{\hyperlink{struct_pallet_a9e5a10be32ec564eeb8c62f057394cb0}{id}}))\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ result.push\_back(pallet);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ weight\ +=\ pallet.\mbox{\hyperlink{struct_pallet_a216a90fe257bc40e1f5412dc9627b322}{weight}};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00048}00048\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\{maxProfit,\ weight,\ result\};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00051}00051\ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00053}\mbox{\hyperlink{algorithms_8h_a906e92f84678ce17ec3224fb357dd73c}{00053}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{dynamic_p_8cpp_a906e92f84678ce17ec3224fb357dd73c}{dp\_hashmap\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{keywordtype}{int}\ capacity\ =\ instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00055}00055\ \ \ \ \ \textcolor{keyword}{using\ }State\ =\ std::pair<int,\ std::vector<int>>;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00057}00057\ \ \ \ \ std::unordered\_map<int,\ State>\ dp;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00058}00058\ \ \ \ \ dp[0]\ =\ \{0,\ \{\}\};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00060}00060\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ std::unordered\_map<int,\ State>\ next\ =\ dp;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [weight,\ state]\ :\ dp)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ newWeight\ =\ weight\ +\ pallet.weight;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (newWeight\ >\ capacity)\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ newProfit\ =\ state.first\ +\ pallet.profit;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ next.find(newWeight);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ ==\ next.end()\ ||}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it-\/>second.first\ <\ newProfit\ ||}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (it-\/>second.first\ ==\ newProfit\ \&\&\ it-\/>second.second.size()\ >\ state.second.size()\ +\ 1))\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<int>\ newSelection\ =\ state.second;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ newSelection.push\_back(pallet.id);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ next[newWeight]\ =\ \{newProfit,\ std::move(newSelection)\};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00077}00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ dp\ =\ std::move(next);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00080}00080\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00082}00082\ \ \ \ \ \textcolor{keywordtype}{int}\ maxProfit\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00083}00083\ \ \ \ \ std::vector<int>\ bestSelection;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [weight,\ state]\ :\ dp)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00085}00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (state.first\ >\ maxProfit\ ||}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ (state.first\ ==\ maxProfit\ \&\&\ state.second.size()\ <\ bestSelection.size()))\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ maxProfit\ =\ state.first;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ bestSelection\ =\ state.second;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00090}00090\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00092}00092\ \ \ \ \ std::unordered\_set<int>\ selectedPallets(bestSelection.begin(),\ bestSelection.end());}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00093}00093\ \ \ \ \ std::vector<Pallet>\ result;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00094}00094\ \ \ \ \ \textcolor{keywordtype}{int}\ weight\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00095}00095\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_pallet}{Pallet}}\&\ pallet\ :\ instance.\mbox{\hyperlink{struct_problem_instance_a90196a995a95f2308932d0dca330e524}{pallets}})\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selectedPallets.contains(pallet.\mbox{\hyperlink{struct_pallet_a9e5a10be32ec564eeb8c62f057394cb0}{id}}))\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ result.push\_back(pallet);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ weight\ +=\ pallet.\mbox{\hyperlink{struct_pallet_a216a90fe257bc40e1f5412dc9627b322}{weight}};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00099}00099\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00100}00100\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\{maxProfit,\ weight,\ result\};}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00103}00103\ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00105}\mbox{\hyperlink{algorithms_8h_a509b42d2fced8a73f0df85298490d59a}{00105}}\ \mbox{\hyperlink{struct_knapsack_result}{KnapsackResult}}\ \mbox{\hyperlink{dynamic_p_8cpp_a509b42d2fced8a73f0df85298490d59a}{dp\_approach}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_problem_instance}{ProblemInstance}}\&\ instance)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00106}00106\ \ \ \ \ \textcolor{keywordflow}{if}\ (instance.\mbox{\hyperlink{struct_problem_instance_a1c24ca201fdb741369722b4339f21ccb}{truckCapacity}}\ <=\ 10000)\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{dynamic_p_8cpp_a585935b4f3d5e1b3381316fc43eccb1a}{dp\_array\_approach}}(instance);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00108}00108\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{dynamic_p_8cpp_a906e92f84678ce17ec3224fb357dd73c}{dp\_hashmap\_approach}}(instance);}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00110}00110\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00111}00111\ \}}
+\DoxyCodeLine{\Hypertarget{dynamic_p_8cpp_source_l00112}00112\ }
+
+\end{DoxyCode}
