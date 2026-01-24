@@ -4,7 +4,7 @@ Projects developed by:
 
 * Gabriel Sousa - up202108816@up.pt
 * Gustavo Madureira - up202304978@up.pt
-* Pedro Alves up202305444
+* Pedro Alves - up202305444@up.pt
 
 ---
 
